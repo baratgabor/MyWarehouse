@@ -34,7 +34,7 @@ namespace MyWarehouse
             services.AddHealthChecks();
 
             Infrastructure.Startup.ConfigureServices(services, Configuration, Environment);
-            Core.Startup.ConfigureServices(services);
+            Application.Startup.ConfigureServices(services);
 
             AddMyCorsConfig(services);
         }

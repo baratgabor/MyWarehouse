@@ -27,7 +27,7 @@ namespace MyWarehouse.Infrastructure
             Identity.Startup.ConfigureServices(services, configuration);
             Authentication.Startup.ConfigureServices(services, configuration);
             Persistence.Startup.ConfigureServices(services, configuration, env);
-            CoreDependencies.Startup.ConfigureServices(services, configuration);
+            ApplicationDependencies.Startup.ConfigureServices(services, configuration);
 
             return services;
         }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.Core.IntegrationTests
+namespace MyWarehouse.Application.IntegrationTests
 {
     public class TestData
     {

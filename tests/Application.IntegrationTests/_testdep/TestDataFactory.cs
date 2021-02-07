@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.Core.IntegrationTests
+namespace MyWarehouse.Application.IntegrationTests
 {
     public class TestDataFactory
     {

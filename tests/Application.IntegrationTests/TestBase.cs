@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.Core.IntegrationTests
+namespace MyWarehouse.Application.IntegrationTests
 {
     /// <summary>
     /// Derive all test classes from this base class to implement the cross-cutting concern

@@ -8,7 +8,7 @@ using MyWarehouse.Application.Dependencies.Services;
 using System.IO;
 using System.Reflection;
 
-namespace MyWarehouse.Core.IntegrationTests
+namespace MyWarehouse.Application.IntegrationTests
 {
     public class TestHost
     {

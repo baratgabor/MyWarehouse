@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyWarehouse.Application.Common.Behaviors;
 using System.Reflection;
 
-namespace MyWarehouse.Core
+namespace MyWarehouse.Application
 {
     public static class Startup
     {
