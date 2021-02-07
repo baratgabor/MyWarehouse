@@ -1,0 +1,3 @@
+The point of these one-liner migration "scripts" is that it's absolutely PITA that the startup project always has to be specified for dotnet ef migration commands.
+
+Once ef tools finally add the option to permanently set the startup project, the migration scripts can be deleted.

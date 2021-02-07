@@ -1,0 +1,1 @@
+@dotnet ef migrations remove --project ../src/MyWarehouse.Infrastructure --startup-project ../src/MyWarehouse.Api
