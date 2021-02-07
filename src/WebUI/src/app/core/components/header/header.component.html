@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" (click)="isCollapsed = !isCollapsed" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <a class="navbar-brand" [routerLink]="['']">
+    <img width="50px" height="auto" src="/assets/natificWarehouseLogoWhite.png" />
+  </a>
+
+  <div *ngIf="isLoggedIn" class="collapse navbar-collapse" id="navbarNav" [ngbCollapse]="isCollapsed">
+    <ul class="navbar-nav mr-auto">
+<!--      <li class="nav-item">-->
+<!--        <a class="nav-link" [routerLink]="['/stock']" routerLinkActive="active">Stock</a>-->
+<!--      </li>-->
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/products']" routerLinkActive="active">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/transactions']" routerLinkActive="active">Transactions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/partners']" routerLinkActive="active">Partners</a>
+      </li>
+    </ul>
+
+    <app-navbar-login-info></app-navbar-login-info>
+
+<!--    <ul class="navbar-nav">-->
+<!--      <li class="nav-item nav-link" style="border: solid 1px; border-radius: 5px;">-->
+<!--        <app-server-status-widget></app-server-status-widget>-->
+<!--      </li>-->
+<!--    </ul>-->
+
+  </div>
+</nav>

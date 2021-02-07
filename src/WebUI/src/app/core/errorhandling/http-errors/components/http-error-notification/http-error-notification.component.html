@@ -1,0 +1,89 @@
+
+<ng-container [ngSwitch]="true">
+
+    <ng-container *ngSwitchDefault>
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.fire" class="mr-1"></fa-icon> Unknown Error</h4>
+        </div>
+        <div class="modal-body">
+            <p>Something prevented your request from completing.</p>
+            <p> We have no idea what just happened, and we didn't prepare for this error code. 🤷‍♂️</p>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="httpCode == 0">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.powerOff" class="mr-1"></fa-icon> Server Unreachable</h4>
+        </div>
+        <div class="modal-body">
+            <p>Sorry, we can't connect to the server. Perhaps try again later.</p>
+            <p class="mt-2 font-italic">Also, please remember that this is not a production system, but just a silly demo. So the server might not always be available.</p>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngSwitchCase="httpCode == 400 || httpCode == 422">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.eraser" class="mr-1"></fa-icon> Validation Error</h4>
+        </div>
+        <div class="modal-body">
+            <p>We have this cool thing called <em>client-side validation</em>... It didn't quite work this time, *sigh*.</p>
+            <p> The server says you have to correct the following on your form:</p>
+
+            <div class="form-row mt-4 px-3" *ngFor="let error of validationErrors.errors | keyvalue; let i=index">
+                <div class="col-3 font-weight-bold">
+                    {{error.key}}
+                </div>
+
+                <div class="col-9">
+                    <p class=" alert alert-danger py-1 px-3 mb-1" *ngFor="let message of error.value">▪ {{message}}</p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="httpCode == 403">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.lock" class="mr-1"></fa-icon> Unauthorized Access</h4>
+        </div>
+        <div class="modal-body">
+            <p>It looks like you tried to do something you're not authorized to. We understand who you are, but we can't find your special permission for this action.</p>
+            <p>Sorry, probably we shouldn't have exposed this feature to you.</p>
+        </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="httpCode == 404 || httpCode == 405">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.server" class="mr-1"></fa-icon> Access Error</h4>
+        </div>
+        <div class="modal-body">
+            <p>Sorry, we couldn't access the resource you requested.</p>
+            <p>This normally shouldn't happen, and sadly chances are it's not a transient error. 🙄</p>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngSwitchCase="httpCode == 408">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.hourglass" class="mr-3 ml-1"></fa-icon>Server Timeout</h4>
+        </div>
+        <div class="modal-body">
+            <p>The server didn't respond in time. Sorry. You might want to try again later. Or now, it's up to you. You're the boss. 🤜🤛</p>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngSwitchCase="httpCode == 500">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.bug" class="mr-2 ml-1"></fa-icon>Server Error</h4>
+        </div>
+        <div class="modal-body">
+            <p>Uh-oh. This is what <strong>shouldn't</strong> happen.</p>
+            <p>The server couldn't process your request, in a rather unflattering way. This error might be transient, but chances are it's not. 🙄</p>
+        </div>  
+    </ng-container>
+
+</ng-container>
+
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modalRef.close('Close click')">Close</button>
+</div>
+

@@ -1,0 +1,39 @@
+
+<div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">
+      <fa-icon *ngIf="!searching" [icon]="readyIcon"></fa-icon>
+      <fa-icon *ngIf="searching" [icon]="spinnerIcon" spin="true"></fa-icon>
+    </span>
+  </div>
+
+  <!-- It seems the only way to conditionally use a directive is to copy the whole element. -->
+  <input *ngIf="drawFocus" #myinput ngbAutofocus type="text" class="form-control"
+    [disabled]="disabled"
+    [(ngModel)]="model"
+    [ngbTypeahead]="search"
+    [resultTemplate]="rt"
+    [inputFormatter]="formatter"
+    placeholder="Product name..."
+    (blur)="myinput.value = ''; reset()"
+    [value]="inputValue"/>
+
+  <input *ngIf="!drawFocus" #myinput type="text" class="form-control"
+    [disabled]="disabled"
+    [(ngModel)]="model"
+    [ngbTypeahead]="search"
+    [resultTemplate]="rt"
+    [inputFormatter]="formatter"
+    placeholder="Product name..."
+    (blur)="myinput.value = ''; reset()"
+    [value]="inputValue"/>
+</div>
+
+<div style="min-height: 1rem; height: 1rem;" class="ml-2 mt-1">
+  <span *ngIf="noResults">No results.</span>
+  <span *ngIf="searchFailed">Search failed.</span>
+</div>
+
+<ng-template #rt let-r="result" let-t="term">
+  <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight> <span class="font-italic ml-2 text-muted">- {{r.numberInStock}} in stock</span>
+</ng-template>

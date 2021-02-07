@@ -1,0 +1,17 @@
+<div class="card m-2">
+  <div class="card-body">
+    <h6 class="card-subtitle mb-2 text-muted"><fa-icon *ngIf="faIcon" [icon]="faIcon" class="mr-2"></fa-icon>{{ cardTitle }}</h6>
+    <h2 class="font-weight-light"> {{product.name}}</h2>
+    <p class="card-text"> {{product.description}} </p>
+
+    <div class="d-flex justify-content-around">
+      <p class="flex-column card-text"><fa-icon [icon]="fa.boxes"></fa-icon> {{product.numberInStock}} pcs</p>
+      <p class="flex-column card-text"><fa-icon [icon]="fa.weight"></fa-icon> {{product.massValue | number : '1.0-1' : 'en-US'}} kg</p>
+      <p class="flex-column card-text"><fa-icon [icon]="fa.coins"></fa-icon> {{product.priceAmount | currency : product.priceCurrencyCode:'symbol':'1.0-1':'en-US'}}</p>
+    </div>
+
+    <a [routerLink]="" (click)="refreshRequested.emit()">Refresh</a>
+    <a [routerLink]="" (click)="navigateToProductEdit()" class="float-right">Go to edit</a>
+
+  </div>
+</div>

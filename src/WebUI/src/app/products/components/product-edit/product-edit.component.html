@@ -1,0 +1,16 @@
+
+<div class="mt-1 text-center" style="height: 1em;">
+  <p *ngIf="loadState == state.Loading" class="font-italic">Loading data... <fa-icon [icon]="faSpinner" spin="true"></fa-icon></p>
+  <p *ngIf="loadState == state.Error">Couldn't load data. :( <a [routerLink]="" (click)="loadProduct()">Try again?</a></p>
+</div>
+<app-product-form
+  formTitle="Edit Product"
+  submitText="Save Changes"
+  secondaryBtnText="Delete Product"
+  [validateSecondaryBtn]="false"
+  [showInCard]="showInCard"
+  (submitClicked)="onSaveChanges($event)"
+  (secondaryBtnClicked)="onDeleteProduct($event)"
+  [product]="product"
+  [stockIsEditable]="false"
+></app-product-form>

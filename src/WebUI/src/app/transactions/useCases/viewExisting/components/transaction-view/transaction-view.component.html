@@ -1,0 +1,99 @@
+
+
+<h3 *ngIf="loadState == ls.Busy" class="font-weight-light text-center my-5">
+  Loading data for transaction #{{transactionId}}... <fa-icon [icon]="fa.spinner" spin="true" class="ml-2"></fa-icon>
+</h3>
+
+<h3 *ngIf="loadState == ls.Failed" class="font-weight-light text-center my-5">
+  Error loading data. :( <a [routerLink]="" (click)="loadTransaction()">Retry?</a>
+</h3>
+
+
+<form *ngIf="loadState == ls.Success && model">
+
+  <div class="my-3">
+    <h3 class="font-weight-light">{{transactionName}} transaction</h3>
+    <div class="lead ml-3"><span class="">Transaction Id:</span> #{{model.id}}</div>
+    <div class="lead ml-3"><span class="">Transaction Date:</span> {{model.createdAt | date: 'yyyy.MM.dd. HH:mm'}} <span class="font-italic" style="font-size: 0.8em;">(Created by: {{model.createdBy || "n/a"}})</span></div>
+  </div>
+
+  <div class="my-3">
+    <div class="form-row mb-2">
+      <h4 class="font-weight-light">{{model.transactionType == tt.Sale ? 'Customer' : 'Seller' }}</h4>
+      <hr class="col-12">
+    </div>
+  </div>
+
+  <div class="form-group mx-3 px-3 py-2 bg-light">
+    <h4 class="mb-1">
+      {{model.partnerName}}
+    </h4>
+    <div class="form-group">
+      <fa-icon [icon]="fa.building" class="mr-2"></fa-icon> {{model.partnerAddress}}
+    </div>
+  </div>
+
+  <div>
+    <div class="mb-2">
+      <div class="d-flex flex-row">
+        <div class="p-2">
+          <h4 class="font-weight-light">Products</h4>
+        </div>
+      </div>
+      <hr class="col-12">
+    </div>
+
+    <div class="my-3">
+
+      <div *ngIf="model.transactionLines.length" class="form-row my-2">
+        <div class="col-4">Product name</div>
+        <div class="col-3">{{ getHeaderText('Unit price') }}</div>
+        <div class="col-2">Quantity</div>
+        <div class="col-3">{{ getHeaderText('Subtotal') }}</div>
+      </div>
+
+      <div class="form-row my-2"
+           *ngFor="let line of model.transactionLines; let i=index">
+
+        <div class="col-4">
+          <input readonly type="text" class="form-control" [value]="line.productName"/>
+        </div>
+
+        <div class="col-3">
+          <input readonly class="form-control" [value]="getPriceDisplayText(line.unitPriceAmount, line.unitPriceCurrencyCode)"/>
+        </div>
+
+        <div class="col-2">
+          <input readonly type="number" min="1" #qty class="form-control" [value]="line.quantity"/>
+        </div>
+
+        <div class="col-3">
+          <input readonly type="text" class="form-control" [value]="getPriceDisplayText(qty.value * line.unitPriceAmount, line.unitPriceCurrencyCode)"/>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-row my-1">
+      <hr class="col-12">
+      <h3 class="col font-weight-light mt-3">Transaction total: {{ getPriceDisplayText(model.totalAmount, model.totalCurrencyCode) }}</h3>
+    </div>
+
+    <div class="form-row mt-3">
+
+      <div class="text-center">
+        <button class="btn btn-secondary mr-1" type="button" (click)="closeRequested.emit()">Close form</button>
+      </div>
+
+      <div class="ml-auto mr-2">
+        <app-currency-selector (currencySelected)="setReferenceCurrency($event)"></app-currency-selector>
+      </div>
+
+    </div>
+
+    <div *ngIf="referenceCurrencyExchangeRate" class="form-row my-1">
+      <div class="font-italic text-danger small m-auto"><strong>Note:</strong> Foreign currency prices are reference only, based on <strong>current</strong> exchange rates.</div>
+    </div>
+  </div>
+
+</form>

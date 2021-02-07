@@ -1,0 +1,162 @@
+
+<h2 class="mb-4">Partners</h2>
+
+<div class="p-2 m-2">
+  <button
+    type="button"
+    class="btn btn-primary btn-sm"
+    (click)="openModal(newPartnerModal)"><fa-icon [icon]="fa.plus"></fa-icon> New partner</button>
+</div>
+
+<div class="d-flex flex-md-row flex-column justify-content-between mt-4">
+
+  <div class="p-3">
+    <div class="form-inline md-form">
+      <input #searchInput class="form-control mr-sm-2"
+             type="text" placeholder="Search partner name" aria-label="Search partner name"
+      (keyup.enter)="search(searchInput.value)" >
+      <button class="btn btn-light btn-rounded my-0" type="button" (click)="search(searchInput.value); loadEntities()">Search</button>
+      <button *ngIf="isFiltered" class="btn btn-light btn-rounded my-0 ml-1" type="button" (click)="searchInput.value = ''; search('')"><fa-icon [icon]="fa.trash"></fa-icon></button>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <app-item-count-selector (itemCountSelected)="setPageSize($event)"></app-item-count-selector>
+  </div>
+</div>
+
+<!--Status indicators-->
+<h3 *ngIf="loadingState == ls.Error" class="font-weight-light text-center mb-3">Error fetching data. :(
+  <a [routerLink]="" (click)="loadEntities()">Retry?</a> </h3>
+<div *ngIf="loadingState == ls.Waiting" style="position: absolute; left: 50%; top: 50%;">
+  <p><fa-icon [icon]="fa.spinner" spin="true" size="4x"></fa-icon></p>
+</div>
+<!---->
+
+<div class="container" *ngIf="state.results != null">
+
+<!--  Entity table-->
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Name', propName:'name', colWidth:'30%', iconName:fa.idCard}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Country', propName:'country', colWidth:'15%', iconName:fa.globe}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Zip Code', propName:'zipCode', colWidth:'15%', iconName:fa.barCode}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'City', propName:'city', colWidth:'15%', iconName:fa.mapPin}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Street', propName:'street', colWidth:'20%', iconName:fa.building}">
+        </ng-container>
+        <th scope="col" style="width: 10%">
+          Edit
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let partner of state?.results" style="height: 2em!important;">
+        <td>{{partner.name}}</td>
+        <td>{{partner.country}}</td>
+        <td>{{partner.zipCode}}</td>
+        <td>{{partner.city}}</td>
+        <td>{{partner.street}}</td>
+        <td>
+          <a [routerLink]=""
+             (click)="selectedEntityId = partner.id; openModal(editPartnerModal);"
+             class="btn btn-sm bg-transparent"
+             ngbTooltip="Edit Partner"><fa-icon [icon]="fa.pencil"></fa-icon></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<!---->
+
+  <!--  Page control-->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center d-flex align-middle">
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(1)">First</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(state.pageIndex-1)">Previous</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link disabled">Page {{state.pageIndex}} / {{state.pageCount}}</a>
+      </li>
+
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageIndex+1)">Next</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageCount)">Last</a>
+      </li>
+    </ul>
+  </nav>
+<!---->
+
+  <div class="text-center mb-2 font-weight-light text-muted">{{state.rowCount}} results, showing {{state.firstRowOnPage}}-{{state.lastRowOnPage}}.</div>
+
+
+</div>
+
+
+<!--Partner Edit Modal-->
+<ng-template #editPartnerModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">Edit Partner</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-partner-edit
+      [showInCard]="false"
+      [partnerId]="selectedEntityId"
+      (partnerUpdated)="updateEntityInDateSet($event); closeModal()"
+      (partnerDeleted)="removeEntityFromDataSet($event); closeModal()"
+    ></app-partner-edit>
+  </div>
+</ng-template>
+<!---->
+
+<!--New Partner Modal-->
+<ng-template #newPartnerModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">New Partner</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-partner-new
+      [showInCard]="false"
+      (partnerCreated)="closeModal(); onEntityCreated($event)"
+    ></app-partner-new>
+  </div>
+</ng-template>
+<!---->
+
+<!--Clickable table header for two-way sorting-->
+<ng-template #sortableTableHeader let-colName='colName' let-colWidth='colWidth' let-propName="propName" let-iconName="iconName" let-classes="classes">
+  <th scope="col" [ngStyle]="{'width': colWidth, 'cursor' : 'pointer'}" (click)="toggleSort(propName)" [class]="classes">
+    <fa-icon [icon]="iconName"></fa-icon>
+    <br class="d-md-none"/> {{ colName }} <br class="d-md-none"/>
+    <fa-icon *ngIf="selectedSortProperty != propName" [icon]="fa.sort" style="opacity: 0.5;"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && selectedSortIsAscending" [icon]="fa.sortUp"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && !selectedSortIsAscending" [icon]="fa.sortDown"></fa-icon>
+  </th>
+</ng-template>
+<!---->

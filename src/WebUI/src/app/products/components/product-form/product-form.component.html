@@ -1,0 +1,58 @@
+
+<div *ngIf="showInCard; else form" class="card m-3">
+  <h5 class="card-header">{{formTitle}}</h5>
+  <div class="card-body">
+    <ng-container *ngTemplateOutlet="form"></ng-container>
+  </div>
+</div>
+
+<ng-template #form>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-row">
+        <div class="form-group col">
+          <label>Name</label>
+          <input type="text" ngbAutoFocus formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitAttempted && f.name.errors }" />
+          <app-show-validation-errors [control]="f.name" [shouldShow]="submitAttempted"></app-show-validation-errors>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col">
+          <label>Description</label>
+          <textarea rows=3 style="min-height: 4em" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitAttempted && f.description.errors }"></textarea>
+          <app-show-validation-errors [control]="f.description" [shouldShow]="submitAttempted"></app-show-validation-errors>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col">
+          <label>Price ({{productPriceCurrency}})</label>
+          <input type="number" formControlName="priceAmount" class="form-control" [ngClass]="{ 'is-invalid': submitAttempted && f.priceAmount.errors }" />
+          <app-show-validation-errors [control]="f.priceAmount" [shouldShow]="submitAttempted"></app-show-validation-errors>
+        </div>
+        <div class="form-group col">
+          <label>Mass ({{productMassUnit}})</label>
+          <input type="number" formControlName="massValue" class="form-control" [ngClass]="{ 'is-invalid': submitAttempted && f.massValue.errors }" />
+          <app-show-validation-errors [control]="f.massValue" [shouldShow]="submitAttempted"></app-show-validation-errors>
+        </div>
+        <div class="form-group col">
+          <label>Number in stock</label>
+          <span [ngbTooltip]="stockIsEditable ? null : 'Stock can only be changed via transactions.'">
+            <input type="number" formControlName="numberInStock" class="form-control" [ngClass]="{ 'is-invalid': stockIsEditable && submitAttempted && f.numberInStock.errors }" />
+          </span>
+          <app-show-validation-errors [control]="f.numberInStock" [shouldShow]="submitAttempted"></app-show-validation-errors>
+        </div>
+      </div>
+
+      <div class="form-row mt-3">
+          <div class="text-center">
+            <button [disabled]="productForm.disabled" class="btn btn-primary mr-1" type="submit">{{submitText}}</button>
+            <button [disabled]="productForm.disabled" *ngIf="secondaryBtnText" class="btn btn-secondary mr-1" type="button" (click)="onSecondary()">{{secondaryBtnText}}</button>
+          </div>
+      </div>
+
+    </form>
+
+</ng-template>

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b37f6470-595a-42af-84e7-480c97616ffc/resourceGroups/testwarehouse/providers/Microsoft.Web/sites/testwarehouseweb",
+    "appService.deploySubpath": "dist\\MyWareHouse-Web"
+}

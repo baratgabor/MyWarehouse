@@ -1,0 +1,14 @@
+<ng-template #editProductModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">Edit Product</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-product-edit #productEdit
+      [showInCard]="false"
+      [productId]="selectedProductId"
+    ></app-product-edit>
+  </div>
+</ng-template>

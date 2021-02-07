@@ -1,0 +1,45 @@
+
+<div *ngIf="isLoggedIn">
+  <h3 class="font-weight-light">Welcome, <strong>{{loggedInUsername}}</strong>.</h3>
+  <p class="">Your login is valid for {{validityDays}} more days.</p>
+  <button class="btn btn-primary btn-sm" type="button" (click)="doLogout()">Log out</button>
+</div>
+
+<div class="card m-2" *ngIf="!isLoggedIn">
+  <div class="card-body">
+    <h5 class="card-title">Sign in</h5>
+    <p class="card-text">Sign in to chew bubblegum and test stuff.</p>
+
+    <div class="alert bg-light" style="margin:1em auto;">Just ask me if I forgot to give you the credentials. :)</div>
+
+    <div class="text-left" style="max-width: 400px; margin:0 auto;">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="px-4 py-3">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" formControlName="username" id="username" placeholder="Username"
+                 [ngClass]="{ 'is-invalid': formSubmitAttempt && f.username.errors }">
+          <div *ngIf="f.username.errors" class="invalid-feedback">
+            <div>Username is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" formControlName="password" id="password" placeholder="Password"
+                 [ngClass]="{ 'is-invalid': formSubmitAttempt && f.password.errors }">
+          <div *ngIf="f.password.errors" class="invalid-feedback">
+            <div>A minimum 6 character password is required</div>
+          </div>
+        </div>
+        <button [disabled]="form.disabled" type="submit" class="btn btn-primary" (click)="onSubmit()">Sign in</button>
+
+        <span *ngIf="loadState == state.Waiting" class="ml-3">Please wait... <fa-icon [icon]="faSpinner" spin="true"></fa-icon></span>
+        <span *ngIf="loadState == state.ErrorWrongData" class="ml-3 text-danger">Incorrect credentials.</span>
+        <span *ngIf="loadState == state.Success" class="ml-3 text-success">Success.</span>
+        <!--<div *ngIf="loadState == state.ErrorOther" class="mt-3 text-danger text-center">Error.</div>-->
+
+      </form>
+    </div>
+  </div>
+</div>
+
+

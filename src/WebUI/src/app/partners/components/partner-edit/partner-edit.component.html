@@ -1,0 +1,18 @@
+
+<div *ngIf="loadState == state.Loading" class="mt-1 mb-3 p-2 text-center font-italic">
+  Loading data... <fa-icon [icon]="faSpinner" spin="true"></fa-icon>
+</div>
+
+<div *ngIf="loadState == state.Error" class="mt-1 mb-3 p-2 text-center">
+  Couldn't load data. :( <a [routerLink]="" (click)="loadEntity()">Try again?</a>
+</div>
+
+<app-partner-form *ngIf="loadState == state.Success"
+  formTitle="Edit Partner"
+  submitText="Save Changes"
+  secondaryBtnText="Delete Partner"
+  [showInCard]="showInCard"
+  (submitClicked)="onSaveChanges($event)"
+  (secondaryBtnClicked)="onDeleteEntity($event)"
+  [partner]="partner"
+></app-partner-form>

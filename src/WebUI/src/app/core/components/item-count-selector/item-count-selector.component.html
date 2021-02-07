@@ -1,0 +1,9 @@
+<div class="btn-group">
+  <button class="btn btn-outline-primary" disabled style="opacity:1;">Items/page</button>
+  <div class="btn-group" ngbDropdown role="group">
+    <button class="btn btn-outline-primary" ngbDropdownToggle>{{selectedItemCount}}</button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+      <button *ngFor="let num of itemCountArray; let i = index" ngbDropdownItem (click)="setItemCount(num)">{{num}}</button>
+    </div>
+  </div>
+</div>

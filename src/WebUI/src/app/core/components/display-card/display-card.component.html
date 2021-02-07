@@ -1,0 +1,7 @@
+<div class="card m-2" style="text-align: left">
+  <div class="card-body">
+    <h6 class="card-subtitle mb-2 text-muted"><fa-icon *ngIf="faIcon" [icon]="faIcon" class="mr-2"></fa-icon>{{ title }}</h6>
+    <p class="display-4"><ng-content></ng-content></p>
+    <a *ngIf="linkText" [routerLink]="" (click)="delegateClick()" class="card-link">{{ linkText }}</a>
+  </div>
+</div>

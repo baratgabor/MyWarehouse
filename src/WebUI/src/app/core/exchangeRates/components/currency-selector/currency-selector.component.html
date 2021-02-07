@@ -1,0 +1,12 @@
+<div class="btn-group" style="white-space: pre;" [ngbTooltip]="tipContent">
+  <button type="button" class="btn btn-outline-primary" disabled style="opacity:1;">Foreign currency</button>
+  <div class="btn-group" ngbDropdown role="group" container="body">
+    <button type="button" class="btn btn-outline-primary" ngbDropdownToggle>{{currentSelectedCurrency}}</button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+      <button type="button" ngbDropdownItem (click)="setCurrency(null)">-</button>
+      <button type="button" *ngFor="let curr of availableCurrencies; let i = index" ngbDropdownItem (click)="setCurrency(curr)">{{curr}}</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #tipContent class="text-left">European&nbsp;Central&nbsp;Bank<br><span class="font-weight-bold">Date:</span> {{currencyDataFreshness}} </ng-template>

@@ -1,0 +1,201 @@
+<h2 class="mb-4">
+  <span *ngIf="showAllEntries">Transactions</span>
+  <span *ngIf="showOnlySales">Sales Transactions</span>
+  <span *ngIf="showOnlyProcurement">Procurement Transactions</span>
+</h2>
+
+<div class="p-2 m-2">
+  <button
+    type="button"
+    class="btn btn-primary btn-sm mr-2 mb-1"
+    (click)="openModal(newSalesTransactionModal)"><fa-icon [icon]="fa.plus"></fa-icon> Record new sales</button>
+  <button
+    type="button"
+    class="btn btn-primary btn-sm mb-1"
+    (click)="openModal(newProcurementTransactionModal)"><fa-icon [icon]="fa.plus"></fa-icon> Record new procurement</button>
+</div>
+
+<div class="d-flex justify-content-between mt-4 flex-wrap">
+
+  <div class="p-3">
+    <div class="form-inline md-form">
+      <input #searchInput class="form-control mr-sm-2"
+             type="text" placeholder="Filter partner's name" aria-label="Search transaction name"
+             (keyup.enter)="search(searchInput.value)">
+      <button class="btn btn-light btn-rounded my-0" type="button" (click)="search(searchInput.value); loadEntities()">Search</button>
+      <button *ngIf="isFiltered" class="btn btn-light btn-rounded my-0 ml-1" type="button" (click)="searchInput.value = ''; search('')"><fa-icon [icon]="fa.trash"></fa-icon></button>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn" (click)="setViewType('showAllEntries')" [ngClass]="showAllEntries ? 'btn-primary': 'btn-light'">All</button>
+      <button type="button" class="btn" (click)="setViewType('showOnlySales')" [ngClass]="showOnlySales ? 'btn-primary': 'btn-light'">Sales</button>
+      <button type="button" class="btn" (click)="setViewType('showOnlyProcurement')" [ngClass]="showOnlyProcurement ? 'btn-primary': 'btn-light'">Procurement</button>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <app-currency-selector (currencySelected)="setForeignCurrency($event)"></app-currency-selector>
+  </div>
+
+  <div class="p-3">
+    <app-item-count-selector (itemCountSelected)="setPageSize($event)"></app-item-count-selector>
+  </div>
+
+</div>
+
+<!--Status indicators-->
+<h3 *ngIf="loadingState == ls.Error" class="font-weight-light text-center mb-3">Error fetching data. :(
+  <a [routerLink]="" (click)="loadEntities()">Retry?</a> </h3>
+<div *ngIf="loadingState == ls.Waiting" style="position: absolute; left: 50%; top: 50%;">
+  <p><fa-icon [icon]="fa.spinner" spin="true" size="4x"></fa-icon></p>
+</div>
+<!---->
+
+<div class="container" *ngIf="state.results != null">
+
+  <!--  Entity table-->
+  <table class="table table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col" style="width: 5%;">
+        Type
+      </th>
+      <ng-container
+        [ngTemplateOutlet]="sortableTableHeader"
+        [ngTemplateOutletContext]="{colName:'Date', propName:'createdAt', colWidth:'15%', iconName:fa.calendar}">
+      </ng-container>
+      <ng-container
+        [ngTemplateOutlet]="sortableTableHeader"
+        [ngTemplateOutletContext]="{colName:'Partner', propName:'partnerName', colWidth:'35%', iconName:fa.idCard}">
+      </ng-container>
+      <ng-container
+        [ngTemplateOutlet]="sortableTableHeader"
+        [ngTemplateOutletContext]="{colName:'Total', propName:'totalAmount', colWidth:'15%', iconName:fa.coins}">
+      </ng-container>
+      <th *ngIf="selectedForeignCurrency" scole="col" style="width: 15%">
+        <fa-icon [icon]="fa.coins"></fa-icon> {{selectedForeignCurrency}}
+      </th>
+      <th scope="col" style="width: 6%">
+        Details
+      </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let transaction of state?.results" style="height: 2em!important;"
+        [ngStyle]="transaction.transactionType == tt.Sale ? {'background-color':'#f7fcff'} : {'background-color':'#fcfff7'}" >
+      <td *ngIf="transaction.transactionType == tt.Sale" class="text-center">
+        <span [ngbTooltip]="tt[transaction.transactionType]">
+          <fa-icon [icon]="fa.minus"></fa-icon>
+        </span>
+      </td>
+      <td *ngIf="transaction.transactionType == tt.Procurement" class="text-center">
+        <span [ngbTooltip]="tt[transaction.transactionType]">
+          <fa-icon [icon]="fa.plus"></fa-icon>
+        </span>
+      </td>
+      <td>{{transaction.createdAt | date: 'yyyy.MM.dd. HH:mm'}}</td>
+      <td>{{transaction.partnerName}}</td>
+      <td>{{transaction.totalAmount | currency: transaction.totalCurrencyCode :'symbol':'1.0-1':'en-US'}}</td>
+      <td *ngIf="selectedForeignCurrency && selectedForeignCurrencyRate">{{transaction.totalAmount * selectedForeignCurrencyRate | currency: selectedForeignCurrency:'symbol' }}</td>
+      <td><a [routerLink]=""
+             (click)="selectedEntityId = transaction.id; openModal(viewTransactionModal);"
+             class="btn btn-sm bg-transparent"
+             ngbTooltip="View details"><fa-icon [icon]="fa.search"></fa-icon></a></td>
+    </tr>
+    </tbody>
+  </table>
+  <!---->
+
+  <!--  Page control-->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center d-flex align-middle">
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(1)">First</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(state.pageIndex-1)">Previous</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link disabled">Page {{state.pageIndex}} / {{state.pageCount}}</a>
+      </li>
+
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageIndex+1)">Next</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageCount)">Last</a>
+      </li>
+    </ul>
+  </nav>
+  <!---->
+
+  <div class="text-center mb-2 font-weight-light text-muted">{{state.rowCount}} results, showing {{state.firstRowOnPage}}-{{state.lastRowOnPage}}.</div>
+
+
+</div>
+
+
+<!--Transaction Edit Modal-->
+<ng-template #viewTransactionModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">Transaction Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-transaction-view [transactionId]="selectedEntityId" (closeRequested)="modal.dismiss()"></app-transaction-view>
+  </div>
+</ng-template>
+<!---->
+
+<!--New Transaction Modal-->
+<ng-template #newSalesTransactionModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">New Sales Transaction</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-transaction-new
+      [transactionType]="tt.Sale"
+      (transactionCreated)="loadEntities(); modal.dismiss('Op finished');">
+    </app-transaction-new>
+  </div>
+</ng-template>
+<!---->
+
+<!--New Transaction Modal-->
+<ng-template #newProcurementTransactionModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">New Procurement Transaction</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-transaction-new
+      [transactionType]="tt.Procurement"
+      (transactionCreated)="loadEntities(); modal.dismiss('Op finished');">
+    </app-transaction-new>
+  </div>
+</ng-template>
+<!---->
+
+
+<!--Clickable table header for two-way sorting-->
+<ng-template #sortableTableHeader let-colName='colName' let-colWidth='colWidth' let-propName="propName" let-iconName="iconName" let-classes="classes">
+  <th scope="col" [ngStyle]="{'width': colWidth, 'cursor' : 'pointer'}" (click)="toggleSort(propName)" [class]="classes">
+    <fa-icon [icon]="iconName"></fa-icon>
+    <br class="d-md-none" /> {{ colName }} <br class="d-md-none" />
+    <fa-icon *ngIf="selectedSortProperty != propName" [icon]="fa.sort" style="opacity: 0.5;"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && selectedSortIsAscending" [icon]="fa.sortUp"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && !selectedSortIsAscending" [icon]="fa.sortDown"></fa-icon>
+  </th>
+</ng-template>
+<!---->

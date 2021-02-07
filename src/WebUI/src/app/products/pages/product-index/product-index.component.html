@@ -1,0 +1,174 @@
+
+<h2 class="mb-4">{{showOnlyStocked ? 'Stocked ' : ''}}Products</h2>
+
+<div class="p-2 m-2">
+  <button
+    type="button"
+    class="btn btn-primary btn-sm"
+    (click)="openModal(newProductModal)"><fa-icon [icon]="fa.plus"></fa-icon> New product</button>
+</div>
+
+<div class="d-flex justify-content-between mt-4 flex-wrap">
+
+  <div class="p-3">
+    <div class="form-inline md-form">
+      <input #searchInput class="form-control mr-sm-2"
+             type="text" placeholder="Search product name" aria-label="Search product name"
+      (keyup.enter)="search(searchInput.value)" >
+      <button class="btn btn-light btn-rounded my-0" type="button" (click)="search(searchInput.value); loadProducts()">Search</button>
+      <button *ngIf="isFiltered" class="btn btn-light btn-rounded my-0 ml-1" type="button" (click)="searchInput.value = ''; search('')"><fa-icon [icon]="fa.trash"></fa-icon></button>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <div class="btn-group-toggle" data-toggle="buttons">
+    <label class="btn bg-transparent" style="cursor: pointer;">
+      <input type="checkbox" autocomplete="off"
+             [checked]="showOnlyStocked"
+             (change)="showOnlyStocked = !showOnlyStocked"><fa-icon class="text-primary" [icon]="showOnlyStocked ? fa.toggleOn : fa.toggleOff"></fa-icon> Show only stocked
+    </label>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <app-currency-selector (currencySelected)="setForeignCurrency($event)"></app-currency-selector>
+  </div>
+
+  <div class="p-3">
+    <app-item-count-selector (itemCountSelected)="setPageSize($event)"></app-item-count-selector>
+  </div>
+
+</div>
+
+<!--Status indicators-->
+<h3 *ngIf="loadingState == ls.Error" class="font-weight-light text-center mb-3">Error fetching data. :(
+  <a [routerLink]="" (click)="loadProducts()">Retry?</a> </h3>
+<div *ngIf="loadingState == ls.Waiting" style="position: absolute; left: 50%; top: 50%;">
+  <p><fa-icon [icon]="fa.spinner" spin="true" size="4x"></fa-icon></p>
+</div>
+<!---->
+
+<div class="container" *ngIf="state.results != null">
+
+<!--  Product table-->
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Name', propName:'name', colWidth:'35%', iconName:fa.idCard}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Price', propName:'priceAmount', colWidth:'15%', iconName:fa.coins}">
+        </ng-container>
+        <th *ngIf="selectedForeignCurrency" scole="col" style="width: 10%">
+          <fa-icon [icon]="fa.coins"></fa-icon> {{selectedForeignCurrency}}
+        </th>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Mass', propName:'massValue', colWidth:'20%', iconName:fa.weightHanging, classes:'d-none d-sm-table-cell'}">
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="sortableTableHeader"
+          [ngTemplateOutletContext]="{colName:'Qty', propName:'numberInStock', colWidth:'20%', iconName:fa.boxes}">
+        </ng-container>
+        <th scope="col" style="width: 4.16%">
+          Edit
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let product of state?.results" style="height: 2em!important;">
+        <td>{{product.name}}</td>
+        <td>{{product.priceAmount | currency: product.priceCurrencyCode :'symbol':'1.0-2':'en-US'}}</td>
+        <td *ngIf="selectedForeignCurrency && selectedForeignCurrencyRate">{{product.priceAmount * selectedForeignCurrencyRate | currency: selectedForeignCurrency:'symbol' }}</td>
+        <td class="d-none d-sm-table-cell">{{product.massValue | number : '1.0-1' : 'en-US'}} {{product.massUnitSymbol}}</td>
+        <td>{{product.numberInStock}} pcs.</td>
+        <td><a [routerLink]=""
+               (click)="selectedProductId = product.id; openModal(editProductModal);"
+               class="btn btn-sm bg-transparent"
+              ngbTooltip="Edit Product"><fa-icon [icon]="fa.pencil"></fa-icon></a></td>
+      </tr>
+    </tbody>
+  </table>
+<!---->
+
+  <!--  Page control-->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center d-flex align-middle">
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(1)">First</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex <= 1 || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" tabindex="-1" (click)="setPage(state.pageIndex-1)">Previous</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link disabled">Page {{state.pageIndex}} / {{state.pageCount}}</a>
+      </li>
+
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageIndex+1)">Next</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': state.pageIndex >= state.pageCount || loadingState == ls.Waiting}">
+        <a class="page-link" [routerLink]="" (click)="setPage(state.pageCount)">Last</a>
+      </li>
+    </ul>
+  </nav>
+<!---->
+
+  <div class="text-center mb-2 font-weight-light text-muted">{{state.rowCount}} results, showing {{state.firstRowOnPage}}-{{state.lastRowOnPage}}.</div>
+
+
+</div>
+
+
+<!--Product Edit Modal-->
+<ng-template #editProductModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">Edit Product</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-product-edit
+      [showInCard]="false"
+      [productId]="selectedProductId"
+      (productUpdated)="onProductUpdated($event); closeModal()"
+      (productDeleted)="onProductDeleted(); closeModal()"
+    ></app-product-edit>
+  </div>
+</ng-template>
+<!---->
+
+<!--New Product Modal-->
+<ng-template #newProductModal let-modal>
+  <div class="modal-header bg-light">
+    <h4 class="modal-title">New Product</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-product-new
+      [showInCard]="false"
+      (productCreated)="closeModal(); onProductCreated()"
+    ></app-product-new>
+  </div>
+</ng-template>
+<!---->
+
+<!--Clickable table header for two-way sorting-->
+<ng-template #sortableTableHeader let-colName='colName' let-colWidth='colWidth' let-propName="propName" let-iconName="iconName" let-classes="classes">
+  <th scope="col" [ngStyle]="{'width': colWidth, 'cursor' : 'pointer'}" (click)="toggleSort(propName)" [class]="classes">
+    <fa-icon [icon]="iconName"></fa-icon>
+    <br class="d-md-none" /> {{ colName }} <br class="d-md-none" />
+    <fa-icon *ngIf="selectedSortProperty != propName" [icon]="fa.sort" style="opacity: 0.5;"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && selectedSortIsAscending" [icon]="fa.sortUp"></fa-icon>
+    <fa-icon *ngIf="selectedSortProperty == propName && !selectedSortIsAscending" [icon]="fa.sortDown"></fa-icon>
+  </th>
+</ng-template>
+<!---->

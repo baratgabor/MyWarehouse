@@ -1,0 +1,154 @@
+
+<!--Submit in progress indicator-->
+<div *ngIf="saveState == ss.Busy" style="position: absolute; left: 50%; top: 50%;">
+  <p><fa-icon [icon]="fa.spinner" spin="true" size="4x"></fa-icon></p>
+</div>
+<!---->
+
+<form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+
+  <div class="my-3">
+
+    <div *ngIf="submitAttempted && mainForm.get('transactionType').invalid" class="invalid-feedback">
+      Transaction ID is invalid or not set.
+    </div>
+
+    <div class="form-row mb-2">
+      <h4 class="font-weight-light">Select {{transactionType == tt.Sale ? 'Customer' : 'Seller' }}</h4>
+      <hr class="col-12">
+    </div>
+
+<!-- Partner selection -->
+    <ng-container *ngIf="selectedPartner; then selectedPartnerCard else partnerLookup" class="my-2"></ng-container>
+    <app-show-validation-errors [control]="mainForm.get('partnerId')" [shouldShow]="submitAttempted" extraCssClasses="alert-danger w-100 p-2"></app-show-validation-errors>
+<!---->
+
+  </div>
+
+  <div>
+    <div class="mb-2">
+      <div class="d-flex flex-row">
+        <div class="p-2">
+          <h4 class="font-weight-light">Add Products</h4>
+        </div>
+        <div *ngIf="transactionType == tt.Sale" class="btn-group-toggle p-2" data-toggle="buttons">
+            <label class="btn bg-transparent" style="cursor: pointer;">
+              <input type="checkbox" autocomplete="off"
+                     [disabled]="mainForm.disabled"
+                     [checked]="productLookupOnlyStocked"
+                     (change)="productLookupOnlyStocked = !productLookupOnlyStocked"><fa-icon class="text-primary" [icon]="productLookupOnlyStocked ? fa.toggleOn : fa.toggleOff"></fa-icon> Show only stocked
+            </label>
+        </div>
+      </div>
+      <hr class="col-12">
+    </div>
+
+<!--Product lookup field-->
+    <app-product-lookup-field
+      [disabled]="mainForm.disabled"
+      [resetAfterSelection]="true"
+      resultCount="5"
+      [filterOnlyStocked]="productLookupOnlyStocked"
+      (productSelected)="addLine($event)"></app-product-lookup-field>
+<!---->
+
+    <div formArrayName="transactionLines" class="my-3">
+
+      <div *ngIf="transactionLines.controls.length" class="form-row my-2">
+        <div class="col">Product name</div>
+        <div class="col-2">{{getCurrencyHeaderText('Unit price')}}</div>
+        <div class="col-2">Stock</div>
+        <div class="col-2">Quantity</div>
+        <div class="col-3">{{getCurrencyHeaderText('Subtotal')}}</div>
+      </div>
+
+      <div *ngIf="!transactionLines.controls.length" class="form-row mb-3 text-center">
+        <p class="font-italic text-muted w-100">Add minimum one product to the transaction.</p>
+      </div>
+
+      <div class="form-row my-2"
+        *ngFor="let line of transactionLines.controls; let i=index"
+         [formGroupName]="i">
+
+        <div class="col-3">
+          <input readonly type="text" class="form-control" [value]="getProductName(i)"/>
+        </div>
+
+        <div class="col-2">
+          <input readonly class="form-control" [value]="getFormattedProductPrice(i)"/>
+        </div>
+
+        <div class="col-2">
+          <input readonly #stock class="form-control" [value]="getProductStock(i)"/>
+        </div>
+
+        <div class="col-2">
+          <input type="number" min="1" #qty class="form-control" formControlName="productQuantity" [ngClass]="{ 'is-invalid': (transactionType == tt.Sale && +qty.value > +stock.value) || line.get('productQuantity').errors }"/>
+        </div>
+
+        <div class="col-2">
+          <input readonly type="text" class="form-control" [value]="getFormattedLineTotal(i)"/>
+        </div>
+
+        <button type="button" [disabled]="mainForm.disabled" (click)="deleteLine(i)" class="btn btn-small btn-light"><fa-icon [icon]="fa.trash" ngbTooltip="Remove line"></fa-icon></button>
+
+      </div>
+    </div>
+
+  <!--Order lines validation-->
+  <app-show-validation-errors [control]="transactionLines" [shouldShow]="submitAttempted" extraCssClasses="alert-danger w-100 p-2"></app-show-validation-errors>
+  <!---->
+
+    <div class="form-row my-1">
+      <hr class="col-12">
+      <h3 class="col font-weight-light mt-3">Transaction total: {{ getFormattedTransactionTotal() }}</h3>
+    </div>
+
+    <div class="form-row mt-3">
+
+      <div class="text-center">
+        <button type="submit" [disabled]="mainForm.disabled" class="btn btn-primary mr-1">Submit</button>
+      </div>
+
+      <span *ngIf="saveState == ss.Failed" class="alert p-1 ml-2"><fa-icon [icon]="fa.error" class="text-warning mr-2"></fa-icon> Error sending. :(
+        <a [routerLink]="" class="ml-2" (click)="retrySubmit()">Retry</a>
+        <a [routerLink]="" class="ml-2" (click)="cancelSubmit()">Cancel</a>
+      </span>
+
+      <div class="ml-auto mr-2">
+        <app-currency-selector (currencySelected)="setReferenceCurrency($event)"></app-currency-selector>
+      </div>
+
+    </div>
+  </div>
+
+</form>
+
+
+
+<!--Template displaying already selected partner-->
+  <ng-template #selectedPartnerCard>
+    <div class="form-group mx-1 px-3 py-2 bg-light">
+      <h4 class="mb-1">
+        {{selectedPartner.name}} <a class="btn btn-light border-secondary bg-white btn-sm ml-2" [ngClass]="{'disabled' : mainForm.disabled }" ngbTooltip="Select different partner" [routerLink]="" (click)="removePartner()"><fa-icon [icon]="fa.trash" class="mr-2"></fa-icon> Clear partner</a>
+
+      </h4>
+      <div class="form-group">
+        <fa-icon [icon]="fa.building" class="mr-2"></fa-icon> {{selectedPartner.address}}
+      </div>
+    </div>
+  </ng-template>
+<!---->
+
+<!--Template for selecting a partner-->
+  <ng-template #partnerLookup>
+    <div class="form-row">
+      <div class="form-group col">
+        <app-partner-lookup-field
+          [disabled]="mainForm.disabled"
+          [drawFocus]="true"
+          (partnerSelected)="addPartner($event)"></app-partner-lookup-field>
+      </div>
+    </div>
+  </ng-template>
+<!---->
