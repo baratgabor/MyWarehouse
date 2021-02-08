@@ -1,8 +1,6 @@
 
 <div *ngIf="isLoggedIn">
-  <h3 class="font-weight-light">Welcome, <strong>{{loggedInUsername}}</strong>.</h3>
-  <p class="">Your login is valid for {{validityDays}} more days.</p>
-  <button class="btn btn-primary btn-sm" type="button" (click)="doLogout()">Log out</button>
+  <h4 class="font-weight-light mb-4">Hello, {{loggedInUsername}}.</h4>
 </div>
 
 <div class="card m-2" *ngIf="!isLoggedIn">

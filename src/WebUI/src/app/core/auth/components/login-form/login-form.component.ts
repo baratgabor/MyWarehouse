@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Subscription, timer } from 'rxjs';
 
 enum RequestState {
   None,
@@ -32,7 +33,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
-  private sub;
+  private sub: Subscription;
 
   constructor(private as: AuthService) {
   }
@@ -70,8 +71,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     this.form.disable();
 
     this.as.authorize(this.form.value.username, this.form.value.password).subscribe(
-      res => {
+      _ => {
         this.loadState = RequestState.Success;
+        timer(5000).subscribe(() => this.loadState = RequestState.None); // In case user logs out without navigating elsewhere; the 'success' would still be visible.
         this.form.enable();
       },
       err => {

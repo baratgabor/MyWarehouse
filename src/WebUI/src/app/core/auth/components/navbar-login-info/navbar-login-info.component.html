@@ -1,5 +1,24 @@
-<ul *ngIf="loggedIn" class="navbar-nav">
+<ul *ngIf="isLoggedIn" class="navbar-nav">
   <li class="nav-item">
-    <a class="nav-link" [routerLink]="['']"><fa-icon [icon]="faUser"></fa-icon> Hi, <strong>{{username}}</strong></a>
+    <a class="nav-link font-weight-bold" [routerLink]="" (click)="openModal(userInfo)"><fa-icon [icon]="faUser" class="mr-2"></fa-icon>{{username}}</a>
   </li>
 </ul>
+
+<ng-template #userInfo let-modal>
+<div class="modal-header">
+  <h4 class="modal-title">User information</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="isLoggedIn">
+      <h5>You're logged in as <strong>{{username}}</strong>.</h5>
+      <p>We can't show you a lot of information here right now. But we can tell you that your login is valid for <strong>{{validityDays}} more days</strong>.</p>
+      <p>Would you like to <a [routerLink]="['/']" (click)="logout(); modal.dismiss('')">log out</a>?</p>
+  </div>
+  <div *ngIf="!isLoggedIn">
+      <p>You're not logged in.</p>
+  </div>
+</div>
+</ng-template>
