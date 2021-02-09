@@ -24,7 +24,7 @@ export class HttpErrorNotifierService implements OnDestroy {
 
     public handle(httpError: HttpErrorResponse) {
 
-        if (this.context.LastRequest != httpMethod.post) {
+        if (httpError.status == 400 && this.context.LastRequest != httpMethod.post) {
             // We don't want an error notification for e.g. GET errors; only if we sent a form.
             // Filtering for POST is crude, but currently it works fine.
             // TODO: Extend context by explicitly declaring if request was a form submission (or to find a more elegant solution).
