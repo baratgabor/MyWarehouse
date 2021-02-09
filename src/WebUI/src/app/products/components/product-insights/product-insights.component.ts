@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';
 import { faSpinner, faTrophy, faBox, faBoxes } from '@fortawesome/free-solid-svg-icons';
+import { PagedQuery } from 'app/core/http/paged-query';
+import { ProductSummary } from 'app/products/models/product-summary';
 
 enum DataState {
   Waiting,
@@ -23,13 +24,15 @@ export class ProductInsightsComponent implements OnInit {
     boxes: faBoxes
   };
 
-  productMostStocked: Product;
-  productHeaviest: Product;
+  productMostStocked: ProductSummary;
+  productHeaviest: ProductSummary;
 
   get dataState() { return DataState; }
 
   mostStockedLoadState: DataState = DataState.Waiting;
   heaviestLoadState: DataState = DataState.Waiting;
+
+  private query = new PagedQuery();
 
   constructor(private productService: ProductService) { }
 
@@ -41,16 +44,22 @@ export class ProductInsightsComponent implements OnInit {
   getMostStocked() {
     this.mostStockedLoadState = DataState.Waiting;
 
-    this.productService.getMostStocked().subscribe(
-      res => { this.productMostStocked = res; this.mostStockedLoadState = DataState.Success; },
+    this.query.pageSize = 1;
+    this.query.addSort("numberInStock", true);
+
+    this.productService.getProducts(this.query.toQueryParams()).subscribe(
+      res => { this.productMostStocked = res.results[0]; this.mostStockedLoadState = DataState.Success; },
       _ => { this.mostStockedLoadState = DataState.Error; });
   }
 
   getHeaviest() {
     this.heaviestLoadState = DataState.Waiting;
 
-    this.productService.getHeaviest().subscribe(
-      res => { this.productHeaviest = res; this.heaviestLoadState = DataState.Success; },
+    this.query.pageSize = 1;
+    this.query.addSort("massValue", true);
+
+    this.productService.getProducts(this.query.toQueryParams()).subscribe(
+      res => { this.productHeaviest = res.results[0]; this.heaviestLoadState = DataState.Success; },
       _ => { this.heaviestLoadState = DataState.Error; });
   }
 }

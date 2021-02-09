@@ -1,28 +1,32 @@
 
-<div class="container">
+<div class="container mb-5">
   <h2><fa-icon [icon]="fa.trophy" size="1x"></fa-icon> Top Warehouse Items</h2>
 
   <div class="row mb-3 mt-4">
+
     <div class="" *ngIf="heaviestLoadState == dataState.Waiting || mostStockedLoadState == dataState.Waiting">
       <fa-icon [icon]="fa.spinner" spin="true" size="3x" style="color: #eaeaea;"></fa-icon>
     </div>
+
     <div class="" *ngIf="heaviestLoadState == dataState.Error || mostStockedLoadState == dataState.Error">
       <h3 class="font-weight-light mx-5 my-2">We're sorry. We couldn't fetch one or more products. :(</h3>
     </div>
 
     <div class="col-md-6" *ngIf="heaviestLoadState == dataState.Success">
-      <app-product-card
+      <app-product-card 
         cardTitle="Heaviest product"
         [faIcon]="fa.box"
         [product]="productHeaviest"
         (refreshRequested)="getHeaviest()"></app-product-card>
     </div>
+
     <div class="col-md-6" *ngIf="mostStockedLoadState == dataState.Success">
       <app-product-card
-        cardTitle="Highest quantity product"
+        cardTitle="Most stocked product"
         [faIcon]="fa.boxes"
         [product]="productMostStocked"
         (refreshRequested)="getMostStocked()"></app-product-card>
     </div>
+
   </div>
 </div>
