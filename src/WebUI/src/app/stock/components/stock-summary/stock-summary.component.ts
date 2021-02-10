@@ -35,10 +35,10 @@ export class StockSummaryComponent implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+  loadData(forceRefresh = false) {
     this.loadState = DataState.Waiting;
 
-    this.productService.getStockCount().subscribe(
+    this.productService.getStockCount(forceRefresh).subscribe(
       res => {
         this.productCount = res.productCount;
         this.stockCount = res.totalStock;

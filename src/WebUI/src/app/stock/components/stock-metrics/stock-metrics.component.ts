@@ -40,10 +40,10 @@ export class StockMetricsComponent implements OnInit {
     this.getValue();
   }
 
-  getMass() {
+  getMass(forceRefresh = false) {
     this.stockMassState = DataState.Waiting;
 
-    this.productService.getAggregateMass().subscribe(
+    this.productService.getAggregateMass(forceRefresh).subscribe(
       res => {
         this.stockMass = res.value;
         this.stockMassUnit = res.unit;
@@ -52,10 +52,10 @@ export class StockMetricsComponent implements OnInit {
       _ => { this.stockMassState = DataState.Error; });
   }
 
-  getValue() {
+  getValue(forceRefresh = false) {
     this.stockValueState = DataState.Waiting;
 
-    this.productService.getAggregateValue().subscribe(
+    this.productService.getAggregateValue(forceRefresh).subscribe(
       res => {
         this.stockValue = res.amount;
         this.stockValueCurrency = res.currencyCode;

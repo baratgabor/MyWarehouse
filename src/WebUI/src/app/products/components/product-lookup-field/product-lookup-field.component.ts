@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, tap, switchMap, finalize} from 'rxjs/operators';
-import {PagedState} from '../../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {HttpParams} from '@angular/common/http';
 import {Product} from '../../models/product';
 import {ProductService} from '../../services/product.service';

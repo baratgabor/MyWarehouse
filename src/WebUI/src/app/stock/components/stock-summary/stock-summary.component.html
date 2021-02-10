@@ -4,7 +4,7 @@
 
   <div class="row mb-3 mt-4">
     <div class="col-md-6">
-      <app-display-card title="Number of individual products" [faIcon]="fa.list" linkText="Refresh" (linkClicked)="loadData()">
+      <app-display-card title="Number of individual products" [faIcon]="fa.list" linkText="Refresh" (linkClicked)="loadData(true)">
         <span *ngIf="loadState == dataState.Waiting"> <fa-icon [icon]="fa.spinner" spin="true" size="1x" style="color: #eaeaea"></fa-icon> </span>
         <span *ngIf="loadState == dataState.Error" class="text-muted h5"> {{ errorMessage }} </span>
         <span *ngIf="loadState == dataState.Success"> {{ productCount | number : '1.0-0' : 'en-US' }} </span>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-md-6">
-      <app-display-card title="Total products in stock" [faIcon]="fa.cubes" linkText="Refresh" (linkClicked)="loadData()">
+      <app-display-card title="Total products in stock" [faIcon]="fa.cubes" linkText="Refresh" (linkClicked)="loadData(true)">
         <span *ngIf="loadState == dataState.Waiting"> <fa-icon [icon]="fa.spinner" spin="true" size="1x" style="color: #eaeaea"></fa-icon> </span>
         <span *ngIf="loadState == dataState.Error" class="text-muted h5"> {{ errorMessage }} </span>
         <span *ngIf="loadState == dataState.Success"> {{ stockCount | number : '1.0-0' : 'en-US' }} </span>

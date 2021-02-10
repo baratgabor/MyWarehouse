@@ -4,7 +4,7 @@
 
   <div class="row mb-3 mt-4">
     <div class="col-md-6">
-      <app-display-card title="Overall mass of warehouse stock" [faIcon]="fa.weight" linkText="Refresh" (linkClicked)="getMass()">
+      <app-display-card title="Overall mass of warehouse stock" [faIcon]="fa.weight" linkText="Refresh" (linkClicked)="getMass(true)">
         <span *ngIf="stockMassState == dataState.Waiting"> <fa-icon [icon]="fa.spinner" spin="true" size="1x" style="color: #eaeaea"></fa-icon> </span>
         <span *ngIf="stockMassState == dataState.Error" class="text-muted h5"> {{ errorMessage }} </span>
         <span *ngIf="stockMassState == dataState.Success"> {{ stockMass | number : '1.0-1' : 'en-US' }} {{ stockMassUnit }}</span>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-md-6">
-      <app-display-card title="Overall value of warehouse stock" [faIcon]="fa.money" linkText="Refresh" (linkClicked)="getValue()">
+      <app-display-card title="Overall value of warehouse stock" [faIcon]="fa.money" linkText="Refresh" (linkClicked)="getValue(true)">
         <span *ngIf="stockValueState == dataState.Waiting"> <fa-icon [icon]="fa.spinner" spin="true" size="1x" style="color: #eaeaea"></fa-icon> </span>
         <span *ngIf="stockValueState == dataState.Error" class="text-muted h5"> {{ errorMessage }} </span>
         <span *ngIf="stockValueState == dataState.Success"> {{ stockValue | currency : stockValueCurrency :'symbol':'1.0-0':'en-US' }} </span>

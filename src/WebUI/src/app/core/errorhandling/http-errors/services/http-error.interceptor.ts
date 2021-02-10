@@ -28,7 +28,7 @@ export class ServerValidationErrorInterceptor implements HttpInterceptor {
                     }
 
                     if (err instanceof HttpErrorResponse) {
-                        this.httpErrorHandler.handle(err);
+                        this.httpErrorHandler.handle(err, req);
                     }
 
                     return throwError(err);

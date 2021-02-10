@@ -1,13 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {PagedState} from '../../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute} from '@angular/router';
 import {PartnerListing} from '../../models/partner-listing';
 import {PartnerService} from '../../services/partner.service';
-import { SortState } from '../../../core/http/paged-query';
+import { SortState } from '../../../core/http/models/paged-query';
 import { faBarcode, faBuilding, faGlobe, faIdCard, faMapPin, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSpinner, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { PartnerUpdate } from 'app/partners/models/partner-update';
-import { PartnerCreate } from 'app/partners/models/partner-create';
 
 enum LoadingState {
   Default,

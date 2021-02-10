@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from '../../services/product.service';
-import {PagedState} from '../../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute} from '@angular/router';
 import {ProductSummary} from '../../models/product-summary';
 import {Product} from '../../models/product';
-import { SortState } from '../../../core/http/paged-query';
+import { SortState } from '../../../core/http/models/paged-query';
 import { faToggleOn, faToggleOff, faSpinner, faIdCard, faCoins, 
   faWeightHanging, faBoxes, faPencilAlt, faSort, faSortUp,
   faSortDown, 

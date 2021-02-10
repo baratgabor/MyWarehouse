@@ -4,7 +4,7 @@ import {catchError, debounceTime, distinctUntilChanged, map, tap, switchMap, fin
 import {PartnerService} from '../../services/partner.service';
 import {PartnerListing} from '../../models/partner-listing';
 import {HttpParams} from '@angular/common/http';
-import { PagedQuery } from 'app/core/http/paged-query';
+import { PagedQuery } from 'app/core/http/models/paged-query';
 import { faBook, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

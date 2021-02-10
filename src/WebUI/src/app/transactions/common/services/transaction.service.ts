@@ -3,10 +3,10 @@ import {HttpParams} from '@angular/common/http';
 import {TransactionDetails} from '../../useCases/viewExisting/models/transaction-details';
 import {TransactionCreate} from '../../useCases/createNew/models/transaction-create';
 import {Observable} from 'rxjs';
-import {PagedState} from '../../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {TransactionType} from '../models/transaction-type';
 import {TransactionListing} from '../../useCases/listAll/models/transaction-listing';
-import { ApiService } from 'app/core/http/api-service';
+import { ApiService } from 'app/core/http/services/api-service';
 
 @Injectable({
   providedIn: 'root'

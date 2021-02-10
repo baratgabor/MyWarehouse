@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpParams, HttpResponse} from '@angular/common/http';
-import {PagedState} from '../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {Product} from '../models/product';
 import {Observable} from 'rxjs';
 import {Money} from '../../core/models/Money';
@@ -8,7 +8,8 @@ import {ProductSummary} from '../models/product-summary';
 import {Mass} from '../../core/models/Mass';
 import {ProductStockCount} from '../models/product-stock-count';
 import {ProductCreate} from '../models/product-create';
-import {ApiService} from 'app/core/http/api-service';
+import {ApiService} from 'app/core/http/services/api-service';
+import { PagedQuery } from 'app/core/http/models/paged-query';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,12 @@ export class ProductService {
 
   constructor(private apiService: ApiService) { }
 
-  getProducts(params: HttpParams, onlyStocked: boolean = false, ) : Observable<PagedState<ProductSummary>>
+  getProducts(params: HttpParams, onlyStocked: boolean = false, cacheResponse = false, forceRefresh = false) : Observable<PagedState<ProductSummary>>
   {
     if (onlyStocked)
       params = params.append('status','stocked');
 
-    return this.apiService.get<PagedState<ProductSummary>>('products', params);
+    return this.apiService.get<PagedState<ProductSummary>>('products', params, { cacheResponse, forceRefresh });
   }
 
   getProduct(id: number)
@@ -58,25 +59,15 @@ export class ProductService {
     });
   }
 
-  getAggregateMass(): Observable<Mass> {
-    return this.apiService.get<Mass>(`products/totalMass`);
+  getAggregateMass(forceRefresh = false): Observable<Mass> {
+    return this.apiService.get<Mass>(`products/totalMass`, null, { cacheResponse: true, forceRefresh });
   }
 
-  getAggregateValue(): Observable<Money> {
-    return this.apiService.get<Money>(`products/totalValue`);
+  getAggregateValue(forceRefresh = false): Observable<Money> {
+    return this.apiService.get<Money>(`products/totalValue`, null, { cacheResponse: true, forceRefresh });
   }
 
-  getStockCount(): Observable<ProductStockCount> {
-    return this.apiService.get<ProductStockCount>(`products/stockCount`);
-  }
-
-  getMostStocked(): Observable<Product>
-  {
-    return this.apiService.get<Product>(`products/MostStocked`);
-  }
-
-  getHeaviest(): Observable<Product>
-  {
-    return this.apiService.get<Product>(`products/Heaviest`);
+  getStockCount(forceRefresh = false): Observable<ProductStockCount> {
+    return this.apiService.get<ProductStockCount>(`products/stockCount`, null, { cacheResponse: true, forceRefresh });
   }
 }

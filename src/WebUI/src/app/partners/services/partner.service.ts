@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { PartnerListing } from '../models/partner-listing';
 import { Observable } from 'rxjs';
-import { PagedState } from 'app/core/http/paged-state';
+import { PagedState } from 'app/core/http/models/paged-state';
 import { PartnerDetails } from '../models/partner-details';
 import { PartnerCreate } from '../models/partner-create';
 import { PartnerUpdate } from '../models/partner-update';
-import { ApiService } from 'app/core/http/api-service';
+import { ApiService } from 'app/core/http/services/api-service';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({

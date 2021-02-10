@@ -21,6 +21,7 @@ import { ItemCountSelectorComponent } from './components/item-count-selector/ite
 import { ServerValidationErrorInterceptor } from './errorhandling/http-errors/services/http-error.interceptor';
 import { ShowValidationErrorsComponent } from './errorhandling/form-validation/components/show-validation-errors/show-validation-errors.component';
 import { HttpErrorNotificationComponent } from './errorhandling/http-errors/components/http-error-notification/http-error-notification.component';
+import { CachingInterceptor } from './http/services/caching-interceptor';
 
 @NgModule({
   entryComponents:[
@@ -69,6 +70,11 @@ import { HttpErrorNotificationComponent } from './errorhandling/http-errors/comp
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ServerValidationErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CachingInterceptor,
       multi: true
     }
   ]

@@ -17,7 +17,7 @@
         cardTitle="Heaviest product"
         [faIcon]="fa.box"
         [product]="productHeaviest"
-        (refreshRequested)="getHeaviest()"></app-product-card>
+        (refreshRequested)="getHeaviest(true)"></app-product-card>
     </div>
 
     <div class="col-md-6" *ngIf="mostStockedLoadState == dataState.Success">
@@ -25,7 +25,7 @@
         cardTitle="Most stocked product"
         [faIcon]="fa.boxes"
         [product]="productMostStocked"
-        (refreshRequested)="getMostStocked()"></app-product-card>
+        (refreshRequested)="getMostStocked(true)"></app-product-card>
     </div>
 
   </div>

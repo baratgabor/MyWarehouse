@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild } from '@angular/core';
-import {PagedState} from '../../../../../core/http/paged-state';
+import {PagedState} from 'app/core/http/models/paged-state';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute} from '@angular/router';
 import {TransactionDetails} from '../../../viewExisting/models/transaction-details';
 import {TransactionService} from '../../../../common/services/transaction.service';
 import { TransactionType } from '../../../../common/models/transaction-type';
-import { SortState } from '../../../../../core/http/paged-query';
+import { SortState } from '../../../../../core/http/models/paged-query';
 import { faCalendarAlt, faCoins, faIdCard, faMinus, faPlus, faSearch, faSort, faSortDown, faSortUp, faSpinner, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SelectedCurrency } from 'app/core/exchangeRates/components/currency-selector/currency-selector.component';
 
