@@ -21,7 +21,24 @@ The following, rather informatively written documentation page has a two-fold pu
 ---------
 **Contents:**
 
-{:toc}
+- [Technologies](#technologies)
+- [Backend Design Paradigms](#backend-design-paradigms)
+  * [Clean Architecture](#clean-architecture)
+  * [Vertical Slicing](#vertical-slicing)
+  * [Domain Driven Design](#domain-driven-design)
+- [Diversions from and extensions to the Clean Architecture Template](#diversions-from-and-extensions-to-the-clean-architecture-template)
+  * [DDD in Domain](#ddd-in-domain-)
+  * [Paging, ordering and filtering](#paging--ordering-and-filtering-)
+  * [Infrastructure layer modularization](#infrastructure-layer-modularization-)
+  * [Improved integration/unit testing](#improved-integration-unit-testing-)
+  * [Support structure for strongly typed configuration](#support-structure-for-strongly-typed-configuration-)
+  * [Repository layer](#repository-layer-)
+  * [Logging extensions](#logging-extensions-)
+  * [No Identity Server integration](#no-identity-server-integration-)
+  * [Deemphasizing CQRS](#deemphasizing-cqrs-)
+  * [.Net 5 (C# 9) features](#net-5--c--9--features-)
+  * [More feature-rich Angular frontend](#more-feature-rich-angular-frontend-)
+- [Potential/planned improvements](#potential-planned-improvements)
 
 ## Motivation
 
