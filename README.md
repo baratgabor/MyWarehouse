@@ -1,16 +1,16 @@
-<img width="600" src=".github/logo.png" /> 
 
-----------
+
+
+
+##  <img width="300" src=".github/logo-no-desc.png" />  <br/> A Clean Architecture,  Vertical Slicing, DDD sample in ASP.NET Core
 
 ![.NET Core](https://github.com/baratgabor/MyWarehouse/workflows/.NET%20Core/badge.svg)
 
-----------
+<br/>
 
-Hola, muchachos!
+This is a sample project consisting of an ASP.NET Core web API backend service and an Angular frontend with Bootstrap.
 
-What you have here is a sample project consisting of an ASP.NET Core web API backend service and an Angular frontend with Bootstrap.
-
-Finally decided it's time to have something on my GitHub that is actually relevant to my professional focus on ASP.NET Core, retiring those *god-awfully written*\* old classical ASP.NET projects I had on BitBucket. *(\*They had business logic in the controller actions. That's all I have to say about them.)*
+I  have finally decided it's time to have something public on my GitHub account that is actually relevant to my professional focus on ASP.NET Core, retiring those god-awfully written old classical ASP.NET projects I had on BitBucket.
 
 The following, rather informatively written documentation page has a two-fold purpose:
 
@@ -20,6 +20,7 @@ The following, rather informatively written documentation page has a two-fold pu
 
 ---------
 **Contents:**
+
 {:toc}
 
 ## Motivation
@@ -34,9 +35,13 @@ I'm not saying I never want to work on a more classical project, since there are
 
 This project had an older version I originally developed for a job application, with functionality they specifically asked to implement. I actually know very little of warehouses as a business domain, and I have no contact with any business experts from this domain, so the domain aspect (perhaps confusingly) is not intended to model a real warehouse. What I explored doing, with respect to the domain, is introducing validation and logic in entities, locking them down by not exposing mutable properties, and using value objects like *Money* and *Mass* (instead of [primitive obsession](https://blog.ploeh.dk/2011/05/25/DesignSmellPrimitiveObsession/)) in the context of EF Core (i.e. owned types).
 
+## Technologies
+
+[C# 9](https://devblogs.microsoft.com/dotnet/welcome-to-c-9-0/)  ◊ [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0) ◊ [ASP.NET Core 5](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-5.0) ◊ [Entity Framework Core 5](https://docs.microsoft.com/en-us/ef/core/) ◊ [Angular 11](https://angular.io/) ◊ [Bootstrap](https://getbootstrap.com/) ◊ [MediatR](https://github.com/jbogard/MediatR) ◊ [AutoMapper](https://automapper.org/) ◊ [FluentValidation](https://fluentvalidation.net/) ◊ [NUnit](https://nunit.org/) ◊ [Moq](https://github.com/Moq/moq4/wiki/Quickstart) ◊ [FluentAssertions](https://fluentassertions.com/) ◊ [Respawn](https://github.com/jbogard/Respawn) ◊ [Swagger](https://swagger.io/)
+
 ## Backend Design Paradigms
 
-The current project's backend system uses the following design paradigms. You can find plenty of dry materials pertaining to these subjects, so I mostly focused on providing a pragmatic narration that could perhaps help you to 'get the point' if you had difficulties extracting that value from other sources.
+The current project's backend system uses the following design paradigms (besides the fundamentals that are not worth mentioning). You can find plenty of dry materials pertaining to these subjects, so I mostly focused on providing a pragmatic narration that could perhaps help you to 'get the point' if you had difficulties extracting that value from other sources.
 
 ### Clean Architecture
 
