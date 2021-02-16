@@ -196,11 +196,13 @@ But we all have to discover our own ways, based on our own experiences, followin
 
 - **I'm not a front-end developer** (™): But I built a relatively decent and polished frontend for this project, at least from a UX perspective. So if you're new to Angular, it could be perhaps more helpful to look into it than the mostly blank Clean Architecture Template. I broke down most problems into reusable components, and centralized what I could. For example I automated the displaying of form validation errors via [custom validators](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/validators/custom-validators.ts) and a component that [lists all reported validation errors](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/components/show-validation-errors/show-validation-errors.component.ts). That said, chances are you can find better resources and samples for frontend development. And if you're an Angular pro or especially an RxJS pro, perhaps you can look into it just to laugh at me. Although I genuinely didn't see much use for Stores in this particular project.
 
-## Potential/planned improvements
+## Potential improvements
 
 - **HttpService, external services:** It's just *strange* to have any project these days that doesn't communicate with at least some  external APIs. So it would be great to find a few good candidates for integration. One of them could be the exchange rate service that I added to the frontend earlier in a rather lazy and ad-hoc fashion.
 - **Localization:** Seems like this would be a reasonable and well-placed addition. I've worked on web API localization earlier with good results, but I'd have to research how to implement it in a DDD paradigm, because frankly I have no clue (and that is exactly why it would be a good subject to explore).
 - **Audit system:** A system for storing all changes to the entities, with the ability to list these changes through the API and display them for users on-demand. This is actually something I haven't had to implement yet, so this will also require a bit of research.
+- **Actual warehouse features:** For example adding dimensions to products, and at the very least aggregating those dimensions to ascertain if the warehouse is full (after also designating a given warehouse capacity). But there is no end to these potential features, as warehouses are obviously complex structures, and I'm not that interested in actually making a working warehouse system, so the basis of consideration should be whether something is a good learning experience in DDD or API design.
+- **Swagger Codegen:** I didn't implement automatic code generation for the frontend services, and probably it would be a good idea to look into doing so.
 
 ## In conclusion
 
