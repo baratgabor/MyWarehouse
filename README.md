@@ -1,12 +1,14 @@
-<img src="src/WebUI/src/assets/logo-long-color.png" style="zoom:20%;" /> 
-
-🍕 A Clean Architecture + DDD sample project in ASP.NET Core 🍕
-
----------
 
 ![.NET Core](https://github.com/baratgabor/MyWarehouse/workflows/.NET%20Core/badge.svg)
 
 ---------
+
+<img width="465" src=".github/logo.png" /> 
+
+🍕 A Clean Architecture + DDD sample project in ASP.NET Core 🍕 
+
+---------
+
 
 Hola, muchachos! What you have here is a sample project consisting of an ASP.NET Core web API backend service and an Angular frontend (with Bootstrap).
 
@@ -20,7 +22,7 @@ The following, rather informatively written documentation page has a two-fold pu
 
 ---------
 **Contents:**
-[TOC]
+{:toc}
 
 ## Motivation
 
