@@ -7,8 +7,6 @@ const apiRoute = '';
 
 export const environment = {
   production: false,
-  //baseHost: 'https://localhost:44315',
-  //apiHost: 'https://localhost:44315/api',
   baseHost: `https://${new URL(window.location.origin).hostname}:${apiPort}`,
   apiHost: `https://${new URL(window.location.origin).hostname}:${apiPort}`,
 };
