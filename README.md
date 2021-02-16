@@ -38,7 +38,7 @@ The following, rather informatively written documentation page has a two-fold pu
   * [Deemphasizing CQRS](#deemphasizing-cqrs-)
   * [.Net 5 (C# 9) features](#net-5--c--9--features-)
   * [More feature-rich Angular frontend](#more-feature-rich-angular-frontend-)
-- [Potential/planned improvements](#potential-planned-improvements)
+- [Potential improvements](#potential-improvements)
 
 ## Motivation
 
