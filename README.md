@@ -20,7 +20,15 @@ The following, rather informatively written documentation page has a two-fold pu
 [See here](https://baratgabor.github.io/MyWarehouse). The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
 
 <p align="center">
-	<a href="https://baratgabor.github.io/MyWarehouse"><img src=".github\demo-button.png" width="500" /></a>
+	<a href="https://baratgabor.github.io/MyWarehouse" target="_blank"><img src=".github\demo-button.png" width="500" /></a>
+</p>
+
+## Screenshots
+
+<p align="center">
+   	<a href=".github\screenshots\1.png" target="_blank"><img src=".github\screenshots\1.png" height="250"/></a>
+   	<a href=".github\screenshots\2.png" target="_blank"><img src=".github\screenshots\2.png" height="250"/></a>
+   	<a href=".github\screenshots\3.png" target="_blank"><img src=".github\screenshots\3.png" height="250"/></a>
 </p>
 
 
