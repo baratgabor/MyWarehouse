@@ -1,8 +1,6 @@
 
 
-
-
-##  <img width="300" src=".github/logo-no-desc.png" />  <br/> A Clean Architecture,  Vertical Slicing, DDD sample in ASP.NET Core
+##  MyWarehouse – A Clean Architecture, Vertical Slicing, DDD sample in ASP.NET Core
 
 ![.NET Core](https://github.com/baratgabor/MyWarehouse/workflows/.NET%20Core/badge.svg)
 
@@ -15,8 +13,17 @@ I  have finally decided it's time to have something public on my GitHub account 
 The following, rather informatively written documentation page has a two-fold purpose:
 
 1. To be – hopefully – useful for others who wish to explore a similar direction in development.
-
 2. To provide a summary of my current approach to working with ASP.NET Core, and my current level of understanding thereof, so anyone who was interested in my skillset could easily review it in a single place.
+
+## Live Demo
+
+[See here](https://baratgabor.github.io/MyWarehouse). The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
+
+<p align="center">
+	<a href="https://baratgabor.github.io/MyWarehouse"><img src=".github\demo-button.png" width="500" /></a>
+</p>
+
+
 
 ---------
 **Contents:**
