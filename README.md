@@ -26,9 +26,9 @@ The following, rather informatively written documentation page has a two-fold pu
 ## Screenshots
 
 <p align="center">
-   	<a href=".github\screenshots\1.png" target="_blank"><img src=".github\screenshots\1.png" height="250"/></a>
-   	<a href=".github\screenshots\2.png" target="_blank"><img src=".github\screenshots\2.png" height="250"/></a>
-   	<a href=".github\screenshots\3.png" target="_blank"><img src=".github\screenshots\3.png" height="250"/></a>
+   	<a href="https://raw.githubusercontent.com/baratgabor/MyWarehouse/master/.github/screenshots/1.png" target="_blank"><img src=".github\screenshots\1.png" height="250"/></a>
+   	<a href="https://raw.githubusercontent.com/baratgabor/MyWarehouse/master/.github/screenshots/2.png" target="_blank"><img src=".github\screenshots\2.png" height="250"/></a>
+   	<a href="https://raw.githubusercontent.com/baratgabor/MyWarehouse/master/.github/screenshots/3.png" target="_blank"><img src=".github\screenshots\3.png" height="250"/></a>
 </p>
 
 
