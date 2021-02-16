@@ -72,6 +72,12 @@ namespace MyWarehouse
 
         private void AddMyCorsConfig(IServiceCollection services)
         {
+
+            var corsSettings = Configuration.GetMyOptions<CorsSettings>();
+
+            if (corsSettings == null)
+                return;
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -82,7 +88,7 @@ namespace MyWarehouse
                         .AllowCredentials()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .WithOrigins(
-                            Configuration.GetMyOptions<CorsSettings>().AllowedOrigins)
+                            corsSettings.AllowedOrigins)
                         .Build();
                     });
             });
