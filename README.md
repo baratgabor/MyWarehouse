@@ -54,6 +54,7 @@ The following, rather informatively written documentation page has a two-fold pu
   * [.Net 5 (C# 9) features](#net-5-c-9-features)
   * [More feature-rich Angular frontend](#more-feature-rich-angular-frontend)
 - [Potential improvements](#potential-improvements)
+- [How to set up to run locally](#how-to-set-up-to-run-locally)
 
 ## Motivation
 
@@ -218,6 +219,53 @@ But we all have to discover our own ways, based on our own experiences, followin
 - **Audit system:** A system for storing all changes to the entities, with the ability to list these changes through the API and display them for users on-demand. This is actually something I haven't had to implement yet, so this will also require a bit of research.
 - **Actual warehouse features:** For example adding dimensions to products, and at the very least aggregating those dimensions to ascertain if the warehouse is full (after also designating a given warehouse capacity). But there is no end to these potential features, as warehouses are obviously complex structures, and I'm not that interested in actually making a working warehouse system, so the basis of consideration should be whether something is a good learning experience in DDD or API design.
 - **Swagger Codegen:** I didn't implement automatic code generation for the frontend services, and probably it would be a good idea to look into doing so.
+
+## How to set up to run locally
+
+It you wish to clone this repository and use it (for whatever purpose you see fit), you'll have to take care of the following:
+
+- Download and install **.NET 5 and ASP.NET Core 5 runtime** for the backend. The other project dependencies will be restored via NuGet.
+
+- Install **Node.js and npm package manager** on your machine, and run `npm install` in the `WebUI` project folder to restore the frontend packages. Frontend can be run with `ng serve`.
+
+- The less obvious one – **Secrets in configuration**:
+   - The backend system relies on multiple configuration values that are treated as 'secrets' and aren't part of the configuration committed to git. A `// Secret` comment identifies these in `WebApi.appsettings.json`.
+
+   - An excellent place for these secrets is the **User Secrets file**. You can access this file by right-clicking the `WebApi` project, and selecting **Manage User Secrets**.
+        - This opens a `secrets.json` file (which is actually located in your user profile folder, and not in the solution folder). In this json file you can enter any additional configuration values you'd want to see injected over the default appsettings.json (ideally only the secrets).
+     
+     - To set a nested configuration setting, you can use colon (`:`) as a separator. For example to set the `DefaultUsername` property inside `UserSeedSettings`, you can simply set a value for `"UserSeedSettings:DefaultUsername"`.
+     
+     - The following could be a valid configuration that should allow running the solution in development mode (keep `LogglySettings:WriteToLoggly` and `AzureKeyVaultSettings:AddToConfiguration` as false):
+     
+          ```json
+          {    
+            "UserSeedSettings:SeedDefaultUser": true,
+            "UserSeedSettings:DefaultUsername": "User",
+            "UserSeedSettings:DefaultPassword": "Password",
+            "UserSeedSettings:DefaultEmail": "something@gmail.com",
+            "ConnectionStrings:DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MyWarehouseDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+            "AuthenticationSettings:JwtSigningKeyBase64": "e09053f6847d466b8f243d9522c340ef234sdfds",
+          }
+          ```
+     
+   - Alternative to the user secrets file is using **environment variables**.
+
+     - You can set nested configuration properties with environment variables as well. This can be achieved by using a colon (`:`) separator as explained above, or on a Linux system you can use a double underscore (`__`) separator. Actually both should work on Windows, so it's generally safer to use double underscore.
+
+     - You can even set array values. For example to set the `CorsSettings.AllowedOrigins` array, which contains the list of hosts that are allowed to access the backend API, you could use the following format*:
+
+       `CorsSettings__AllowedOrigins__0 = http://frontendlocation.com`
+
+       `CorsSettings__AllowedOrigins__1 = https://frontendlocation.com`
+
+       *(\*Don't include a trailing slash `/` character, for the love of god, or any capital letters, because the host checking is absolutely primitive; it's basically just doing [a case-sensitive ordinal string comparison](https://github.com/dotnet/aspnetcore/blob/461c4ece84ef5e7385249994645a3262717d3ca5/src/Middleware/CORS/src/Infrastructure/CorsPolicy.cs#L179) with the host contained in `HttpContext`. And if CORS tells you that `CORS Policy Execution Failed`, that actually means that CORS policy execution succeeded, it just ascertained that the host should not be allowed.)*
+
+   - And of course you can just set them right in `appsettings.json` too. Nothing horrible will happen. It's just a good idea to get familiar with the proper ways to inject secret configuration values into the solution, because otherwise you can end up accidentally committing these to Git repos. The demo backend system hosted in Azure gets them from an Azure Key Vault, for example.
+
+- You should be able to log in with the seeded default user account details.
+
+- Sample data will be automatically generated in the database (unless `ApplicationDbSettings:AutoSeed` is set to `false`), so don't be surprised to see a bunch of products, partners and transactions.
 
 ## In conclusion
 
