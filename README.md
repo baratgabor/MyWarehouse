@@ -236,7 +236,7 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
      
      - To set a nested configuration setting, you can use colon (`:`) as a separator. For example to set the `DefaultUsername` property inside `UserSeedSettings`, you can simply set a value for `"UserSeedSettings:DefaultUsername"`.
      
-     - The following could be a valid configuration that should allow running the solution in development mode (keep `LogglySettings:WriteToLoggly` and `AzureKeyVaultSettings:AddToConfiguration` as false):
+     - The following could be a valid configuration that should allow running the solution in development mode (keep `LogglySettings:WriteToLoggly` and `AzureKeyVaultSettings:AddToConfiguration` as false; and also please note this connection string does rely on [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15), which is a standard part of the 'ASP.NET and web development' workload in the Visual Studio installer):
      
           ```json
           {    
