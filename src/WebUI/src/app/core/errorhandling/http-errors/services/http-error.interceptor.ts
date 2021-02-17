@@ -7,7 +7,7 @@ import { HttpErrorNotifierService } from './http-error-notifier.service';
 @Injectable()
 export class ServerValidationErrorInterceptor implements HttpInterceptor {
 
-    readonly requestTimeout = 20000;
+    readonly requestTimeout = 60000;
 
     constructor(protected httpErrorHandler: HttpErrorNotifierService) {}
 
