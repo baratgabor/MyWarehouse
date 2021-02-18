@@ -210,9 +210,13 @@ But we all have to discover our own ways, based on our own experiences, followin
 
 ### More feature-rich Angular frontend:
 
-- **I'm not a front-end developer** (™): But I built a relatively decent and polished frontend for this project, at least from a UX perspective. So if you're new to Angular, it could be perhaps more helpful to look into it than the mostly blank Clean Architecture Template. I broke down most problems into reusable components, and centralized what I could. For example I automated the displaying of form validation errors via [custom validators](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/validators/custom-validators.ts) and a component that [lists all reported validation errors](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/components/show-validation-errors/show-validation-errors.component.ts). That said, chances are you can find better resources and samples for frontend development. And if you're an Angular pro or especially an RxJS pro, perhaps you can look into it just to laugh at me. Although I genuinely didn't see much use for Stores in this particular project. Also:
+- **I'm not a front-end developer** (™): But I built a relatively decent and polished frontend for this project, at least from a UX perspective. So if you're new to Angular, it could be perhaps more helpful to look into it than the mostly blank Clean Architecture Template. I broke down most problems into reusable components, and centralized what I could. For example I automated the displaying of form validation errors via [custom validators](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/validators/custom-validators.ts) and a component that [lists all reported validation errors](https://github.com/baratgabor/MyWarehouse/blob/master/src/WebUI/src/app/core/errorhandling/form-validation/components/show-validation-errors/show-validation-errors.component.ts). That said, chances are you can find better resources and samples for frontend development. And if you're an Angular pro or especially an RxJS pro, perhaps you can look into it just to laugh at me. Although I genuinely didn't see much use for Stores in this particular project. Besides:
 
   <p align="center"><img src=".github/frontend-joke.jpg"/></p>
+  
+  Not to mention:
+  
+  <p align="center"><img src=".github/frontend-joke2.jpg"/></p>
 
 
 
@@ -237,8 +241,8 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
 
    - An excellent place for these secrets is the **User Secrets file**. You can access this file by right-clicking the `WebApi` project, and selecting **Manage User Secrets**.
         - This opens a `secrets.json` file (which is actually located in your user profile folder, and not in the solution folder). In this json file you can enter any additional configuration values you'd want to see injected over the default appsettings.json (ideally only the secrets).
-     
-     - To set a nested configuration setting, you can use colon (`:`) as a separator. For example to set the `DefaultUsername` property inside `UserSeedSettings`, you can simply set a value for `"UserSeedSettings:DefaultUsername"`.
+       
+     - To set a nested configuration setting in a short way, you can use colon (`:`) as a separator. For example to set the `DefaultUsername` property inside `UserSeedSettings`, you can simply set a value for `"UserSeedSettings:DefaultUsername"` (the configuration system flattens the hierarchical settings internally in the exact same format).
      
      - The following could be a valid configuration that should allow running the solution in development mode (keep `LogglySettings:WriteToLoggly` and `AzureKeyVaultSettings:AddToConfiguration` as false; and also please note this connection string does rely on [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15), which is a standard part of the 'ASP.NET and web development' workload in the Visual Studio installer):
      
@@ -255,7 +259,7 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
      
    - Alternative to the user secrets file is using **environment variables**.
 
-     - You can set nested configuration properties with environment variables as well. This can be achieved by using a colon (`:`) separator as explained above, or on a Linux system you can use a double underscore (`__`) separator. Actually both should work on Windows, so it's generally safer to use double underscore.
+     - You can set nested configuration properties with environment variables as well. This can be achieved by using a colon (`:`) separator as explained above, or on a Linux system you can use a double underscore (`__`) separator. Windows doesn't mind the underscores either, so you can just default to using double underscores.
 
      - You can even set array values. For example to set the `CorsSettings.AllowedOrigins` array, which contains the list of hosts that are allowed to access the backend API, you could use the following format*:
 
