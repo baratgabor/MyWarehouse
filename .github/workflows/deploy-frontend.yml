@@ -2,7 +2,7 @@ name: Deploy-Frontend
 
 on:
   push:
-    branches: [ release ]
+    branches: [ master ]
   workflow_dispatch:
 
 defaults:
