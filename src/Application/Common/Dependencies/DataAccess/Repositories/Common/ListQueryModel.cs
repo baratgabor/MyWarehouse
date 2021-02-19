@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MyWarehouse.Application.Common.Exceptions;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyWarehouse.Application.Common.Dependencies.DataAccess.Repositories.Common
 {
@@ -9,13 +10,13 @@ namespace MyWarehouse.Application.Common.Dependencies.DataAccess.Repositories.Co
         /// <summary>
         /// The index of the page to fetch.
         /// </summary>
-        //[Range(1, int.MaxValue, ErrorMessage = "PAGE_INDEX_MUST_BE_POSITIVE")]
+        [Range(1, int.MaxValue, ErrorMessage = "The minimum page index is 1.")]
         public int PageIndex { get; set; } = 1;
 
         /// <summary>
         /// The page size used for fetching data.
         /// </summary>
-        //[Range(1, MAX_PAGESIZE, ErrorMessage = "PAGE_SIZE_OUT_OF_BOUNDS")]
+        [Range(1, MAX_PAGESIZE)]
         public int PageSize { get; set; } = DEFAULT_PAGESIZE;
 
         /// <summary>
