@@ -182,7 +182,7 @@ export class TransactionIndexComponent implements OnInit {
       return;
     
     this.state.pageSize = pageSize;
-    this.state.pageIndex = 1;
+    this.state.pageIndex = Math.trunc(this.state.firstRowOnPage / pageSize) + 1 || 1;
     this.loadEntities();
   }
 

@@ -205,6 +205,7 @@ export class ProductIndexComponent implements OnInit {
       return;
 
     this.state.pageSize = pageSize;
+    this.state.pageIndex = Math.trunc(this.state.firstRowOnPage / pageSize) + 1 || 1;
     this.loadProducts();
   }
 }
