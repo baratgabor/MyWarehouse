@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>MyWarehouse.Domain</AssemblyName>
+    <RootNamespace>MyWarehouse.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

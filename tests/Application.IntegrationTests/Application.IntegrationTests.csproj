@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>MyWarehouse.Application.IntegrationTests</AssemblyName>
+
+    <RootNamespace>MyWarehouse.Application.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

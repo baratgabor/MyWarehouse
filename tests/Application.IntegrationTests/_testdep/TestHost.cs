@@ -25,7 +25,7 @@ namespace MyWarehouse.Application.IntegrationTests
         {
             Environment = Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development" &&
-                w.ApplicationName == "MyWarehouse.Api");
+                w.ApplicationName == "MyWarehouse.WebApi");
 
             // Last added overrides. Make sure .Testing.json is placed after API jsons.
             var configuration = new ConfigurationBuilder()
@@ -41,7 +41,7 @@ namespace MyWarehouse.Application.IntegrationTests
                 .AddSingleton(Environment)
                 .AddLogging();
 
-            new MyWarehouse.Startup(configuration, Environment)
+            new MyWarehouse.WebApi.Startup(configuration, Environment)
                 .ConfigureServices(services);
 
             services = ReplaceServices(services);

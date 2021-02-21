@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>MyWarehouse.Domain.UnitTests</AssemblyName>
+
+    <RootNamespace>MyWarehouse.Domain.UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
