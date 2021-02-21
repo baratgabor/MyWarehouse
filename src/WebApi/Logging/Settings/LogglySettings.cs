@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyWarehouse.Infrastructure.Common.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyWarehouse.WebApi.Logging.Settings
 {
@@ -7,7 +8,7 @@ namespace MyWarehouse.WebApi.Logging.Settings
         [Required]
         public bool? WriteToLoggly { get; init; }
 
-        [Required, MinLength(1)]
+        [RequiredIf(nameof(WriteToLoggly), true)]
         public string CustomerToken { get; init; }
     }
 }
