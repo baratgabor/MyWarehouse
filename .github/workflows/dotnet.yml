@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -22,4 +22,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter FullyQualifiedName!~MyWarehouse.Application.IntegrationTests
+      run: dotnet test --no-build --verbosity normal
+      #Test if we can run localdb integration tests on Windows vm
+      #run: dotnet test --no-build --verbosity normal --filter FullyQualifiedName!~MyWarehouse.Application.IntegrationTests
