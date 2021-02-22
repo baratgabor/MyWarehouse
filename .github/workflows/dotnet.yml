@@ -28,7 +28,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -c Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build -c Release --verbosity normal
       env:
         UserSeedSettings__SeedDefaultUser: false
         AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
