@@ -2,7 +2,7 @@
 
 ##  MyWarehouse – A Clean Architecture, Vertical Slicing, DDD sample in ASP.NET Core
 
-[![Backend CI](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml) [![Backend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml) [![Frontend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml)
+[![Backend CI](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml) [![Backend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml) [![Frontend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml) [![App Core Coverage Status](https://coveralls.io/repos/github/baratgabor/MyWarehouse/badge.svg?branch=chore/master)](https://coveralls.io/github/baratgabor/MyWarehouse?branch=master)
 
 <br/>
 
