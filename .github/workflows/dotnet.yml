@@ -33,7 +33,8 @@ jobs:
         UserSeedSettings__SeedDefaultUser: false
         AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
         SwaggerSettings__UseSwagger: false
+    - uses: nelonoel/branch-name@v1
     - uses: actions/upload-artifact@v2
-      with:
-        name: backend-release-${GITHUB_REF##*/} # Suffixed with branch name
+      with: 
+        name: backend-release-${{ BRANCH_NAME }}
         path: src/WebApi
