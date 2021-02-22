@@ -2,7 +2,7 @@
 
 ##  MyWarehouse – A Clean Architecture, Vertical Slicing, DDD sample in ASP.NET Core
 
-![.NET Core](https://github.com/baratgabor/MyWarehouse/workflows/.NET%20Core/badge.svg)
+[![Backend CI](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml) [![Backend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml) [![Frontend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml)
 
 <br/>
 
@@ -245,7 +245,7 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
 
    - An excellent place for these secrets is the **User Secrets file**. You can access this file by right-clicking the `WebApi` project, and selecting **Manage User Secrets**.
         - This opens a `secrets.json` file (which is actually located in your user profile folder, and not in the solution folder). In this json file you can enter any additional configuration values you'd want to see injected over the default appsettings.json (ideally only the secrets).
-         
+        
      - To set a nested configuration setting in a short way, you can use colon (`:`) as a separator. For example to set the `DefaultUsername` property inside `UserSeedSettings`, you can simply set a value for `"UserSeedSettings:DefaultUsername"` (the configuration system flattens the hierarchical settings internally in the exact same format).
      
      - The following could be a valid configuration that should allow running the solution in development mode (keep `LogglySettings:WriteToLoggly` and `AzureKeyVaultSettings:AddToConfiguration` as false; and also please note this connection string does rely on [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15), which is a standard part of the 'ASP.NET and web development' workload in the Visual Studio installer):
