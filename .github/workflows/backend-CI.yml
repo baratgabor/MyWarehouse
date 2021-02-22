@@ -29,7 +29,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
         /p:CollectCoverage=true
-        /p:Include="[MyWarehouse.Domain]*,[MyWarehouse.Application]*"
+        /p:Include=\"[MyWarehouse.Domain]*,[MyWarehouse.Application]*\"
         /p:CoverletOutput=.coverage/
         /p:CoverletOutputFormat=lcov
       env:
