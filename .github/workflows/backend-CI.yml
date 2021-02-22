@@ -1,11 +1,10 @@
+name: Backend CI
 
 # This workflow runs the unit tests and integration tests for the backend.
 # Integration tests use real SQL database, but fortunately windows-latest
 # image contains support for SQL Express localDb.
 # This approach is significantly simpler than running it via docker-compose,
 # although, yes, it's more prone to breaking, since it's not isolated.
-
-name: .NET Core
 
 on:
   pull_request:
@@ -33,9 +32,3 @@ jobs:
         UserSeedSettings__SeedDefaultUser: false
         AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
         SwaggerSettings__UseSwagger: false
-    - name: Save build artifact
-      if: github.ref == 'refs/heads/chore/improve-ci-cd' # Change it to main once finalized
-      uses: actions/upload-artifact@v2
-      with: 
-        name: backend-release-master
-        path: src/WebApi
