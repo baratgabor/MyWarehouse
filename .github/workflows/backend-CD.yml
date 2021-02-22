@@ -1,0 +1,25 @@
+name: Backend CD
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v2
+      with: 
+        name: backend-release-master
+    - name: Publish
+      run: dotnet publish --no-build -c Release -o my-release
+    - name: 'Deploy to Azure'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: mywarehouseapi
+        publish-profile: ${{ secrets.AZURE_PUBLISHING_PROFILE }}
+        package: './my-release'
