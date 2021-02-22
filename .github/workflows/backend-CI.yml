@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  buildtest:
 
     runs-on: windows-latest
 
@@ -28,7 +28,33 @@ jobs:
       run: dotnet build --no-restore -c Release
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
+        /p:CollectCoverage=true
+        /p:Include=\"[MyWarehouse.Domain]*,[MyWarehouse.Application]*\" # Collect coverage only of App Core.
+        /p:CoverletOutput=.coverage/
+        /p:CoverletOutputFormat=lcov
       env:
         UserSeedSettings__SeedDefaultUser: false
         AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
         SwaggerSettings__UseSwagger: false
+
+    - name: DomainUnitTests Report Upload
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: DomainUnitTests
+        path-to-lcov: tests/Domain.UnitTests/.coverage/coverage.info
+        parallel: true
+
+    - name: ApplicationIntegrationTests Report Upload
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: ApplicationIntegrationTests
+        path-to-lcov: tests/Application.IntegrationTests/.coverage/coverage.info
+        parallel: true
+
+    - name: Conclude Coverage Upload
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true   
