@@ -36,5 +36,5 @@ jobs:
     - uses: nelonoel/branch-name@v1
     - uses: actions/upload-artifact@v2
       with: 
-        name: backend-release-${{ BRANCH_NAME }}
+        name: backend-release-${{ env.BRANCH_NAME }}
         path: src/WebApi
