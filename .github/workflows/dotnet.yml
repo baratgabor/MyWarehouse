@@ -26,3 +26,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       #Test if we can run localdb integration tests on Windows vm
       #run: dotnet test --no-build --verbosity normal --filter FullyQualifiedName!~MyWarehouse.Application.IntegrationTests
+      env:
+          UserSeedSettings__SeedDefaultUser: false
+          AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
+          SwaggerSettings__UseSwagger: false
