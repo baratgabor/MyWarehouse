@@ -33,9 +33,9 @@ jobs:
         UserSeedSettings__SeedDefaultUser: false
         AuthenticationSettings__JwtSigningKeyBase64: e09053f6847d466b8f243d9522c340ef234sdfds # Not actually used.
         SwaggerSettings__UseSwagger: false
-    - run: set BRANCH_NAME=${{ github.ref }}
-    - run: set BRANCH_NAME=%BRANCH_NAME:refs/heads/=%
-    - uses: actions/upload-artifact@v2
+    - name: Save build artifact
+      if: github.ref == 'refs/heads/chore/improve-ci-cd' # Change it to main once finalized
+      uses: actions/upload-artifact@v2
       with: 
-        name: backend-release-${{ env.BRANCH_NAME }}
+        name: backend-release-master
         path: src/WebApi
