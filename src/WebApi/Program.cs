@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using MyWarehouse.WebApi.Logging;
 using System.Reflection;
 
-namespace MyWarehouse
+namespace MyWarehouse.WebApi
 {
     public static class Program
     {

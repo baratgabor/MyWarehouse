@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-MyWarehouse-E99EEC75-3176-485B-AAB4-5452F05E7109</UserSecretsId>
+    <AssemblyName>MyWarehouse.WebApi</AssemblyName>
+    <RootNamespace>MyWarehouse.WebApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
