@@ -17,7 +17,11 @@ The following, rather informatively written documentation page has a two-fold pu
 
 ## Live Demo
 
-[See here](https://baratgabor.github.io/MyWarehouse). The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
+[See here (and sign in with the credentials shown on the picture below)](https://baratgabor.github.io/MyWarehouse). The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
+
+**Feel free to alter the data**, as the solution has an automatic [sample generation module](https://github.com/baratgabor/MyWarehouse/tree/master/src/SampleData) that I can run any time to reset it. What it doesn't have is a profanity filter. But I trust your maturity. 😅
+
+**With respect to deployment**, the backend and the frontend are both automatically deployed by the corresponding [GitHub CD pipeline](https://github.com/baratgabor/MyWarehouse/tree/master/.github/workflows) when a push happens in the master branch, so the build you see should always reflect the state of the master branch.
 
 <p align="center">
 	<a href="https://baratgabor.github.io/MyWarehouse" target="_blank"><img src=".github\demo-button.png" width="500" /></a>
@@ -95,6 +99,8 @@ And there comes the realization that *DRY – don't repeat yourself –* can be 
 > *What matters is not whether code in two or more places look similar in form, but whether you can guarantee that they have the same – preferably single – reason to change.* (Sorry, not an actual quote, just wanted to highlight it.)
 
 This is how you end up with a design where each feature or [use case](https://martinfowler.com/bliki/UseCase.html) is more substantial than just a few calls on a bunch of generalized services, and actually might encapsulate proper business logic in a structurally segregated manner.
+
+Obviously this is a crude oversimplification of vertical slicing as an architectural pattern, and in any complex system you'll undoubtedly still end up with plenty of generalized components that implement actually general/cross-cutting concerns. It's just that you can focus your design process around vertical slices, feel comfortable putting business logic into them in a prima facie fashion, and when you see the need you can *then* push those down to the domain entities (to implement DDD), or into general components.
 
 Another great thing about vertical slicing that it aligns well to [SCREAMING ARCHITECTURE](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html), where you look at a solution, and what you see are not meaningless generic tech terms like models, services, dtos, validators... but you see *what the system actually does, what features it has*. Which arguably makes it easier to comprehend and work with a system.
 
@@ -236,13 +242,18 @@ But we all have to discover our own ways, based on our own experiences, followin
 
 It you wish to clone this repository and use it (for whatever purpose you see fit), you'll have to take care of the following:
 
-- Download and install **.NET 5 and ASP.NET Core 5 runtime** for the backend. The other project dependencies will be restored via NuGet.
+- **Set up backend:** Download and install **.NET 5 and ASP.NET Core 5 runtime** for the backend. The other project dependencies will be restored via NuGet when you run the project. If you're new to .NET, you should be aware of the handy `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet run` CLI commands.
 
-- Install **Node.js and npm package manager** on your machine, and run `npm install` in the `WebUI` project folder to restore the frontend packages. Frontend can be run with `ng serve`.
+- **Set up frontend:** Install **Node.js and npm package manager** on your machine, and run `npm install` in the `WebUI` project folder to restore the frontend packages. Frontend can be run with `ng serve`.
 
-- The less obvious one – **Secrets in configuration**:
-   - The backend system relies on multiple configuration values that are treated as 'secrets' and aren't part of the configuration committed to git. A `// Secret` comment identifies these in `WebApi.appsettings.json`.
+- If you have issues setting up or running the backend or the frontend, you can look into the `run` commands issued by the [CI/CD pipelines](CI/CD pipelines), because they do exactly that during the testing and deployment workflows.
 
+- **CORS settings:** If you run the frontend and the backend on different hosts (which most probably will happen), you'll need to add the host address of the frontend to the `CorsSettings.AllowedOrigins` array in the `appsettings.JSON` or `appsettings.Development.json` configuration file (or put it into the user secrets or environment variables, as described below).
+
+- **Secrets:**
+   
+- The backend system relies on multiple configuration values that are treated as 'secrets' and aren't part of the configuration committed to git. A `// Secret` comment identifies these in `WebApi.appsettings.json`.
+   
    - An excellent place for these secrets is the **User Secrets file**. You can access this file by right-clicking the `WebApi` project, and selecting **Manage User Secrets**.
         - This opens a `secrets.json` file (which is actually located in your user profile folder, and not in the solution folder). In this json file you can enter any additional configuration values you'd want to see injected over the default appsettings.json (ideally only the secrets).
         
@@ -261,23 +272,23 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
           }
           ```
      
-   - Alternative to the user secrets file is using **environment variables**.
+- Alternative to the user secrets file is using **environment variables**.
+   
+  - You can set nested configuration properties with environment variables as well. This can be achieved by using a colon (`:`) separator as explained above, or on a Linux system you can use a double underscore (`__`) separator. Windows doesn't mind the underscores either, so you can just default to using double underscores.
+   
+  - You can even set array values. For example to set the `CorsSettings.AllowedOrigins` array, which contains the list of hosts that are allowed to access the backend API, you could use the following format*:
+   
+    `CorsSettings__AllowedOrigins__0 = http://frontendlocation.com`
+   
+    `CorsSettings__AllowedOrigins__1 = https://frontendlocation.com`
+   
+    *(\*Don't include a trailing slash `/` character, for the love of god, or any capital letters, because the host checking is absolutely primitive; it's basically just doing [a case-sensitive ordinal string comparison](https://github.com/dotnet/aspnetcore/blob/461c4ece84ef5e7385249994645a3262717d3ca5/src/Middleware/CORS/src/Infrastructure/CorsPolicy.cs#L179) with the host contained in `HttpContext`. And if CORS tells you that `CORS Policy Execution Failed`, that actually means that CORS policy execution succeeded, it just ascertained that the host should not be allowed.)*
+   
+- And of course you can just set them right in `appsettings.json` too. Nothing horrible will happen. It's just a good idea to get familiar with the proper ways to inject secret configuration values into the solution, because otherwise you can end up accidentally committing these to Git repos. The demo backend system hosted in Azure gets them from an Azure Key Vault, for example.
+   
+- **Login:** You should be able to log in to the frontend with the seeded default user account details, i.e. `DefaultUsername` and `DefaultUserPassword` above. Also, I made sure that Swagger – at \<backend address\>/swagger – also supports comfortable login via credentials.
 
-     - You can set nested configuration properties with environment variables as well. This can be achieved by using a colon (`:`) separator as explained above, or on a Linux system you can use a double underscore (`__`) separator. Windows doesn't mind the underscores either, so you can just default to using double underscores.
-
-     - You can even set array values. For example to set the `CorsSettings.AllowedOrigins` array, which contains the list of hosts that are allowed to access the backend API, you could use the following format*:
-
-       `CorsSettings__AllowedOrigins__0 = http://frontendlocation.com`
-
-       `CorsSettings__AllowedOrigins__1 = https://frontendlocation.com`
-
-       *(\*Don't include a trailing slash `/` character, for the love of god, or any capital letters, because the host checking is absolutely primitive; it's basically just doing [a case-sensitive ordinal string comparison](https://github.com/dotnet/aspnetcore/blob/461c4ece84ef5e7385249994645a3262717d3ca5/src/Middleware/CORS/src/Infrastructure/CorsPolicy.cs#L179) with the host contained in `HttpContext`. And if CORS tells you that `CORS Policy Execution Failed`, that actually means that CORS policy execution succeeded, it just ascertained that the host should not be allowed.)*
-
-   - And of course you can just set them right in `appsettings.json` too. Nothing horrible will happen. It's just a good idea to get familiar with the proper ways to inject secret configuration values into the solution, because otherwise you can end up accidentally committing these to Git repos. The demo backend system hosted in Azure gets them from an Azure Key Vault, for example.
-
-- You should be able to log in with the seeded default user account details.
-
-- Sample data will be automatically generated in the database (unless `ApplicationDbSettings:AutoSeed` is set to `false`), so don't be surprised to see a bunch of products, partners and transactions.
+- **Data:** The backend is configured to use a localDb connection string, which means that if SQL Server Express is present on the machine, a new database will be automatically created. Sample data will be also automatically generated in the database (unless `ApplicationDbSettings:AutoSeed` is set to `false`), so don't be surprised to see a bunch of products, partners and transactions.
 
 ## In conclusion
 
