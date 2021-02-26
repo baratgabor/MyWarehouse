@@ -15,26 +15,20 @@ namespace MyWarehouse.WebApi.Controllers
         private readonly IUserService _userService;
 
         public AccountController(IUserService userService)
-        {
-            this._userService = userService;
-        }
+            => _userService = userService;
 
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public Task<ActionResult<TokenResponseDto>> Login([FromBody]LoginDto login)
-        {
-            return LoginInternal(login);
-        }
+        public Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginDto login)
+            => LoginInternal(login);
 
         [AllowAnonymous]
         [HttpPost]
         [Route("loginForm")]
         [ProducesResponseType(typeof(TokenResponseDto), StatusCodes.Status200OK)]
-        public Task<ActionResult<TokenResponseDto>> LoginForm([FromForm]LoginDto login)
-        {
-            return LoginInternal(login);
-        }
+        public Task<ActionResult<TokenResponseDto>> LoginForm([FromForm] LoginDto login)
+            => LoginInternal(login);
 
         private async Task<ActionResult<TokenResponseDto>> LoginInternal(LoginDto login)
         {
