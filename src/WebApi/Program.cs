@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using MyWarehouse.WebApi.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace MyWarehouse.WebApi
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         public static void Main(string[] args)

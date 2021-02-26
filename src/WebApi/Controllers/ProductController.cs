@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyWarehouse.Application.Common.Dependencies.DataAccess.Repositories.Common;
-using MyWarehouse.Application.Partners.DeletePartner;
-using MyWarehouse.Application.Partners.UpdatePartner;
 using MyWarehouse.Application.Products.CreateProduct;
+using MyWarehouse.Application.Products.DeleteProduct;
 using MyWarehouse.Application.Products.GetProduct;
 using MyWarehouse.Application.Products.GetProducts;
 using MyWarehouse.Application.Products.GetProductsSummary;
 using MyWarehouse.Application.Products.ProductStockMass;
 using MyWarehouse.Application.Products.ProductStockValue;
+using MyWarehouse.Application.Products.UpdateProduct;
 using System.Threading.Tasks;
 
 namespace MyWarehouse.WebApi.Controllers

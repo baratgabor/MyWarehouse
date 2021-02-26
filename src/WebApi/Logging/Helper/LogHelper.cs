@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Serilog.Events;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.Logging.Helper
 {
+    [ExcludeFromCodeCoverage]
     internal static class LogHelper
     {
         /// <summary>

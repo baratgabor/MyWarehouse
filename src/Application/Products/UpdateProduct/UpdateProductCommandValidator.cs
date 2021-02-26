@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MyWarehouse.Domain.Products;
 
-namespace MyWarehouse.Application.Partners.UpdatePartner
+namespace MyWarehouse.Application.Products.UpdateProduct
 {
     public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
     {

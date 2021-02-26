@@ -11,9 +11,11 @@ using MyWarehouse.WebApi.ErrorHandling;
 using System.Text.Json;
 using MyWarehouse.WebApi.CORS;
 using MyWarehouse.Infrastructure;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         protected IConfiguration Configuration { get; }

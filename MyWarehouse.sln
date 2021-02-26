@@ -28,6 +28,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleData", "src\SampleDat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain.csproj", "{DB2A0D38-6829-4413-8EE9-511BEAFDA5D7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.UnitTests", "tests\WebApi.UnitTests\WebApi.UnitTests.csproj", "{E79457E5-05D1-4DD0-B52F-22276205EF45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "tests\Application.UnitTests\Application.UnitTests.csproj", "{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +70,14 @@ Global
 		{DB2A0D38-6829-4413-8EE9-511BEAFDA5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB2A0D38-6829-4413-8EE9-511BEAFDA5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB2A0D38-6829-4413-8EE9-511BEAFDA5D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79457E5-05D1-4DD0-B52F-22276205EF45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79457E5-05D1-4DD0-B52F-22276205EF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79457E5-05D1-4DD0-B52F-22276205EF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79457E5-05D1-4DD0-B52F-22276205EF45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +91,8 @@ Global
 		{6EC6AD37-1D7D-419E-B191-6BC8C74F164D} = {B2315480-4D42-4643-B60E-DE823C32A92D}
 		{FB414F9F-BA98-4FFB-9821-A3D70C1DE1DA} = {BD794B73-A20A-45A8-B38D-9318D181615F}
 		{DB2A0D38-6829-4413-8EE9-511BEAFDA5D7} = {BD794B73-A20A-45A8-B38D-9318D181615F}
+		{E79457E5-05D1-4DD0-B52F-22276205EF45} = {B2315480-4D42-4643-B60E-DE823C32A92D}
+		{FC7A5BBD-5FAB-4DE8-9A31-AF9351418E06} = {B2315480-4D42-4643-B60E-DE823C32A92D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5FECF7DF-777D-49DD-AFB4-D98906EA079B}

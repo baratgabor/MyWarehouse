@@ -31,7 +31,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
         /p:CollectCoverage=true
-        /p:Include="[MyWarehouse.Domain]*?%2c[MyWarehouse.Application]*"
+        /p:Include="[MyWarehouse.Domain]*?%2c[MyWarehouse.Application]*?%2c[MyWarehouse.WebApi]*"
         /p:CoverletOutput=.coverage/
         /p:CoverletOutputFormat=lcov
       env:
@@ -55,8 +55,24 @@ jobs:
         path-to-lcov: tests/Application.IntegrationTests/.coverage/coverage.info
         parallel: true
 
+    - name: WebApiUnitTests Report Upload
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: WebApiUnitTests
+        path-to-lcov: tests/WebApi.UnitTests/.coverage/coverage.info
+        parallel: true
+
+    - name: ApplicationUnitTests Report Upload
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: ApplicationUnitTests
+        path-to-lcov: tests/Application.UnitTests/.coverage/coverage.info
+        parallel: true
+
     - name: Conclude Coverage Upload
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true   
+        parallel-finished: true

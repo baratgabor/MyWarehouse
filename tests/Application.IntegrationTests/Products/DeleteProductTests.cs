@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using MyWarehouse.Application.Common.Exceptions;
-using MyWarehouse.Application.Partners.DeletePartner;
+using MyWarehouse.Application.Products.DeleteProduct;
 using MyWarehouse.Domain.Products;
 using NUnit.Framework;
 using System.Threading.Tasks;

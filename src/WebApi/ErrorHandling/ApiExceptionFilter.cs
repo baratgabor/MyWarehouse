@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using MyWarehouse.Application.Common.Exceptions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.ErrorHandling
 {
@@ -30,6 +31,7 @@ namespace MyWarehouse.WebApi.ErrorHandling
             base.OnException(context);
         }
 
+        [ExcludeFromCodeCoverage] // Seems like coverlet doesn't register switch expressions properly; it is tested.
         private static IActionResult ExecuteHandler(Exception exception)
             => exception switch
             {
