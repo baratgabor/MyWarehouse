@@ -22,11 +22,13 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
     public class ProductControllerTests
     {
         private Mock<IMediator> _mockMediator;
+        private ProductController _sut;
 
         [SetUp]
         public void Setup()
         {
             _mockMediator = new Mock<IMediator>(MockBehavior.Strict);
+            _sut = new ProductController(_mockMediator.Object);
         }
 
         [Test]
@@ -35,9 +37,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var command = new CreateProductCommand();
             _mockMediator.Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(123);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.Create(command);
+            var result = await _sut.Create(command);
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(123, ((OkObjectResult)result.Result).Value);
@@ -50,9 +51,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var response = new ProductDetailsDto();
             _mockMediator.Setup(x => x.Send(It.Is<GetProductDetailsQuery>(q => q.Id == expectedId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.Get(expectedId);
+            var result = await _sut.Get(expectedId);
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(response, ((OkObjectResult)result.Result).Value);
@@ -65,9 +65,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var response = new ListResponseModel<ProductDto>(query, 100, new List<ProductDto>());
             _mockMediator.Setup(x => x.Send(query, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.GetList(query);
+            var result = await _sut.GetList(query);
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(response, ((OkObjectResult)result.Result).Value);
@@ -79,9 +78,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var command = new UpdateProductCommand() { Id = 123 };
             _mockMediator.Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Unit.Value));
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.Update(command.Id, command);
+            var result = await _sut.Update(command.Id, command);
 
             _mockMediator.Verify(x => x.Send(command, It.IsAny<CancellationToken>()),
                 Times.Once);
@@ -93,9 +91,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var expectedId = 123;
             _mockMediator.Setup(x => x.Send(It.Is<DeleteProductCommand>(q => q.Id == expectedId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Unit.Value);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.Delete(expectedId);
+            var result = await _sut.Delete(expectedId);
 
             _mockMediator.Verify(x => x.Send(It.Is<DeleteProductCommand>(c => c.Id == expectedId), It.IsAny<CancellationToken>()),
                 Times.Once);
@@ -107,9 +104,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var response = new ProductStockCountDto();
             _mockMediator.Setup(x => x.Send(It.IsAny<ProductStockCountQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.ProductStockCount();
+            var result = await _sut.ProductStockCount();
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(response, ((OkObjectResult)result.Result).Value);
@@ -121,9 +117,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var response = new StockMassDto();
             _mockMediator.Setup(x => x.Send(It.IsAny<ProductStockMassQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.ProductStockMass();
+            var result = await _sut.ProductStockMass();
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(response, ((OkObjectResult)result.Result).Value);
@@ -135,9 +130,8 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var response = new StockValueDto();
             _mockMediator.Setup(x => x.Send(It.IsAny<ProductStockValueQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
-            var sut = new ProductController(_mockMediator.Object);
 
-            var result = await sut.ProductStockValue();
+            var result = await _sut.ProductStockValue();
 
             Assert.IsAssignableFrom<OkObjectResult>(result.Result);
             Assert.AreEqual(response, ((OkObjectResult)result.Result).Value);
