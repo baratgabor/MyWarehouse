@@ -84,6 +84,18 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
         }
 
         [Test]
+        public async Task Update_WithIdMismatch_ShouldReturnBadRequest()
+        {
+            var command = new UpdatePartnerCommand() { Id = 123 };
+            _mockMediator.Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(Unit.Value));
+
+            var result = await _sut.Update(456, command);
+
+            Assert.IsAssignableFrom(typeof(BadRequestResult), result);
+        }
+
+        [Test]
         public async Task Delete()
         {
             var expectedId = 123;
