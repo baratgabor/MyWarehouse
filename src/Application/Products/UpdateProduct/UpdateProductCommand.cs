@@ -5,7 +5,7 @@ using MyWarehouse.Domain.Products;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.Application.Partners.UpdatePartner
+namespace MyWarehouse.Application.Products.UpdateProduct
 {
     public record UpdateProductCommand : IRequest
     {

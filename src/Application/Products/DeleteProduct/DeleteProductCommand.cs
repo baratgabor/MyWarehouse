@@ -5,7 +5,7 @@ using MyWarehouse.Domain.Products;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.Application.Partners.DeletePartner
+namespace MyWarehouse.Application.Products.DeleteProduct
 {
     public record DeleteProductCommand : IRequest
     {
