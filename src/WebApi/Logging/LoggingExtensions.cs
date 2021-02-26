@@ -6,9 +6,11 @@ using MyWarehouse.WebApi.Logging.Settings;
 using MyWarehouse.Infrastructure;
 using Serilog;
 using Serilog.Events;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.Logging
 {
+    [ExcludeFromCodeCoverage]
     public static class LoggingExtensions
     {
         public static IWebHostBuilder AddMySerilogLogging(this IWebHostBuilder webBuilder)

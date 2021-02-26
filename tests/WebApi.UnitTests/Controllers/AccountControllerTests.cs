@@ -42,6 +42,7 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             tokenResult.token_type.Should().Be(tokenResponse.TokenType);
             tokenResult.access_token.Should().Be(tokenResponse.AccessToken);
             tokenResult.username.Should().Be(tokenResponse.Username);
+            tokenResult.expires_in.Should().BePositive();
         }
 
         [Test]

@@ -13,7 +13,8 @@
         /// <summary>
         /// The stored refresh token.
         /// </summary>
-        public string refresh_token { get; set; }
+        // TODO: Consider supporting refresh tokens.
+        //public string refresh_token { get; set; }
 
         /// <summary>
         /// The type of the token. Usually "Bearer".

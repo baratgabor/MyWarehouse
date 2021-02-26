@@ -8,6 +8,7 @@ namespace MyWarehouse.WebApi.Authentication.Services
     public class CurrentUserService : ICurrentUserService
     {
         private const string DefaultNonUserMoniker = "System";
+        private const string UknownUserMoniker = "Anonymous";
 
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
@@ -17,7 +18,8 @@ namespace MyWarehouse.WebApi.Authentication.Services
             }
             else
             {
-                UserId = httpContextAccessor.HttpContext.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName);
+                UserId = httpContextAccessor.HttpContext.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName)
+                     ?? UknownUserMoniker;
             }
         }
 
