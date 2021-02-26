@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using MyWarehouse.Application.Common.Exceptions;
-using MyWarehouse.Application.Partners.UpdatePartner;
+using MyWarehouse.Application.Products.UpdateProduct;
 using MyWarehouse.Domain.Products;
 using NUnit.Framework;
 using System.Linq;
