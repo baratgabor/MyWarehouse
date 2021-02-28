@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using MyWarehouse.Infrastructure.Authentication.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using MyWarehouse.Infrastructure.Authentication.Core.Model;
 using MyWarehouse.Infrastructure.Authentication.Settings;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 
-namespace MyWarehouse.Infrastructure.Authentication.Services
+namespace MyWarehouse.Infrastructure.Authentication.Core.Services
 {
     public class JwtTokenService : ITokenService
     {
@@ -17,10 +18,10 @@ namespace MyWarehouse.Infrastructure.Authentication.Services
             _authSettings = authSettings;
         }
 
-        public TokenModel CreateAuthenticationToken(string userId, string userName)
+        public TokenModel CreateAuthenticationToken(string userId, string userName,
+            IEnumerable<(string claimType, string claimValue)> customClaims = null)
         {
             var expiration = DateTime.UtcNow.AddDays(7);
-            var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -29,10 +30,13 @@ namespace MyWarehouse.Infrastructure.Authentication.Services
                     new Claim(JwtRegisteredClaimNames.Aud, _authSettings.JwtAudience),
                     new Claim(JwtRegisteredClaimNames.Sub, userId),
                     new Claim(JwtRegisteredClaimNames.UniqueName, userName)
-                }),
+                }.Concat(
+                    customClaims?.Select(x => new Claim(x.claimType, x.claimValue)) ?? Enumerable.Empty<Claim>())
+                ),
                 Expires = expiration,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_authSettings.JwtSigningKey), SecurityAlgorithms.HmacSha256Signature)
             };
+            var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 

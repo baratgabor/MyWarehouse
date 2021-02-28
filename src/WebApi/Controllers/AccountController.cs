@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyWarehouse.Infrastructure.Authentication.Services;
+using MyWarehouse.Infrastructure.Authentication.Core.Model;
+using MyWarehouse.Infrastructure.Authentication.Core.Services;
+using MyWarehouse.Infrastructure.Authentication.External.Services;
 using MyWarehouse.WebApi.Authentication.Models.Dtos;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace MyWarehouse.WebApi.Controllers
@@ -13,41 +16,54 @@ namespace MyWarehouse.WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IExternalSignInService _externalSignInService;
 
-        public AccountController(IUserService userService)
-            => _userService = userService;
-
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("login")]
-        public Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginDto login)
-            => LoginInternal(login);
-
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("loginForm")]
-        [ProducesResponseType(typeof(TokenResponseDto), StatusCodes.Status200OK)]
-        public Task<ActionResult<TokenResponseDto>> LoginForm([FromForm] LoginDto login)
-            => LoginInternal(login);
-
-        private async Task<ActionResult<TokenResponseDto>> LoginInternal(LoginDto login)
+        public AccountController(IUserService userService, IExternalSignInService externalSignInService)
         {
-            var (result, token) = await _userService.SignIn(login.Username, login.Password);
+            _userService = userService;
+            _externalSignInService = externalSignInService;
+        }
 
-            if (result.IsLockedOut)
-                return Forbid("User locked out.");
-            else if (result.IsNotAllowed)
-                return Forbid("User is not allowed to sign in.");
-            else if (!result.Succeeded)
-                return Unauthorized("Username or password incorrect.");
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto login)
+            => ProduceLoginResponse(
+                await _userService.SignIn(login.Username, login.Password));
 
-            return Ok(new TokenResponseDto()
-            {
-                access_token = token.AccessToken,
-                token_type = token.TokenType,
-                expires_in = token.GetRemainingLifetimeSeconds(),
-                username = token.Username
-            });
+        [AllowAnonymous]
+        [HttpPost("loginForm")]
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult<LoginResponseDto>> LoginForm([FromForm] LoginDto login)
+            => ProduceLoginResponse(
+                await _userService.SignIn(login.Username, login.Password));
+
+        [AllowAnonymous]
+        [HttpPost("loginExternal")]
+        public async Task<ActionResult<LoginResponseDto>> ExternalLogin(ExternalLoginDto login)
+            => ProduceLoginResponse(
+                await _externalSignInService.SignInExternal(login.Provider, login.IdToken));
+
+        private ActionResult<LoginResponseDto> ProduceLoginResponse((MySignInResult result, SignInData data) loginResults)
+        {
+            var (result, data) = loginResults;
+
+            return result switch
+            { 
+                MySignInResult.Failed => Unauthorized("Username or password incorrect."),
+                MySignInResult.LockedOut => Forbid("User is temporarily locked out."),
+                MySignInResult.NotAllowed => Forbid("User is not allowed to sign in."),
+                MySignInResult.Success => Ok(new LoginResponseDto()
+                {
+                    AccessToken = data.Token.AccessToken,
+                    TokenType = data.Token.TokenType,
+                    ExpiresIn = data.Token.GetRemainingLifetimeSeconds(),
+                    Username = data.Username,
+                    Email = data.Email,
+                    IsExternalLogin = data.IsExternalLogin,
+                    ExternalAuthenticationProvider = data.ExternalAuthenticationProvider
+                }),
+                _ => throw new InvalidEnumArgumentException($"Unknown sign-in result '{result}'.")
+            };
         }
     }
 }

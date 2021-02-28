@@ -4,10 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MyWarehouse.Infrastructure.Authentication.Settings;
-using MyWarehouse.Infrastructure.Authentication.Services;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using MyWarehouse.Infrastructure.Authentication.Core.Services;
+using MyWarehouse.Infrastructure.Authentication.External.Services;
 
 namespace MyWarehouse.Infrastructure.Authentication
 {
@@ -15,13 +16,16 @@ namespace MyWarehouse.Infrastructure.Authentication
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Core
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, JwtTokenService>();
+            services.RegisterMyOptions<AuthenticationSettings>();
+            ConfigureLocalJwtAuthentication(services, configuration.GetMyOptions<AuthenticationSettings>());
 
-            var authOptions = configuration.GetMyOptions<AuthenticationSettings>();
-            services.AddSingleton(authOptions);
-
-            ConfigureLocalJwtAuthentication(services, authOptions);
+            // External
+            services.RegisterMyOptions<ExternalAuthenticationSettings>();
+            services.AddScoped<IExternalAuthenticationVerifier, ExternalAuthenticationVerifier>();
+            services.AddScoped<IExternalSignInService, ExternalSignInService>();
         }
 
         public static void Configure(IApplicationBuilder app)
