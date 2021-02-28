@@ -5,6 +5,6 @@ namespace MyWarehouse.Infrastructure.Authentication.Core.Services
 {
     public interface ITokenService
     {
-        TokenModel CreateAuthenticationToken(string userId, string userName, IEnumerable<(string claimType, string claimValue)> customClaims = null);
+        TokenModel CreateAuthenticationToken(string userId, string uniqueName, IEnumerable<(string claimType, string claimValue)> customClaims = null);
     }
 }

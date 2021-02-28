@@ -27,11 +27,11 @@ namespace MyWarehouse.Infrastructure.Authentication.External.Services
                 return (MySignInResult.Failed, null);
             }
 
-            if (string.IsNullOrWhiteSpace(userData.Email) || string.IsNullOrWhiteSpace(userData.FirstName))
+            if (string.IsNullOrWhiteSpace(userData.Email) || string.IsNullOrWhiteSpace(userData.FullName))
             {
                 var missingFields = new List<string>();
                 if (string.IsNullOrWhiteSpace(userData.Email)) missingFields.Add(nameof(ExternalUserData.Email));
-                if (string.IsNullOrWhiteSpace(userData.FirstName)) missingFields.Add(nameof(ExternalUserData.FirstName));
+                if (string.IsNullOrWhiteSpace(userData.FullName)) missingFields.Add(nameof(ExternalUserData.FullName));
 
                 throw new ExternalAuthenticationInfoException(
                     missingFields: missingFields,
@@ -43,7 +43,9 @@ namespace MyWarehouse.Infrastructure.Authentication.External.Services
             // Partically because that might involve privacy concerns.
             // TODO: Consider if user creation is needed, or if external logins should be registered in Identity tables.
 
-            var token = _tokenService.CreateAuthenticationToken($"ext:{userData.Email}", userData.Email, new[] { ("ExternalAuthority", provider.ToString()) });
+            var token = _tokenService.CreateAuthenticationToken(
+                userId: $"ext:{provider}:{userData.Email}",
+                uniqueName: $"{userData.FullName} ({provider})");
 
             return (
                 result: MySignInResult.Success,

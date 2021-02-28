@@ -18,7 +18,7 @@ namespace MyWarehouse.Infrastructure.Authentication.Core.Services
             _authSettings = authSettings;
         }
 
-        public TokenModel CreateAuthenticationToken(string userId, string userName,
+        public TokenModel CreateAuthenticationToken(string userId, string uniqueName,
             IEnumerable<(string claimType, string claimValue)> customClaims = null)
         {
             var expiration = DateTime.UtcNow.AddDays(7);
@@ -29,7 +29,7 @@ namespace MyWarehouse.Infrastructure.Authentication.Core.Services
                     new Claim(JwtRegisteredClaimNames.Iss, _authSettings.JwtIssuer),
                     new Claim(JwtRegisteredClaimNames.Aud, _authSettings.JwtAudience),
                     new Claim(JwtRegisteredClaimNames.Sub, userId),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, userName)
+                    new Claim(JwtRegisteredClaimNames.UniqueName, uniqueName)
                 }.Concat(
                     customClaims?.Select(x => new Claim(x.claimType, x.claimValue)) ?? Enumerable.Empty<Claim>())
                 ),
