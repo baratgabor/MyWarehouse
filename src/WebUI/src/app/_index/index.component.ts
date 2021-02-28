@@ -14,8 +14,8 @@ export class IndexComponent implements OnInit, OnDestroy {
   constructor(private auth : AuthService) {}
 
   ngOnInit() {
-    this.sub = this.auth.loginState.subscribe(
-      (status) => this.isLoggedIn = status
+    this.sub = this.auth.signInState.subscribe(
+      (userData) => this.isLoggedIn = userData != null
     )
   }
 

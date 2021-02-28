@@ -3,13 +3,15 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Observable, throwError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { HttpErrorNotifierService } from './http-error-notifier.service';
+import { AuthService } from 'app/core/auth/services/auth.service';
 
 @Injectable()
 export class ServerValidationErrorInterceptor implements HttpInterceptor {
 
     readonly requestTimeout = 60000;
 
-    constructor(protected httpErrorHandler: HttpErrorNotifierService) {}
+    constructor(protected httpErrorHandler: HttpErrorNotifierService,
+                protected authService: AuthService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -28,7 +30,15 @@ export class ServerValidationErrorInterceptor implements HttpInterceptor {
                     }
 
                     if (err instanceof HttpErrorResponse) {
-                        this.httpErrorHandler.handle(err, req);
+
+                        // Little bit of SRP violation here, but I didn't feel like adding a separate interceptor.
+                        // Force user to log in again if we get an Unauthorized response (meaning that token is invalid).
+                        if (err.status == 401 && this.authService.isSignedIn) {
+                            this.authService.signOut();
+                        }
+                        else {
+                            this.httpErrorHandler.handle(err, req);
+                        }
                     }
 
                     return throwError(err);

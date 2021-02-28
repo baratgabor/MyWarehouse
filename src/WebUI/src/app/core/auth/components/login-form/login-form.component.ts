@@ -3,13 +3,21 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, timer } from 'rxjs';
+import { AuthenticationSuccessData } from '../../models/login-data';
 
-enum RequestState {
+enum LocalLoginState {
   None,
   Waiting,
   Success,
   ErrorWrongData,
   ErrorOther
+}
+
+enum ExternalLoginState {
+  None,
+  Waiting,
+  Success,
+  Error
 }
 
 @Component({
@@ -27,8 +35,11 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
   formSubmitAttempt: boolean;
 
-  loadState = RequestState.None;
-  get state() { return RequestState; }
+  localLoginState = LocalLoginState.None;
+  get localLoginStates() { return LocalLoginState; }
+
+  externalLoginState = ExternalLoginState.None;
+  get externalLoginStates() { return ExternalLoginState; }
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
@@ -39,9 +50,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.as.loginState.subscribe(newState => {
-      this.isLoggedIn = newState;
-      this.updateUserData();
+    this.sub = this.as.signInState.subscribe(userData => {
+      this.isLoggedIn = userData != null;
+      this.updateUserData(userData);
 
       if (!this.isLoggedIn && !this.form)
         this.createLoginForm();
@@ -60,6 +71,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  signInWithGoogle() {
+    this.externalLoginState = ExternalLoginState.Waiting;
+    this.as.signInWithGoogle()
+      .catch(_ => this.externalLoginState = ExternalLoginState.Error);
+  }
+
   onSubmit() {
 
     this.formSubmitAttempt = true;
@@ -67,13 +84,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadState = RequestState.Waiting;
+    this.localLoginState = LocalLoginState.Waiting;
     this.form.disable();
 
-    this.as.authorize(this.form.value.username, this.form.value.password).subscribe(
+    this.as.authenticate(this.form.value.username, this.form.value.password).subscribe(
       _ => {
-        this.loadState = RequestState.Success;
-        timer(5000).subscribe(() => this.loadState = RequestState.None); // In case user logs out without navigating elsewhere; the 'success' would still be visible.
+        this.localLoginState = LocalLoginState.Success;
+        timer(5000).subscribe(() => this.localLoginState = LocalLoginState.None); // In case user logs out without navigating elsewhere; the 'success' would still be visible.
         this.form.enable();
       },
       err => {
@@ -81,20 +98,20 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         this.form.enable();
 
         if (err.status == 401)
-          this.loadState = RequestState.ErrorWrongData;
+          this.localLoginState = LocalLoginState.ErrorWrongData;
         else
-          this.loadState = RequestState.ErrorOther;
+          this.localLoginState = LocalLoginState.ErrorOther;
       }
     );
   }
 
-  doLogout() {
-    this.as.logout();
+  signOut() {
+    this.as.signOut();
   }
 
-  updateUserData() {
+  updateUserData(userData: AuthenticationSuccessData) {
     if (this.isLoggedIn) {
-      this.loggedInUsername = this.as.getUsername();
+      this.loggedInUsername = userData.username;
       this.validityDays = Math.round(this.as.getValidityDays());
     } else {
       this.loggedInUsername = '';

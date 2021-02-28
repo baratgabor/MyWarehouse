@@ -12,13 +12,13 @@
       <img style="margin: 0 auto;" width="300px" height="auto" src="assets/logo-long-color.png" />
     </div>
 
-    <div class="card m-2" style="min-width: 300px;">
+    <div class="card m-2" style="min-width: 350px;">
       <div class="card-body">
         <h5 class="card-title">Sign in</h5>
-        <p class="card-text">Sign in to chew bubblegum and test stuff.</p>
+        <p class="card-text">Sign in to chew bubblegum <br/> test stuff.</p>
 
         <div class="text-left">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="px-4 py-3">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="px-2 pt-1 pb-3">
 
             <div class="form-group">
               <label for="username">Username</label>
@@ -40,12 +40,18 @@
             <button [disabled]="form.disabled" type="submit" class="btn btn-primary" (click)="onSubmit()">Sign
               in</button>
 
-            <span *ngIf="loadState == state.Waiting" class="ml-3">Please wait... <fa-icon [icon]="faSpinner"
+            <span *ngIf="localLoginState == localLoginStates.Waiting" class="ml-3">Please wait... <fa-icon [icon]="faSpinner"
                 spin="true"></fa-icon></span>
-            <span *ngIf="loadState == state.ErrorWrongData" class="ml-3 text-danger">Incorrect credentials.</span>
-            <span *ngIf="loadState == state.Success" class="ml-3 text-success">Success.</span>
+            <span *ngIf="localLoginState == localLoginStates.ErrorWrongData" class="ml-3 text-danger">Incorrect credentials.</span>
+            <span *ngIf="localLoginState == localLoginStates.Success" class="ml-3 text-success">Success.</span>
 
           </form>
+        </div>
+        <div class="mx-4 pt-3" style="border-top:1px solid #dddddd">
+          <a (click)="signInWithGoogle()" class="btn btn-light py-2 px-3 mb-2" [routerLink]=""><img style="margin: 0 auto;" width="30px" height="auto" src="assets/google-logo.png" /> Sign in with Google</a>
+          <div *ngIf="externalLoginState == externalLoginStates.Waiting" class="font-italic">Working on it... <fa-icon [icon]="faSpinner"
+            spin="true"></fa-icon></div>
+          <div *ngIf="externalLoginState == externalLoginStates.Error">Uhh, it didn't work. 😓</div>
         </div>
       </div>
     </div>
