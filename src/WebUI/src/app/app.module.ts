@@ -29,6 +29,9 @@ import {ProductsModule} from './products/products.module';
 import {CanActivate} from '@angular/router';
 import {LoggedInCanActivate} from './core/auth/services/logged-in-can-activate.service';
 
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+
 registerLocaleData(localeHu, 'hu-HU', localeHuExtra);
 
 @NgModule({
@@ -51,6 +54,7 @@ registerLocaleData(localeHu, 'hu-HU', localeHuExtra);
     BrowserAnimationsModule,
     TransactionsModule,
     ProductsModule,
+    SocialLoginModule,
 
     AppRoutingModule,
   ],
@@ -58,6 +62,20 @@ providers: [
   CurrencyPipe,
   DatePipe,
   //{ provide: ErrorHandler, useClass: AppErrorHandler }
+  {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(
+            '417092478781-v986diqhp87iufde61b2th79p6o9c848.apps.googleusercontent.com'
+          )
+        }
+      ]
+    } as SocialAuthServiceConfig,
+  }
 ],
   bootstrap: [AppComponent]
 })

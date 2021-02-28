@@ -14,6 +14,8 @@ export class NavbarLoginInfoComponent implements OnInit, OnDestroy {
 
   isLoggedIn: boolean;
   username: string;
+  email: string;
+  externalLogin: string;
   validityDays: number;
 
   private sub: Subscription;
@@ -21,11 +23,13 @@ export class NavbarLoginInfoComponent implements OnInit, OnDestroy {
   constructor(private as: AuthService, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.sub = this.as.loginState.subscribe(newLoginState => {
-      this.isLoggedIn = newLoginState;
+    this.sub = this.as.signInState.subscribe(userData => {
+      this.isLoggedIn = userData != null;
 
       if (this.isLoggedIn) {
-        this.username = this.as.getUsername();
+        this.username = userData.username;
+        this.email = userData.email;
+        this.externalLogin = userData.externalAuthenticationProvider;
         this.validityDays = Math.round(this.as.getValidityDays());
       }
     });
@@ -43,7 +47,7 @@ export class NavbarLoginInfoComponent implements OnInit, OnDestroy {
     });
   }
 
-  logout() {
-    this.as.logout();
+  signOut() {
+    this.as.signOut();
   }
 }

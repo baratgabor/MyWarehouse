@@ -1,20 +1,15 @@
 ﻿using System;
 
-namespace MyWarehouse.Infrastructure.Authentication.Model
+namespace MyWarehouse.Infrastructure.Authentication.Core.Model
 {
-    public class TokenModel
+    public record TokenModel
     {
         public string TokenType { get; }
         public string AccessToken { get; }
-        public DateTime ExpiresAt {get;}
-        public string Username { get; set; }
+        public DateTime ExpiresAt { get; }
 
         public TokenModel(string tokenType, string accessToken, DateTime expiresAt)
-        {
-            TokenType = tokenType;
-            AccessToken = accessToken;
-            ExpiresAt = expiresAt;
-        }
+            => (TokenType, AccessToken, ExpiresAt) = (tokenType, accessToken, expiresAt);
 
         public int GetRemainingLifetimeSeconds()
             => Math.Max(0, (int)(ExpiresAt - DateTime.Now).TotalSeconds);

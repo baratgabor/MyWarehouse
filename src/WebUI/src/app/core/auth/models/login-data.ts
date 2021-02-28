@@ -1,6 +1,10 @@
+
 export interface AuthenticationSuccessData {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
+  accessToken: string;
+  tokenType: string;
+  expiresIn: number;
   username: string;
+  email: string;
+  isExternalLogin: string;
+  externalAuthenticationProvider: string;
 }

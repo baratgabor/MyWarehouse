@@ -14,8 +14,12 @@
 <div class="modal-body">
   <div *ngIf="isLoggedIn">
       <h5>You're logged in as <strong>{{username}}</strong>.</h5>
-      <p>We can't show you a lot of information here right now. But we can tell you that your login is valid for <strong>{{validityDays}} more days</strong>.</p>
-      <p>Would you like to <a [routerLink]="['/']" (click)="logout(); modal.dismiss('')">log out</a>?</p>
+      <p>
+        <span *ngIf="externalLogin">We've authenticated you through a {{externalLogin}} account connected to the <strong>{{email}}</strong> email address. Rest assured, no personal identification data is stored in our database. When you log out here, we won't remember anything.</span>
+        <span *ngIf="!externalLogin">You're using a local user account connected to the following email address: <strong>{{email}}</strong>.</span>
+      </p>
+      <p>Your login session is valid for <strong>{{validityDays}} more days</strong>.</p>
+      <p>Would you like to <a [routerLink]="['/']" (click)="signOut(); modal.dismiss('')">log out</a>?</p>
   </div>
   <div *ngIf="!isLoggedIn">
       <p>You're not logged in.</p>

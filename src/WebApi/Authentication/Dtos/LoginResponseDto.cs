@@ -3,12 +3,12 @@
     /// <summary>
     /// Standard token response for login.
     /// </summary>
-    public class TokenResponseDto
+    public class LoginResponseDto
     {
         /// <summary>
         /// The generated access token.
         /// </summary>
-        public string access_token { get; set; }
+        public string AccessToken { get; set; }
 
         /// <summary>
         /// The stored refresh token.
@@ -19,13 +19,19 @@
         /// <summary>
         /// The type of the token. Usually "Bearer".
         /// </summary>
-        public string token_type { get; set; } = "Bearer";
+        public string TokenType { get; set; } = "Bearer";
 
         /// <summary>
         /// The expiration of the token, set in minutes.
         /// </summary>
-        public int expires_in { get; set; }
+        public int ExpiresIn { get; set; }
 
-        public string username { get; set; }
+        public string Username { get; set; }
+
+        public string Email { get; set; }
+
+        public string ExternalAuthenticationProvider { get; set; }
+
+        public bool IsExternalLogin { get; set; }
     }
 }

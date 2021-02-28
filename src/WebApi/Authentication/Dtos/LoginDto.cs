@@ -2,12 +2,12 @@
 
 namespace MyWarehouse.WebApi.Authentication.Models.Dtos
 {
-    public class LoginDto
+    public record LoginDto
     {
         [Required, MinLength(1)]
-        public string Username { get; set; }
+        public string Username { get; init; }
 
         [Required, MinLength(1)]
-        public string Password { get; set; }
+        public string Password { get; init; }
     }
 }
