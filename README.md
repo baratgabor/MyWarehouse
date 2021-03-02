@@ -17,7 +17,13 @@ The following, rather informatively written documentation page has a two-fold pu
 
 ## Live Demo
 
-[See here](https://baratgabor.github.io/MyWarehouse). The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
+[See here](https://baratgabor.github.io/MyWarehouse). You'll have to sign in with the credentials shown on the picture below, or with your Google account*. The backend is hosted in an Azure App Service, connecting to an Azure SQL database. The frontend is hosted right here, at the excellent GitHub Pages. Apologies if the first request times out – Azure is spinning the services down if there is no traffic.
+
+**Feel free to alter the data**, as the solution has an automatic [sample generation module](https://github.com/baratgabor/MyWarehouse/tree/master/src/SampleData) that I can run any time to reset it. What it doesn't have is a profanity filter. But I trust your maturity. 😅
+
+**With respect to deployment**, the backend and the frontend are both automatically deployed by the corresponding [GitHub CD pipeline](https://github.com/baratgabor/MyWarehouse/tree/master/.github/workflows) when a push happens in the master branch. So the build you see should always reflect the state of the master branch.
+
+**Google login privacy concerns: The app doesn't store any personally identifying data. The only data of yours that can end up being saved in database is your name (as `LastModifiedBy`) when you modify an entity. But no email address or Google profile ID is saved.*
 
 <p align="center">
 	<a href="https://baratgabor.github.io/MyWarehouse" target="_blank"><img src=".github\demo-button.png" width="500" /></a>
