@@ -80,6 +80,16 @@
         </div>  
     </ng-container>
 
+    <ng-container *ngSwitchCase="httpCode == 503">
+        <div class="modal-header">
+            <h4 class="modal-title"><fa-icon [icon]="icons.hourglass" class="mr-2 ml-1"></fa-icon>Service Unavailable</h4>
+        </div>
+        <div class="modal-body">
+            <p>The specific service you tried to access is currently unavailable. Our server told us that this is most likely a transient issue, so fingers crossed. 🤞</p>
+            <p>Here, have a cookie for trying: 🍪</p>
+        </div>
+    </ng-container>
+
 </ng-container>
 
 
