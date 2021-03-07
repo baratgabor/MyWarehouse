@@ -30,12 +30,26 @@ namespace MyWarehouse.WebApi.Controllers
             => ProduceLoginResponse(
                 await _userService.SignIn(login.Username, login.Password));
 
+        /// <summary>
+        /// OAuth2.0 compliant login endpoint. Used for Swagger login.
+        /// </summary>
         [AllowAnonymous]
-        [HttpPost("loginForm")]
+        [HttpPost("oauth2/access_token")]
         [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<LoginResponseDto>> LoginForm([FromForm] LoginDto login)
-            => ProduceLoginResponse(
-                await _userService.SignIn(login.Username, login.Password));
+        {             
+            var (result, model) = await _userService.SignIn(login.Username, login.Password);
+
+            return result switch
+            {
+                MySignInResult.Success => Ok(new { 
+                    access_token = model.Token.AccessToken,
+                    token_type = model.Token.TokenType,
+                    expires_in = model.Token.GetRemainingLifetimeSeconds()
+                }),
+                _ => Unauthorized()
+            };
+        }
 
         [AllowAnonymous]
         [HttpPost("loginExternal")]

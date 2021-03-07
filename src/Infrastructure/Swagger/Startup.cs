@@ -24,20 +24,18 @@ namespace MyWarehouse.Infrastructure.Swagger
 
                 c.SwaggerDoc(swaggerSettings.ApiVersion, new OpenApiInfo { Title = swaggerSettings.ApiName, Version = swaggerSettings.ApiVersion });
 
-                {   // Add Login capability to Swagger UI.
-                    c.AddSecurityDefinition(SecuritySchemeNames.ApiLogin, new OpenApiSecurityScheme
+                // Add Login capability to Swagger UI.
+                c.AddSecurityDefinition(SecuritySchemeNames.ApiLogin, new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
                     {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
+                        Password = new OpenApiOAuthFlow()
                         {
-                            Password = new OpenApiOAuthFlow()
-                            {
-                                TokenUrl = new Uri(swaggerSettings.LoginPath, UriKind.Relative),
-                                AuthorizationUrl = new Uri(swaggerSettings.LoginPath, UriKind.Relative),
-                            }
+                            TokenUrl = new Uri(swaggerSettings.LoginPath, UriKind.Relative)
                         }
-                    });
-                }
+                    }
+                });
 
                 // Prevent SwaggerGen from throwing exception when multiple DTOs from different namespaces have the same type name.
                 c.CustomSchemaIds(x => {

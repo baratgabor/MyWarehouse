@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using MyWarehouse.Application.Common.Exceptions;
+using MyWarehouse.Infrastructure.Authentication.External.Exceptions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -37,8 +38,21 @@ namespace MyWarehouse.WebApi.ErrorHandling
             {
                 InputValidationException e => HandleValidationException(e),
                 EntityNotFoundException e => HandleNotFoundException(e),
+                ExternalAuthenticationPreventedException e => HandleCannotAuthenticateExternal(e),
                 _ => HandleUnknownException(exception)
             };
+
+        private static IActionResult HandleCannotAuthenticateExternal(ExternalAuthenticationPreventedException e)
+        {
+            var details = new ProblemDetails
+            {
+                Status = StatusCodes.Status503ServiceUnavailable,
+                Title = "External authentication was prevented. Authentication provider might be unavailable. Try again later.",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.4"
+            };
+
+            return new ObjectResult(details) { StatusCode = StatusCodes.Status503ServiceUnavailable };
+        }
 
         private static IActionResult HandleUnknownException(Exception _)
         {
