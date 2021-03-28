@@ -6,10 +6,12 @@ using MyWarehouse.Application.Dependencies.Services;
 using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess;
 using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess.Repositories;
 using MyWarehouse.Infrastructure.ApplicationDependencies.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.Infrastructure.ApplicationDependencies
 {
-    public static class Startup
+    [ExcludeFromCodeCoverage]
+    internal static class Startup
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration _)
         {

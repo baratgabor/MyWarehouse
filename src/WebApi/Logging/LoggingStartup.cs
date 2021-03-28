@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace MyWarehouse.WebApi.Logging
 {
     [ExcludeFromCodeCoverage]
-    public static class LoggingExtensions
+    internal static class LoggingStartup
     {
         public static IWebHostBuilder AddMySerilogLogging(this IWebHostBuilder webBuilder)
         {
@@ -49,7 +49,7 @@ namespace MyWarehouse.WebApi.Logging
         /// Adds Serilog request logging to the request processing pipeline.
         /// Call it early in the pipeline to capture as much as possible.
         /// </summary>
-        public static IApplicationBuilder AddMyRequestLogging(this IApplicationBuilder appBuilder)
+        public static IApplicationBuilder UseMyRequestLogging(this IApplicationBuilder appBuilder)
         {
             return appBuilder
                 // Log requests

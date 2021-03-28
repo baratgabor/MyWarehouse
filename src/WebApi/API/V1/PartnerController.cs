@@ -9,7 +9,7 @@ using MyWarehouse.Application.Partners.GetPartners;
 using MyWarehouse.Application.Partners.UpdatePartner;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.Controllers
+namespace MyWarehouse.WebApi.API.V1
 {
     [Authorize]
     [ApiController]

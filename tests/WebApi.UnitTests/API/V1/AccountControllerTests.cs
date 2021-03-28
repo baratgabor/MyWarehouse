@@ -5,18 +5,18 @@ using MyWarehouse.Infrastructure.Authentication.Core.Model;
 using MyWarehouse.Infrastructure.Authentication.Core.Services;
 using MyWarehouse.Infrastructure.Authentication.External.Model;
 using MyWarehouse.Infrastructure.Authentication.External.Services;
+using MyWarehouse.WebApi.API.V1;
 using MyWarehouse.WebApi.Authentication.Models.Dtos;
-using MyWarehouse.WebApi.Controllers;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.UnitTests.Controllers
+namespace MyWarehouse.WebApi.UnitTests.API.V1
 {
     public class AccountControllerTests
     {
         private Mock<IUserService> _mockUserService;
-        private Mock<IExternalSignInService>_mockExternalSignInService;
+        private Mock<IExternalSignInService> _mockExternalSignInService;
         private AccountController _sut;
 
         [SetUp]
@@ -35,7 +35,7 @@ namespace MyWarehouse.WebApi.UnitTests.Controllers
             var signInData = new SignInData { Token = new TokenModel("Bearer", "veryFancyToken", DateTime.Now.AddDays(5)) };
             _mockUserService.Setup(x => x.SignIn(loginDto.Username, loginDto.Password))
                 .ReturnsAsync((signInResponse, signInData));
-                        
+
             var result = await _sut.Login(loginDto);
             var resultAlt = await _sut.LoginForm(loginDto);
 

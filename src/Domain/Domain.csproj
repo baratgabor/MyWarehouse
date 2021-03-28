@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\ValueObjects\Address\" />
+    <Compile Remove="Common\ValueObjects\Address\**" />
+    <EmbeddedResource Remove="Common\ValueObjects\Address\**" />
+    <None Remove="Common\ValueObjects\Address\**" />
   </ItemGroup>
 
 </Project>

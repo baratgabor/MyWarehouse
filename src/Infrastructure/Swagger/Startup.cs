@@ -6,9 +6,11 @@ using MyWarehouse.Infrastructure.Swagger.Configuration;
 using MyWarehouse.Infrastructure.Swagger.Filters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.Infrastructure.Swagger
 {
+    [ExcludeFromCodeCoverage]
     internal static class Startup
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)

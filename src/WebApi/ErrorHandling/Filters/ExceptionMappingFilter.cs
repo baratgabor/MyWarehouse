@@ -13,23 +13,21 @@ namespace MyWarehouse.WebApi.ErrorHandling
     /// Maps exceptions occurred in lower layers into HTTP responses with appropriate HTTP code.
     /// Make sure to register this filter globally.
     /// </summary>
-    public class ApiExceptionFilter : ExceptionFilterAttribute
+    public class ExceptionMappingFilter : IExceptionFilter
     {
-        private readonly ILogger<ApiExceptionFilter> _logger;
+        private readonly ILogger<ExceptionMappingFilter> _logger;
 
-        public ApiExceptionFilter(ILogger<ApiExceptionFilter> logger)
+        public ExceptionMappingFilter(ILogger<ExceptionMappingFilter> logger)
         {
             _logger = logger;
         }
 
-        public override void OnException(ExceptionContext context)
+        public void OnException(ExceptionContext context)
         { 
             //TODO: Push logging deeper, into Application layer, and dedicate this component to response mapping.
             _logger.LogError($"Exception: [{context.Exception.Message}]\r\n\r\nStack Trace:\r\n{context.Exception.StackTrace}");
             context.Result = ExecuteHandler(context.Exception);
             context.ExceptionHandled = true;
-
-            base.OnException(context);
         }
 
         [ExcludeFromCodeCoverage] // Seems like coverlet doesn't register switch expressions properly; it is tested.

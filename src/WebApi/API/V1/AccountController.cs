@@ -8,9 +8,8 @@ using MyWarehouse.WebApi.Authentication.Models.Dtos;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.Controllers
+namespace MyWarehouse.WebApi.API.V1
 {
-    [Authorize]
     [ApiController]
     [Route("account")]
     public class AccountController : ControllerBase
@@ -37,12 +36,13 @@ namespace MyWarehouse.WebApi.Controllers
         [HttpPost("oauth2/access_token")]
         [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<LoginResponseDto>> LoginForm([FromForm] LoginDto login)
-        {             
+        {
             var (result, model) = await _userService.SignIn(login.Username, login.Password);
 
             return result switch
             {
-                MySignInResult.Success => Ok(new { 
+                MySignInResult.Success => Ok(new
+                {
                     access_token = model.Token.AccessToken,
                     token_type = model.Token.TokenType,
                     expires_in = model.Token.GetRemainingLifetimeSeconds()
@@ -62,7 +62,7 @@ namespace MyWarehouse.WebApi.Controllers
             var (result, data) = loginResults;
 
             return result switch
-            { 
+            {
                 MySignInResult.Failed => Unauthorized("Username or password incorrect."),
                 MySignInResult.LockedOut => Forbid("User is temporarily locked out."),
                 MySignInResult.NotAllowed => Forbid("User is not allowed to sign in."),
