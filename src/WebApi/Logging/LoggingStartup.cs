@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace MyWarehouse.WebApi.Logging
 {
     [ExcludeFromCodeCoverage]
-    public static class LoggingStartup
+    internal static class LoggingStartup
     {
         public static IWebHostBuilder AddMySerilogLogging(this IWebHostBuilder webBuilder)
         {

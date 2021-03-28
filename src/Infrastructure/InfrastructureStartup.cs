@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MyWarehouse.Infrastructure.UnitTests")]
@@ -12,6 +13,7 @@ namespace MyWarehouse.Infrastructure
     // This class implements a rather crude modular configuration of subcomponents, without any ceremony or meta-structure.
     // Proper abstractions can be added later if modularization would seem to benefit from them.
 
+    [ExcludeFromCodeCoverage]
     public static class InfrastructureStartup
     {
         public static void AddMyInfrastructureConfiguration(this IConfigurationBuilder configBuilder, HostBuilderContext context)

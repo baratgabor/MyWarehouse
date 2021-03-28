@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyWarehouse.Infrastructure.Identity.Model;
 using MyWarehouse.Infrastructure.Persistence.Context;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace MyWarehouse.Infrastructure.Identity
 {
+    [ExcludeFromCodeCoverage]
     internal static class Startup
     {
         public static void ConfigureServices(IServiceCollection services, IConfiguration _)

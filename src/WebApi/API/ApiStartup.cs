@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace MyWarehouse.WebApi.Authentication
 {
-    public static class ApiStartup
+    [ExcludeFromCodeCoverage]
+    internal static class ApiStartup
     {
         public static void AddMyApi(this IServiceCollection services)
         {

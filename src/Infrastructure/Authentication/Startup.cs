@@ -9,9 +9,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using MyWarehouse.Infrastructure.Authentication.Core.Services;
 using MyWarehouse.Infrastructure.Authentication.External.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.Infrastructure.Authentication
 {
+    [ExcludeFromCodeCoverage]
     internal static class Startup
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)

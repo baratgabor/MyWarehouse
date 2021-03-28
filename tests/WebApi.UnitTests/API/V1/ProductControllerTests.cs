@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.UnitTests.Controllers
+namespace MyWarehouse.WebApi.UnitTests.API.V1
 {
     // Simple happy path tests.
     public class ProductControllerTests

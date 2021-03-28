@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.ErrorHandling
 {
-    public static class ErrorHandlingStartup
+    [ExcludeFromCodeCoverage]
+    internal static class ErrorHandlingStartup
     {
         public static void AddMyErrorHandling(this IServiceCollection services)
         {

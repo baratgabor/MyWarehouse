@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyWarehouse.Infrastructure;
 using MyWarehouse.WebApi.CORS.Settings;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.CORS
 {
-    public static class CorsStartup
+    [ExcludeFromCodeCoverage]
+    internal static class CorsStartup
     {
         public static void AddMyCorsConfiguration(this IServiceCollection services, IConfiguration configuration)
         {

@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyWarehouse.Infrastructure.Persistence.Context;
 using MyWarehouse.Infrastructure.Persistence.Settings;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.Infrastructure.Persistence
 {
+    [ExcludeFromCodeCoverage]
     internal static class Startup
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
