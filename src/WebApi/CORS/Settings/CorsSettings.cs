@@ -1,4 +1,4 @@
-﻿namespace MyWarehouse.WebApi.CORS
+﻿namespace MyWarehouse.WebApi.CORS.Settings
 {
     // Used for binding allowed origins in a strongly typed manner
     // from JSON configuration.

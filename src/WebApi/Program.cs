@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using MyWarehouse.Infrastructure;
 using MyWarehouse.WebApi.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -31,7 +32,7 @@ namespace MyWarehouse.WebApi
                     config.AddUserSecrets(Assembly.GetEntryAssembly(), optional: true);
 
                     // Notice: Infrastructure hook.
-                    Infrastructure.Startup.ConfigureAppConfiguration(context, config);
+                    config.AddMyInfrastructureConfiguration(context);
                 });
     }
 }

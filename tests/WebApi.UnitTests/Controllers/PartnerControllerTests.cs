@@ -8,7 +8,7 @@ using MyWarehouse.Application.Partners.GetPartnerDetails;
 using MyWarehouse.Application.Partners.GetPartners;
 using MyWarehouse.Application.Partners.UpdatePartner;
 using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess.Repositories.Common;
-using MyWarehouse.WebApi.Controllers;
+using MyWarehouse.WebApi.API.V1;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ namespace MyWarehouse.Infrastructure.Persistence
 {
     internal static class Startup
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddSingleton(configuration.GetMyOptions<ApplicationDbSettings>());
 

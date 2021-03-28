@@ -10,7 +10,7 @@ using MyWarehouse.Application.Products.ProductStockMass;
 using MyWarehouse.Application.Products.ProductStockValue;
 using MyWarehouse.Application.Products.UpdateProduct;
 using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess.Repositories.Common;
-using MyWarehouse.WebApi.Controllers;
+using MyWarehouse.WebApi.API.V1;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;

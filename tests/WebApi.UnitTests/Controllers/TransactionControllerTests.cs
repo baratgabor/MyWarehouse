@@ -5,7 +5,7 @@ using MyWarehouse.Application.Transactions.CreateTransaction;
 using MyWarehouse.Application.Transactions.GetTransactionDetails;
 using MyWarehouse.Application.Transactions.GetTransactionsList;
 using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess.Repositories.Common;
-using MyWarehouse.WebApi.Controllers;
+using MyWarehouse.WebApi.API.V1;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;

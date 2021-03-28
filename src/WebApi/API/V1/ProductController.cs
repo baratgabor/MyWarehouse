@@ -12,7 +12,7 @@ using MyWarehouse.Application.Products.ProductStockValue;
 using MyWarehouse.Application.Products.UpdateProduct;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.Controllers
+namespace MyWarehouse.WebApi.API.V1
 {
     [Authorize]
     [ApiController]

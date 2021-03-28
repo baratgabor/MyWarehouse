@@ -7,7 +7,7 @@ using MyWarehouse.Application.Transactions.GetTransactionDetails;
 using MyWarehouse.Application.Transactions.GetTransactionsList;
 using System.Threading.Tasks;
 
-namespace MyWarehouse.WebApi.Controllers
+namespace MyWarehouse.WebApi.API.V1
 {
     [Authorize]
     [ApiController]

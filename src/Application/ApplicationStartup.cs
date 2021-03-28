@@ -7,17 +7,15 @@ using System.Reflection;
 
 namespace MyWarehouse.Application
 {
-    public static class Startup
+    public static class ApplicationStartup
     {
-        public static IServiceCollection ConfigureServices(this IServiceCollection services)
+        public static void AddMyApplicationDependencies(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-
-            return services;
         }
     }
 }

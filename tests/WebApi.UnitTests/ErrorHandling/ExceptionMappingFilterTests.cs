@@ -14,16 +14,16 @@ using System.Collections.Generic;
 
 namespace MyWarehouse.WebApi.UnitTests.ErrorHandling
 {
-    public class ApiExceptionFilterTests
+    public class ExceptionMappingFilterTests
     {
-        private Mock<ILogger<ApiExceptionFilter>> _mockLogger;
-        private ApiExceptionFilter _sut;
+        private Mock<ILogger<ExceptionMappingFilter>> _mockLogger;
+        private ExceptionMappingFilter _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _mockLogger = new Mock<ILogger<ApiExceptionFilter>>();
-            _sut = new ApiExceptionFilter(_mockLogger.Object);
+            _mockLogger = new Mock<ILogger<ExceptionMappingFilter>>();
+            _sut = new ExceptionMappingFilter(_mockLogger.Object);
         }
 
         private ExceptionContext GetExceptionContext(Exception exception)
