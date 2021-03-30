@@ -7,6 +7,7 @@ using MyWarehouse.Infrastructure;
 using Serilog;
 using Serilog.Events;
 using System.Diagnostics.CodeAnalysis;
+using Serilog.Formatting.Json;
 
 namespace MyWarehouse.WebApi.Logging
 {
@@ -26,7 +27,7 @@ namespace MyWarehouse.WebApi.Logging
                 if (context.HostingEnvironment.IsDevelopment())
                 {
                     loggerCfg
-                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Event} - {Message}{NewLine}{Exception}")
+                    .WriteTo.Console()
                     .WriteTo.Debug();
                 }
                 else
