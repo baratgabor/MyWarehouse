@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyWarehouse.Infrastructure.Swagger.Configuration
+namespace MyWarehouse.WebApi.Swagger.Configuration
 {
     class SwaggerSettings
     {

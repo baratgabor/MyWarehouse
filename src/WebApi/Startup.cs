@@ -10,6 +10,7 @@ using MyWarehouse.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
 using MyWarehouse.Application;
 using MyWarehouse.WebApi.Authentication;
+using MyWarehouse.WebApi.Swagger;
 
 namespace MyWarehouse.WebApi
 {
@@ -27,6 +28,7 @@ namespace MyWarehouse.WebApi
             services.AddMyApi();
             services.AddMyApiAuthDeps();
             services.AddMyErrorHandling();
+            services.AddMySwagger(Configuration);
             services.AddMyCorsConfiguration(Configuration);
             services.AddMyInfrastructureDependencies(Configuration, Environment);
             services.AddMyApplicationDependencies();
@@ -43,6 +45,7 @@ namespace MyWarehouse.WebApi
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseMyCorsConfiguration();
+            app.UseMySwagger(Configuration);
             app.UseMyInfrastructure(Configuration, Environment);
             app.UseMyApi();
         }

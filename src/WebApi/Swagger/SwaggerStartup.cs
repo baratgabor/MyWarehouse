@@ -2,18 +2,19 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using MyWarehouse.Infrastructure.Swagger.Configuration;
-using MyWarehouse.Infrastructure.Swagger.Filters;
+using MyWarehouse.Infrastructure;
+using MyWarehouse.WebApi.Swagger.Configuration;
+using MyWarehouse.WebApi.Swagger.Filters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MyWarehouse.Infrastructure.Swagger
+namespace MyWarehouse.WebApi.Swagger
 {
     [ExcludeFromCodeCoverage]
-    internal static class Startup
+    internal static class SwaggerStartup
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddMySwagger(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(c =>
             {
@@ -40,7 +41,8 @@ namespace MyWarehouse.Infrastructure.Swagger
                 });
 
                 // Prevent SwaggerGen from throwing exception when multiple DTOs from different namespaces have the same type name.
-                c.CustomSchemaIds(x => {
+                c.CustomSchemaIds(x =>
+                {
                     var lastNamespaceSection = x.Namespace[(x.Namespace.LastIndexOf('.') + 1)..];
                     var genericParameters = string.Join(',', (IEnumerable<Type>)x.GetGenericArguments());
 
@@ -51,8 +53,8 @@ namespace MyWarehouse.Infrastructure.Swagger
                 c.OperationFilter<SwaggerAuthorizeFilter>();
             });
         }
-        
-        public static void Configure(IApplicationBuilder app, IConfiguration configuration)
+
+        public static void UseMySwagger(this IApplicationBuilder app, IConfiguration configuration)
         {
             var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
 

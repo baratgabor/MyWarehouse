@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyWarehouse.Infrastructure.Swagger.Filters
+namespace MyWarehouse.WebApi.Swagger.Filters
 {
     /// <summary>
     /// Specifies a custom name that overrides Swagger's default group name for the actions in the given controller.

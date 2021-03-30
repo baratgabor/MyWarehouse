@@ -25,7 +25,6 @@ namespace MyWarehouse.Infrastructure
 
         public static void AddMyInfrastructureDependencies(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
-            Swagger.Startup.ConfigureServices(services, configuration);
             Identity.Startup.ConfigureServices(services, configuration);
             Authentication.Startup.ConfigureServices(services, configuration);
             Persistence.Startup.ConfigureServices(services, configuration, env);
@@ -36,7 +35,6 @@ namespace MyWarehouse.Infrastructure
         {
             Authentication.Startup.Configure(app);
             Persistence.Startup.Configure(app, configuration);
-            Swagger.Startup.Configure(app, configuration);
         }
     }
 }

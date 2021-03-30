@@ -1,4 +1,4 @@
-﻿namespace MyWarehouse.Infrastructure.Swagger.Configuration
+﻿namespace MyWarehouse.WebApi.Swagger.Configuration
 {
     public static class SecuritySchemeNames
     {
