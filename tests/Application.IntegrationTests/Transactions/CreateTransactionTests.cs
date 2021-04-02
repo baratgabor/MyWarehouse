@@ -4,10 +4,7 @@ using MyWarehouse.Application.Transactions.CreateTransaction;
 using MyWarehouse.Domain.Partners;
 using MyWarehouse.Domain.Products;
 using MyWarehouse.Domain.Transactions;
-using MyWarehouse.Domain.Exceptions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,6 +52,34 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
             newProducts.Select(x => new { id = x.Id, qty = x.NumberInStock })
                 .Should().BeEquivalentTo(command.TransactionLines
                 .Select(x => new { id = x.ProductId, qty = x.ProductQuantity }));
+        }
+
+        [Test]
+        public async Task WhenInvalidProductIdPresent_ShouldThrowException()
+        {
+            var partner = (await TestFramework.DataFactory.AddPartners(1)).First();
+            var products = await TestFramework.DataFactory.AddProducts(3);
+            var command = new CreateTransactionCommand()
+            {
+                PartnerId = partner.Id,
+                TransactionType = Domain.TransactionType.Procurement,
+                TransactionLines = products.Select(p => new CreateTransactionCommand.TransactionLine()
+                {
+                    ProductId = p.Id,
+                    ProductQuantity = 5
+                }).Concat(new CreateTransactionCommand.TransactionLine[] { new()
+                {
+                    ProductId = 62614, // Another line added with invalid product Id.
+                    ProductQuantity = 2
+                }
+                })
+                .ToArray()
+            };
+
+            FluentActions.Invoking(() => TestFramework.SendAsync(command))
+                .Should().ThrowExactly<InputValidationException>()
+                .Which.Errors.Should().ContainKey("ProductId")
+                .And.Subject["ProductId"].Should().ContainMatch("*62614*");
         }
 
         [Test]
