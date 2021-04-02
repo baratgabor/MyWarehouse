@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using MyWarehouse.Application;
 using MyWarehouse.WebApi.Authentication;
 using MyWarehouse.WebApi.Swagger;
+using MyWarehouse.WebApi.Versioning;
 
 namespace MyWarehouse.WebApi
 {
@@ -29,6 +30,7 @@ namespace MyWarehouse.WebApi
             services.AddMyApiAuthDeps();
             services.AddMyErrorHandling();
             services.AddMySwagger(Configuration);
+            services.AddMyVersioning();
             services.AddMyCorsConfiguration(Configuration);
             services.AddMyInfrastructureDependencies(Configuration, Environment);
             services.AddMyApplicationDependencies();

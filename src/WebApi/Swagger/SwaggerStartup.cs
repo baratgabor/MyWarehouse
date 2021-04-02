@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MyWarehouse.Infrastructure;
 using MyWarehouse.WebApi.Swagger.Configuration;
 using MyWarehouse.WebApi.Swagger.Filters;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -16,16 +18,16 @@ namespace MyWarehouse.WebApi.Swagger
     {
         public static void AddMySwagger(this IServiceCollection services, IConfiguration configuration)
         {
+            var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
+
+            if (swaggerSettings.UseSwagger == false)
+            {
+                return;
+            }
+
             services.AddSwaggerGen(c =>
             {
-                var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
-
-                if (swaggerSettings.UseSwagger == false)
-                {
-                    return;
-                }
-
-                c.SwaggerDoc(swaggerSettings.ApiVersion, new OpenApiInfo { Title = swaggerSettings.ApiName, Version = swaggerSettings.ApiVersion });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerSettings.ApiName, Version = "v1" });
 
                 // Add Login capability to Swagger UI.
                 c.AddSecurityDefinition(SecuritySchemeNames.ApiLogin, new OpenApiSecurityScheme
@@ -52,6 +54,9 @@ namespace MyWarehouse.WebApi.Swagger
                 c.OperationFilter<SwaggerGroupFilter>();
                 c.OperationFilter<SwaggerAuthorizeFilter>();
             });
+
+            // Register options configurator for SwaggerUI; this will be picked up by UseSwaggerUI().
+            services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         }
 
         public static void UseMySwagger(this IApplicationBuilder app, IConfiguration configuration)
@@ -61,13 +66,7 @@ namespace MyWarehouse.WebApi.Swagger
             if (swaggerSettings.UseSwagger == true)
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint(
-                        url: swaggerSettings.JsonEndpointPath,
-                        name: swaggerSettings.ApiName + swaggerSettings.ApiVersion
-                    );
-                });
+                app.UseSwaggerUI();
             }
         }
     }
