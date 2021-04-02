@@ -9,7 +9,11 @@ namespace MyWarehouse.Application.Common.Dependencies.DataAccess
         public IPartnerRepository Partners { get; }
         public IProductRepository Products { get; }
         public ITransactionRepository Transactions { get; }
+        bool HasActiveTransaction { get; }
 
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
         public Task SaveChanges();
     }
 }

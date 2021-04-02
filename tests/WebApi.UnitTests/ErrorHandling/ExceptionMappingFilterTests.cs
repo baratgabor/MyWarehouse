@@ -16,14 +16,12 @@ namespace MyWarehouse.WebApi.UnitTests.ErrorHandling
 {
     public class ExceptionMappingFilterTests
     {
-        private Mock<ILogger<ExceptionMappingFilter>> _mockLogger;
         private ExceptionMappingFilter _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _mockLogger = new Mock<ILogger<ExceptionMappingFilter>>();
-            _sut = new ExceptionMappingFilter(_mockLogger.Object);
+            _sut = new ExceptionMappingFilter();
         }
 
         private ExceptionContext GetExceptionContext(Exception exception)

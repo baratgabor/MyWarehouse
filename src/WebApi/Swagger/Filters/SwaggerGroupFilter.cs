@@ -1,13 +1,15 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace MyWarehouse.Infrastructure.Swagger.Filters
+namespace MyWarehouse.WebApi.Swagger.Filters
 {
     /// <summary>
     /// Overrides the grouping name of actions in controllers which are decorated with <see cref="SwaggerGroupAttribute"/>.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class SwaggerGroupFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

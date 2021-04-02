@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
 using MyWarehouse.Application.Common.Exceptions;
 using MyWarehouse.Infrastructure.Authentication.External.Exceptions;
 using System;
@@ -15,23 +14,14 @@ namespace MyWarehouse.WebApi.ErrorHandling
     /// </summary>
     public class ExceptionMappingFilter : IExceptionFilter
     {
-        private readonly ILogger<ExceptionMappingFilter> _logger;
-
-        public ExceptionMappingFilter(ILogger<ExceptionMappingFilter> logger)
-        {
-            _logger = logger;
-        }
-
         public void OnException(ExceptionContext context)
         { 
-            //TODO: Push logging deeper, into Application layer, and dedicate this component to response mapping.
-            _logger.LogError($"Exception: [{context.Exception.Message}]\r\n\r\nStack Trace:\r\n{context.Exception.StackTrace}");
-            context.Result = ExecuteHandler(context.Exception);
+            context.Result = GetExceptionResult(context.Exception);
             context.ExceptionHandled = true;
         }
 
         [ExcludeFromCodeCoverage] // Seems like coverlet doesn't register switch expressions properly; it is tested.
-        private static IActionResult ExecuteHandler(Exception exception)
+        private static IActionResult GetExceptionResult(Exception exception)
             => exception switch
             {
                 InputValidationException e => HandleValidationException(e),

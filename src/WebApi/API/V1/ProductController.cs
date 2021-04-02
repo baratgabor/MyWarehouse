@@ -16,7 +16,8 @@ namespace MyWarehouse.WebApi.API.V1
 {
     [Authorize]
     [ApiController]
-    [Route("products")]
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/products")]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;

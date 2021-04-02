@@ -2,9 +2,8 @@
 using MyWarehouse.Application.Common.Dependencies.DataAccess;
 using MyWarehouse.Application.Common.Exceptions;
 using MyWarehouse.Domain;
-using MyWarehouse.Domain.Products;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,25 +34,41 @@ namespace MyWarehouse.Application.Transactions.CreateTransaction
             var partner = await _unitOfWork.Partners.GetByIdAsync(request.PartnerId)
                 ?? throw new InputValidationException((nameof(request.PartnerId), $"Partner (id: {request.PartnerId}) was not found."));
 
-            var transactionLines = new List<(Product product, int quantity)>();
-            foreach (var line in request.TransactionLines)
+            // Try not to confuse DB transaction with the "Transaction" domain entity. :)
+            await _unitOfWork.BeginTransactionAsync();
+            int createdTransactionId = 0;
+            try
             {
-                var product = await _unitOfWork.Products.GetByIdAsync(line.ProductId)
-                    ?? throw new InputValidationException((nameof(line.ProductId), $"Product (id: {line.ProductId}) was not found."));
+                var orderedProductIds = request.TransactionLines.Select(x => x.ProductId).Distinct();
+                var orderedProducts = await _unitOfWork.Products.GetFiltered(x => orderedProductIds.Contains(x.Id));
 
-                transactionLines.Add((product, line.ProductQuantity));
+                var validLines = request.TransactionLines.Select(line =>
+                    (
+                        product: orderedProducts.FirstOrDefault(p => p.Id == line.ProductId)
+                            ?? throw new InputValidationException((nameof(line.ProductId), $"Product (id: {line.ProductId}) was not found.")),
+                        qty: line.ProductQuantity
+                    )
+                );
+
+                var transaction = request.TransactionType switch
+                {
+                    TransactionType.Sales => partner.SellTo(validLines),
+                    TransactionType.Procurement => partner.ProcureFrom(validLines),
+                    _ => throw new InvalidEnumArgumentException($"No operation is defined for {nameof(TransactionType)} of '{request.TransactionType}'.")
+                };
+
+                await _unitOfWork.SaveChanges();
+                createdTransactionId = transaction.Id;
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
             }
 
-            var transaction = request.TransactionType switch
-            {
-                TransactionType.Sales => partner.SellTo(transactionLines),
-                TransactionType.Procurement => partner.ProcureFrom(transactionLines),
-                _ => throw new InvalidEnumArgumentException($"No operation is defined for {nameof(TransactionType)} of '{request.TransactionType}'.")
-            };
+            await _unitOfWork.CommitTransactionAsync();
 
-            await _unitOfWork.SaveChanges();
-
-            return transaction.Id;
+            return createdTransactionId;
         }
     }
 }

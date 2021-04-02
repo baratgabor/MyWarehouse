@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace MyWarehouse.WebApi.API.V1
 {
     [ApiController]
-    [Route("account")]
+    [ApiVersion("1.0")]
+    [Route("v{v:apiVersion}/account")]
     public class AccountController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -33,7 +34,8 @@ namespace MyWarehouse.WebApi.API.V1
         /// OAuth2.0 compliant login endpoint. Used for Swagger login.
         /// </summary>
         [AllowAnonymous]
-        [HttpPost("oauth2/access_token")]
+        [ApiVersionNeutral]
+        [HttpPost("/account/oauth2/access_token")]
         [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<LoginResponseDto>> LoginForm([FromForm] LoginDto login)
         {

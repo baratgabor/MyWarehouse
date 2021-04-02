@@ -3,12 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 const apiPort = '5001';
-const apiRoute = '';
+const apiVersion = 'v1';
 
 export const environment = {
   production: false,
-  baseHost: `https://${new URL(window.location.origin).hostname}:${apiPort}`,
-  apiHost: `https://${new URL(window.location.origin).hostname}:${apiPort}`,
+  baseHost: `https://${new URL(window.location.origin).hostname}:${apiPort}/${apiVersion}`,
+  apiHost: `https://${new URL(window.location.origin).hostname}:${apiPort}/${apiVersion}`,
 };
 
 /*

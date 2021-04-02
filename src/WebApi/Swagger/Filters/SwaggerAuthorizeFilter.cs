@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
-using MyWarehouse.Infrastructure.Swagger.Configuration;
+using MyWarehouse.WebApi.Swagger.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace MyWarehouse.Infrastructure.Swagger.Filters
+namespace MyWarehouse.WebApi.Swagger.Filters
 {
     /// <summary>
     /// Configure Swagger to send Bearer token when calling actions that require authorization via Authorize
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class SwaggerAuthorizeFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

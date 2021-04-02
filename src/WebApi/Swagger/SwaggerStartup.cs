@@ -1,30 +1,33 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using MyWarehouse.Infrastructure.Swagger.Configuration;
-using MyWarehouse.Infrastructure.Swagger.Filters;
+using MyWarehouse.Infrastructure;
+using MyWarehouse.WebApi.Swagger.Configuration;
+using MyWarehouse.WebApi.Swagger.Filters;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MyWarehouse.Infrastructure.Swagger
+namespace MyWarehouse.WebApi.Swagger
 {
     [ExcludeFromCodeCoverage]
-    internal static class Startup
+    internal static class SwaggerStartup
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddMySwagger(this IServiceCollection services, IConfiguration configuration)
         {
+            var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
+
+            if (swaggerSettings.UseSwagger == false)
+            {
+                return;
+            }
+
             services.AddSwaggerGen(c =>
             {
-                var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
-
-                if (swaggerSettings.UseSwagger == false)
-                {
-                    return;
-                }
-
-                c.SwaggerDoc(swaggerSettings.ApiVersion, new OpenApiInfo { Title = swaggerSettings.ApiName, Version = swaggerSettings.ApiVersion });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = swaggerSettings.ApiName, Version = "v1" });
 
                 // Add Login capability to Swagger UI.
                 c.AddSecurityDefinition(SecuritySchemeNames.ApiLogin, new OpenApiSecurityScheme
@@ -40,7 +43,8 @@ namespace MyWarehouse.Infrastructure.Swagger
                 });
 
                 // Prevent SwaggerGen from throwing exception when multiple DTOs from different namespaces have the same type name.
-                c.CustomSchemaIds(x => {
+                c.CustomSchemaIds(x =>
+                {
                     var lastNamespaceSection = x.Namespace[(x.Namespace.LastIndexOf('.') + 1)..];
                     var genericParameters = string.Join(',', (IEnumerable<Type>)x.GetGenericArguments());
 
@@ -50,22 +54,19 @@ namespace MyWarehouse.Infrastructure.Swagger
                 c.OperationFilter<SwaggerGroupFilter>();
                 c.OperationFilter<SwaggerAuthorizeFilter>();
             });
+
+            // Register options configurator for SwaggerUI; this will be picked up by UseSwaggerUI().
+            services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         }
-        
-        public static void Configure(IApplicationBuilder app, IConfiguration configuration)
+
+        public static void UseMySwagger(this IApplicationBuilder app, IConfiguration configuration)
         {
             var swaggerSettings = configuration.GetMyOptions<SwaggerSettings>();
 
             if (swaggerSettings.UseSwagger == true)
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint(
-                        url: swaggerSettings.JsonEndpointPath,
-                        name: swaggerSettings.ApiName + swaggerSettings.ApiVersion
-                    );
-                });
+                app.UseSwaggerUI();
             }
         }
     }
