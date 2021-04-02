@@ -5,6 +5,7 @@ using MyWarehouse.WebApi.Versioning.SwaggerConfiguration;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace MyWarehouse.WebApi.Versioning
@@ -12,6 +13,7 @@ namespace MyWarehouse.WebApi.Versioning
     // This module is only semantically meaningful; versioning can't be fully modularized.
     // If the AddApiVersioning() extension method here isn't called, the versioned Route attribute
     // on controllers will throw on exception.
+    [ExcludeFromCodeCoverage]
     internal static class VersioningStartup
     {
         /// <summary>

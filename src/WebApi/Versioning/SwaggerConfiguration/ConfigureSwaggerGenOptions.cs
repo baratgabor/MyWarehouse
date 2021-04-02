@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.Versioning.SwaggerConfiguration
 {
+    [ExcludeFromCodeCoverage]
     public class ConfigureSwaggerGenOptions : IPostConfigureOptions<SwaggerGenOptions>
     {
         readonly IApiVersionDescriptionProvider _versionProvider;

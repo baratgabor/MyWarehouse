@@ -3,9 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MyWarehouse.Infrastructure;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyWarehouse.WebApi.Swagger.Configuration
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigureSwaggerUIOptions : IConfigureOptions<SwaggerUIOptions>
     {
         private readonly IConfiguration _configuration;

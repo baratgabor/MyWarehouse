@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace MyWarehouse.WebApi.Versioning.SwaggerConfiguration
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigureSwaggerUIOptions : IPostConfigureOptions<SwaggerUIOptions>
     {
         private readonly IApiVersionDescriptionProvider _versionProvider;
