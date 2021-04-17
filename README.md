@@ -106,6 +106,8 @@ Vertical slicing also challenges our heavily ingrained modern-day compulsion to 
 
 Vertical slicing leads to a design where each feature, or operation, or [use case](https://martinfowler.com/bliki/UseCase.html) is more substantial than just a few calls on a bunch of generalized services, and actually encapsulates proper business logic in a structurally segregated manner.
 
+Obviously this is an oversimplification, and in any complex system you'll undoubtedly still end up with plenty of generalized components that implement actually general/cross-cutting concerns. It's just that you can focus your design process around vertical slices, feel comfortable putting business logic into them in a prima facie fashion, and when you see the need you can *then* push those down to the domain entities (to implement DDD), or into general components.
+
 Another great thing about vertical slicing that it aligns well to [SCREAMING ARCHITECTURE](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html), where you look at a solution, and what you see are not meaningless generic tech terms like models, services, dtos, validators... but you see *what the system actually does, what features it has*. Which arguably makes it easier to comprehend and work with a system.
 
 One great, modern take on vertical slicing comes from [Jimmy Bogard](https://jimmybogard.com/), developer of the widely used AutoMapper package, and it uses another of his projects, [MediatR](https://github.com/jbogard/MediatR). Here is an excellent talk from him on [vertical slice architecture](https://www.youtube.com/watch?v=SUiWfhAhgQw) (notice how he is not calling it "CQRS").
