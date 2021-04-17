@@ -8,7 +8,7 @@
 
 This is a sample project consisting of an ASP.NET Core web API backend service and an Angular frontend with Bootstrap.
 
-I  have finally decided it's time to have something public on my GitHub account that is actually relevant to my professional focus on ASP.NET Core, retiring those god-awfully written old classical ASP.NET projects I had on BitBucket.
+I have finally decided it's time to have something public on my GitHub account that is actually relevant to my professional focus on ASP.NET Core, retiring those god-awfully written old classical ASP.NET projects I had on BitBucket.
 
 The following, rather informatively written documentation page has a two-fold purpose:
 
@@ -47,12 +47,14 @@ The following, rather informatively written documentation page has a two-fold pu
   * [Clean Architecture](#clean-architecture)
   * [Vertical Slicing](#vertical-slicing)
   * [Domain Driven Design](#domain-driven-design)
+* [Project structure](#project-structure)
 - [Diversions from and extensions to the Clean Architecture Template](#diversions-from-and-extensions-to-the-clean-architecture-template)
   * [DDD in Domain](#ddd-in-domain)
   * [Paging, ordering and filtering](#paging-ordering-and-filtering)
   * [Infrastructure layer modularization](#infrastructure-layer-modularization)
   * [Improved integration/unit testing](#improved-integrationunit-testing)
   * [Support structure for strongly typed configuration](#support-structure-for-strongly-typed-configuration)
+  * [API versioning](#api-versioning)
   * [Repository layer](#repository-layer)
   * [Logging extensions](#logging-extensions)
   * [No Identity Server integration](#no-identity-server-integration)
@@ -80,7 +82,7 @@ This project had an older version I originally developed for a job application, 
 
 ## Backend Design Paradigms
 
-The current project's backend system uses the following design paradigms (besides the fundamentals that are not worth mentioning). You can find plenty of dry materials pertaining to these subjects, so I mostly focused on providing a pragmatic narration that could perhaps help you to 'get the point' if you had difficulties extracting that value from other sources.
+The backend system uses the following design paradigms (besides the fundamentals not worth mentioning). You can find plenty of dry materials pertaining to these subjects, so I mostly focused on providing a pragmatic narration that could perhaps help you to 'get the point' if you had difficulties extracting that value from other sources.
 
 ### Clean Architecture
 
@@ -94,13 +96,15 @@ The basis of my project structure comes from Jason Taylor's excellent [Clean Arc
 
 Vertical slicing is the concept and technique of structuring your solution into more-or-less self-contained feature slices *instead of using a bunch of generalized services from layers upon layers*.
 
-The inspiration comes from the experience of brittleness that a highly service-oriented architecture can exhibit. E.g. when you try to implement a new feature or modify an existing, so you change the service it depends on, only to realize that **you broke another feature** that depended on the same service, because you didn't take into account all use cases of the given service component. Then you go and fix it, only to see that you broke another feature in a component far away which was relying on a second service that was relying on some validator used by a fourth service...
+The inspiration comes from the experience of brittleness that a highly service-oriented architecture can exhibit. E.g. when you try to implement a new feature or modify an existing, so you change the service it depends on, only to realize that **you broke another feature** that depended on the same service, because you didn't take into account all use cases of the given service component. Then you go and fix it, only to see that you broke another feature in a component far away which was relying on a second service that was relying on some validator used by a fourth service... Let's be honest: this is the day-to-day reality of many developers.
 
 And there comes the realization that *DRY – don't repeat yourself –* can be recipe for spaghetti code, unless you take something very-very seriously:
 
 > *What matters is not whether code in two or more places look similar in form, but whether you can guarantee that they have the same – preferably single – reason to change.* (Sorry, not an actual quote, just wanted to highlight it.)
 
-This is how you end up with a design where each feature or [use case](https://martinfowler.com/bliki/UseCase.html) is more substantial than just a few calls on a bunch of generalized services, and actually might encapsulate proper business logic in a structurally segregated manner.
+Vertical slicing also challenges our heavily ingrained modern-day compulsion to extract everything into reusable horizontal service components. Because the truth is that even if a piece of code is used in a single place, today we very often still do place that in some generalized service, partially because that's simply how we do things, and also because without vertical slices we often don't have a good place to put such code.
+
+Vertical slicing leads to a design where each feature, or operation, or [use case](https://martinfowler.com/bliki/UseCase.html) is more substantial than just a few calls on a bunch of generalized services, and actually encapsulates proper business logic in a structurally segregated manner.
 
 Another great thing about vertical slicing that it aligns well to [SCREAMING ARCHITECTURE](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html), where you look at a solution, and what you see are not meaningless generic tech terms like models, services, dtos, validators... but you see *what the system actually does, what features it has*. Which arguably makes it easier to comprehend and work with a system.
 
@@ -110,7 +114,7 @@ In my humble, but perhaps cheeky, opinion, there are two key things to understan
 
 1. ##### MediatR is not a mediator:
 
-   It's just not. I think pretty much everybody who knows their [object-oriented design patterns](https://sourcemaking.com/design_patterns) are bound to see this. It indeed couples two objects with an intermediary, decoupling the direct connection between the two, but that alone doesn't make it a mediator; a bunch of behavioral design patterns do that.
+   It's just not. I think pretty much everybody who knows their [object-oriented design patterns](https://sourcemaking.com/design_patterns) are bound to see this. It indeed couples two objects with an intermediary, decoupling the direct connection between the two, but that alone doesn't make it into a mediator; a bunch of behavioral design patterns do that.
 
    One classical example of the mediator pattern is chat rooms, where you have multiple people wanting to broadcast messages. And instead of making their object representation know about and send messages to each one of them back and forth, you use an intermediary – a mediator – to facilitate distributed two-way communication between them. Another example is a taxi service where the dispatcher mediates between the taxis, instead of all of them having to know about all others. So, usually it refers to longer-term, more complex communication between more than two participators.
 
@@ -120,11 +124,11 @@ In my humble, but perhaps cheeky, opinion, there are two key things to understan
 
 2. ##### MediatR has little to do with CQRS: 
 
-   This really has become one of my pet-peeves. For some reason 90% of people on the internet today seem to associate MediatR with CQRS, and they refer to "*doing CRQS with MediatR*", while their solution shows no concern or need to actually segregate queries from commands, and what they're doing is just *vertical slicing in a command-driven fashion*. Maybe they're confused by the 'command' word, I have no idea, but commanding is an unrelated, well-known pattern.
+   This really has become one of my pet-peeves. For some reason 90% of people on the internet today seem to associate MediatR with CQRS, and they refer to "*doing CRQS with MediatR*", while their solution shows no concern or need to actually segregate queries from commands, and what they're doing is just *vertical slicing in a command-driven fashion*. Because simply naming some of your request handlers as commands and others as queries is *empathically not CQRS*. CQRS is [this](https://martinfowler.com/bliki/CQRS.html), and as Martin Fowler notes, one should be very cautious about using it because of the added complexity.
 
-   *CQRS, or command-query responsibility segregation, is an orthogonal pattern*. You can do CQRS with MediatR, or you can decide not to do CQRS with MediatR. Just as you can do CQRS without MediatR, or decide not to do CQRS without MediatR. But yes, arguably it's easier to implement CQRS (and a lot of other things) if you have a vertical slice architecture.
+   *CQRS, or command-query responsibility segregation, is an orthogonal pattern*. You can do CQRS with MediatR, or you can decide not to do CQRS with MediatR. Just as you can do CQRS without MediatR, or decide not to do CQRS without MediatR. But yes, arguably it's easier to implement CQRS (and a lot of other things) if you have a *vertical slice architecture*.
 
-   In fact, I felt that in my sample project creating an additional level of *Commands* and *Queries* folders (like in Jason Taylor's Clean Architecture template) don't add anything to my design, and even distracts from the goals of screaming architecture, so I simply placed all operations for a given aggregate in the same folder.
+   In fact, I felt that in my sample project creating an additional level of *Commands* and *Queries* folders (like in Jason Taylor's Clean Architecture template) don't add any value to my design, and even distracts from the goals of screaming architecture, so I simply placed all operations for a given aggregate in the same folder.
 
    Here is an article from someone who gets it: [No, MediatR Didn't Run Over My Dog](http://scotthannen.org/blog/2020/06/20/mediatr-didnt-run-over-dog.html).
 
@@ -139,6 +143,18 @@ Though, by banging my head against the proverbial wall I did succeed in rewiring
 But, when I started to work with ASP.NET, for some reason I swiftly abandoned everything I learned about object-oriented design, and I adapted to using a bunch of properties as my "model". That seemed to be the ASP.NET way of doing things, and I was a newcomer to this strange and wonderful land. Not to mention being thoroughly **terrified** of what would happen to the ORM (EF) if I added anything else than properties to the entities. *But you can add. You can add a **lot**.* At least with the current versions of EF Core.
 
 Okay, this was quite abstract, with plenty of babbling. For some details of the actual implementation, [see the relevant section below](#ddd-in-domain).
+
+## Project structure
+
+<img src=".github/clean-structure-w-desc.png"/>
+
+The most important takeaway is that the application is separated both from the presentation (in this case the web API) and the infrastructural concerns. This way you have a highly flexible application core that you could run in multiple ways, and under various, replaceable infrastructural conditions.
+
+Furthermore, the domain driven design (in contrast to anemic domain) helps to ensure that only valid operations are executed on the domain entities. This makes implementing application features less error-prone, especially for newer members of a team.
+
+The vertical slice architecture of the application layer also helps to easily comprehend the behavior of the system, alleviating the usual 'what the hell is going on here' guesswork when someone new starts to work on a system.
+
+*(The visualization of the Infrastructure layer in Clean Architecture varies. Sometimes it's shown to be on the same level as the outermost representation layer, but I think this doesn't align with the perspective of an external observer. From that perspective the presentation (in this case, the API) is the sole outermost layer.)*
 
 ## Diversions from and extensions to the Clean Architecture Template
 
@@ -163,7 +179,7 @@ But we all have to discover our own ways, based on our own experiences, followin
 
 - **Paged Query / Response Models:** It's hard to imagine using *any* API without support for paging, ordering and filtering. The original Clean Architecture Template has no such features, but I implemented a relatively okay design into this project. All list queries utilize the same `ListQueryModel` base class (extended with additional properties for the given entity, if needed), and they return a `ListResponseModel` that contains the currently applied paging parameters, the currently applied ordering and filtering, and the result set.
 - **OData-compliant filtering and ordering:** Let me be frank, I don't like the OData standard's weird URL parameter schema, and also how its [integration](https://docs.microsoft.com/en-us/odata/webapi/netcore) is suggested with Microsoft's OData package. No way I'm gonna use those weird $ parameters and parentheses in my URLs unless someone pays me good money. But the filtering / ordering language itself is fine, so I added support for that. Which means this API supports queries that specify multiple orderbys, and multiple/complex filters.
-- **AutoMapper expression mapping:** A big one, again. When we write proper APIs, where we *always* return DTOs instead of entities, and we flatten/map many of the properties, then allowing the consumers to specify filtering based on  property names is a *pain*, because what they specify often doesn't exist on the actual entity. E.g. they want to sort Orders based on `order.CustomerName`, but what you actually have in the backend is `order.Customer.Name`, so it doesn't work. To be honest, even a year ago I was manually writing converters to support those scenarios. I didn't realize that if we use AutoMapper's [projection features](https://docs.automapper.org/en/stable/Queryable-Extensions.html) (with mapping profiles configured first, obviously), then that automatically translates the DTO property references in the Linq expressions back to entity property references. You just have to create the expressions with property names that are referencing DTO properties, and pretty much everything else is taken care of. *This also protects the properties of entities which are intentionally not exposed through DTOs; ordering and filtering only works on properties that exist on the DTO.*
+- **AutoMapper expression mapping:** A big one, again. When we write proper APIs, where we *always* return DTOs instead of entities, and we flatten/map many of the properties, then allowing the consumers to specify filtering based on property names is a *pain*, because what they specify often doesn't exist on the actual entity. E.g. they want to sort Orders based on `order.CustomerName`, but what you actually have in the backend is `order.Customer.Name`, so it doesn't work. To be honest, even a year ago I was manually writing converters to support those scenarios. I didn't realize that if we use AutoMapper's [projection features](https://docs.automapper.org/en/stable/Queryable-Extensions.html) (with mapping profiles configured first, obviously), then that automatically translates the DTO property references in the Linq expressions back to entity property references. You just have to create the expressions with property names that are referencing DTO properties, and pretty much everything else is taken care of. *This also protects the properties of entities which are intentionally not exposed through DTOs; ordering and filtering only works on properties that exist on the DTO.*
 
 ### Infrastructure layer modularization:
 
