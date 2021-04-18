@@ -47,7 +47,7 @@ The following, rather informatively written documentation page has a two-fold pu
   * [Clean Architecture](#clean-architecture)
   * [Vertical Slicing](#vertical-slicing)
   * [Domain Driven Design](#domain-driven-design)
-* [Project structure](#project-structure)
+- [Project structure](#project-structure)
 - [Diversions from and extensions to the Clean Architecture Template](#diversions-from-and-extensions-to-the-clean-architecture-template)
   * [DDD in Domain](#ddd-in-domain)
   * [Paging, ordering and filtering](#paging-ordering-and-filtering)
@@ -126,7 +126,7 @@ In my humble, but perhaps cheeky, opinion, there are two key things to understan
 
 2. ##### MediatR has little to do with CQRS: 
 
-   This really has become one of my pet-peeves. For some reason 90% of people on the internet today seem to associate MediatR with CQRS, and they refer to "*doing CRQS with MediatR*", while their solution shows no concern or need to actually segregate queries from commands, and what they're doing is just *vertical slicing in a command-driven fashion*. Because simply naming some of your request handlers as commands and others as queries is *empathically not CQRS*. CQRS is [this](https://martinfowler.com/bliki/CQRS.html), and as Martin Fowler notes, one should be very cautious about using it because of the added complexity.
+   This really has become one of my pet-peeves. For some reason 90% of people on the internet today seem to associate MediatR with CQRS, and they refer to "*doing CRQS with MediatR*", while their solution shows no concern or need to actually segregate queries from commands, and what they're doing is just *vertical slicing in a command-driven fashion*. Because simply naming some of your request handlers as commands and others as queries is *emphatically not CQRS*. CQRS is [this](https://martinfowler.com/bliki/CQRS.html), and as Martin Fowler notes, one should be very cautious about using it because of the added complexity.
 
    *CQRS, or command-query responsibility segregation, is an orthogonal pattern*. You can do CQRS with MediatR, or you can decide not to do CQRS with MediatR. Just as you can do CQRS without MediatR, or decide not to do CQRS without MediatR. But yes, arguably it's easier to implement CQRS (and a lot of other things) if you have a *vertical slice architecture*.
 
