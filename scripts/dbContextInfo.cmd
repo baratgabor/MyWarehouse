@@ -1,1 +1,1 @@
-@dotnet ef dbcontext info --project ../src/MyWarehouse.Infrastructure --startup-project ../src/MyWarehouse.Api
+@dotnet ef dbcontext info --project ../src/Infrastructure --startup-project ../src/WebApi

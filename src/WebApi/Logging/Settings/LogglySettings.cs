@@ -1,14 +1,13 @@
 ﻿using MyWarehouse.Infrastructure.Common.Validation;
-using System.ComponentModel.DataAnnotations;
 
-namespace MyWarehouse.WebApi.Logging.Settings
+namespace MyWarehouse.WebApi.Logging.Settings;
+
+public class LogglySettings
 {
-    public class LogglySettings
-    {
-        [Required]
-        public bool? WriteToLoggly { get; init; }
+    [Required]
+    [MemberNotNullWhen(true, nameof(CustomerToken))]
+    public bool? WriteToLoggly { get; init; }
 
-        [RequiredIf(nameof(WriteToLoggly), true)]
-        public string CustomerToken { get; init; }
-    }
+    [RequiredIf(nameof(WriteToLoggly), true)]
+    public string? CustomerToken { get; init; }
 }

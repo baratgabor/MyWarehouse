@@ -1,34 +1,54 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
 
-namespace MyWarehouse.Infrastructure
+namespace MyWarehouse.Infrastructure;
+
+public static class ConfigurationExtensions
 {
-    public static class ConfigurationExtensions
+    const string ConfigMissingErrorMessage = "Options type of '{0}' was requested as required, but the corresponding section was not found in configuration. Make sure one of your configuration sources contains this section.";
+
+    /// <summary>
+    /// Returns part of the configuration, bound to the specified strongly typed options instance. Use this method to get the configuration values needed in startup logic.
+    /// </summary>
+    /// <typeparam name="T">The options type to bind. The name of this type is used as the section name as well.</typeparam>
+    /// <param name="requiredToExistInConfiguration">
+    /// If true, the configuration must be backed by an explicitly existing section in the configuration file, and an exception is thrown if not.
+    /// If false, a default instance of the configuration type is returned.
+    /// </param>
+    public static T GetMyOptions<T> (this IConfiguration configuration, bool requiredToExistInConfiguration = false) where T : class, new()
     {
-        /// <summary>
-        /// Binds a section of the configuration as a strongly typed configuration instance.
-        /// </summary>
-        /// <typeparam name="T">The options type to bind. The name of this type is used as the section name as well.</typeparam>
-        public static T GetMyOptions<T> (this IConfiguration configuration, bool required = false) where T : class
-        {
-            // TODO: Consider declaring the section name to bind via a settings interface or base class. It might be a problematic assumption that section name always equals the type name.
-            var bound = configuration.GetSection(typeof(T).Name).Get<T>();
+        var bound = configuration.GetSection(typeof(T).Name).Get<T>();
 
-            if (bound != null)
-                Validator.ValidateObject(bound, new ValidationContext(bound), validateAllProperties: true);
-            else if (required)
-                throw new InvalidOperationException($"Settings type of '{nameof(T)}' was requested as required, but was not found in configuration.");
+        if (bound is null && requiredToExistInConfiguration)
+            throw new InvalidOperationException(string.Format(ConfigMissingErrorMessage, typeof(T).Name));
 
-            return bound;
-        }
+        bound ??= new T();
+        Validator.ValidateObject(bound, new ValidationContext(bound), validateAllProperties: true);
 
-        public static void RegisterMyOptions<T>(this IServiceCollection services) where T : class
-        {
-            // TODO: Note that validation is late when resolved through resolver delegate. :/ Maybe ask for a configuration too, and bind it eagerly.
-            services.AddSingleton<T>(resolver =>
-                resolver.GetRequiredService<IConfiguration>().GetMyOptions<T>());
-        }
+        return bound;
     }
+
+    /// <summary>
+    /// Registers a type as a strongly typed configuration, automatically taking care of any data annotation validation on startup, if exists.
+    /// The registered type is retrievable from DI directly as a singleton, or wrapped in IOptions<>.
+    /// </summary>
+    /// <typeparam name="T">The options type to bind. The name of this type is used as the section name as well.</typeparam>
+    /// <param name="requiredToExistInConfiguration">
+    /// If true, the configuration must be backed by an explicitly existing section in the configuration file, and an exception is thrown if not.
+    /// If false, a default instance of the configuration type is returned.
+    /// </param>
+public static void RegisterMyOptions<T>(this IServiceCollection services, bool requiredToExistInConfiguration = true) where T : class
+{
+    var optionsBuilder = services.AddOptions<T>()
+        .BindConfiguration(typeof(T).Name)
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
+    if (requiredToExistInConfiguration)
+        optionsBuilder.Validate<IConfiguration>((_, configuration)
+            => configuration.GetSection(typeof(T).Name).Exists(), string.Format(ConfigMissingErrorMessage, typeof(T).Name));
+
+    services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<T>>().Value);
+}
 }

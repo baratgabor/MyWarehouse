@@ -1,15 +1,12 @@
-﻿using System;
+﻿namespace MyWarehouse.Domain.Common;
 
-namespace MyWarehouse.Domain.Common
+public interface IAudited
 {
-    public interface IAudited
-    {
-        string CreatedBy { get; }
+    string CreatedBy { get; }
 
-        DateTime CreatedAt { get; }
+    DateTime CreatedAt { get; }
 
-        string LastModifiedBy { get; }
+    string? LastModifiedBy { get; }
 
-        DateTime? LastModifiedAt { get; }
-    }
+    DateTime? LastModifiedAt { get; }
 }

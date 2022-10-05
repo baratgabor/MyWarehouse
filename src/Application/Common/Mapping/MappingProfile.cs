@@ -28,10 +28,9 @@ namespace MyWarehouse.Application.Common.Mapping
                 var instance = Activator.CreateInstance(type);
 
                 var methodInfo = type.GetMethod("Mapping")
-                    ?? type.GetInterface("IMapFrom`1").GetMethod("Mapping");
+                    ?? type.GetInterface("IMapFrom`1")?.GetMethod("Mapping");
 
                 methodInfo?.Invoke(instance, new object[] { this });
-
             }
         }
     }

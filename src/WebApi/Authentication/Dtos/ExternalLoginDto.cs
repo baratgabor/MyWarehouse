@@ -1,13 +1,11 @@
 ﻿using MyWarehouse.Infrastructure.Authentication.External.Model;
-using System.ComponentModel.DataAnnotations;
 
-namespace MyWarehouse.WebApi.Authentication.Models.Dtos
+namespace MyWarehouse.WebApi.Authentication.Models.Dtos;
+
+public record ExternalLoginDto
 {
-    public record ExternalLoginDto
-    {
-        public ExternalAuthenticationProvider Provider { get; init; }
+    public ExternalAuthenticationProvider Provider { get; init; }
 
-        [Required, MinLength(1)]
-        public string IdToken { get; init; }
-    }
+    [Required, MinLength(1)]
+    public string IdToken { get; init; } = null!;
 }

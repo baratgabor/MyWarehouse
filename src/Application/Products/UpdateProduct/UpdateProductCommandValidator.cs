@@ -1,25 +1,23 @@
-﻿using FluentValidation;
-using MyWarehouse.Domain.Products;
+﻿using MyWarehouse.Domain.Products;
 
-namespace MyWarehouse.Application.Products.UpdateProduct
+namespace MyWarehouse.Application.Products.UpdateProduct;
+
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+    public UpdateProductCommandValidator()
     {
-        public UpdateProductCommandValidator()
-        {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .MaximumLength(ProductInvariants.NameMaxLength);
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MaximumLength(ProductInvariants.NameMaxLength);
 
-            RuleFor(x => x.Description)
-                .NotEmpty()
-                .MaximumLength(ProductInvariants.DescriptionMaxLength);
+        RuleFor(x => x.Description)
+            .NotEmpty()
+            .MaximumLength(ProductInvariants.DescriptionMaxLength);
 
-            RuleFor(x => x.MassValue)
-                .GreaterThanOrEqualTo(ProductInvariants.MassMinimum);
+        RuleFor(x => x.MassValue)
+            .GreaterThanOrEqualTo(ProductInvariants.MassMinimum);
 
-            RuleFor(x => x.PriceAmount)
-                .GreaterThanOrEqualTo(ProductInvariants.PriceMinimum);
-        }
+        RuleFor(x => x.PriceAmount)
+            .GreaterThanOrEqualTo(ProductInvariants.PriceMinimum);
     }
 }

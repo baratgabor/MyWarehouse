@@ -15,7 +15,7 @@ namespace MyWarehouse.Application.IntegrationTests.Partners
         public void WhenDtoIsBlank_ShouldThrow_InputValidationException()
         {
             FluentActions.Invoking(() => TestFramework.SendAsync(new UpdatePartnerCommand()))
-                .Should().ThrowExactly<InputValidationException>();
+                .Should().ThrowExactlyAsync<InputValidationException>();
         }
 
         [Test]

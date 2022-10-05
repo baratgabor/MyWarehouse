@@ -1,38 +1,36 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using MyWarehouse.Infrastructure;
 using MyWarehouse.WebApi.Logging;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace MyWarehouse.WebApi
+namespace MyWarehouse.WebApi;
+
+[ExcludeFromCodeCoverage]
+public static class Program
 {
-    [ExcludeFromCodeCoverage]
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
-            => Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(
-                    webBuilder => {
-                        // Notice: Logging overrides.
-                        webBuilder.AddMySerilogLogging(); 
+        builder.Host
+            .AddMySerilogLogging() // Notice: Logging overrides.
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                // ConfigureWebHostDefaults only adds secrets if environment is Develop.
+                // This ensures they're always added, for local testing of Production setting.
+                config.AddUserSecrets(Assembly.GetEntryAssembly(), optional: true);
 
-                        webBuilder.UseStartup<Startup>();
-                })
-                .ConfigureAppConfiguration((context, config) =>
-                {
-                    // ConfigureWebHostDefaults only adds secrets if environment is Develop.
-                    // This ensures they're always added, for local testing of Production setting.
-                    config.AddUserSecrets(Assembly.GetEntryAssembly(), optional: true);
+                // Notice: Infrastructure hook.
+                config.AddMyInfrastructureConfiguration(context);
+            });
 
-                    // Notice: Infrastructure hook.
-                    config.AddMyInfrastructureConfiguration(context);
-                });
+        var startup = new Startup(builder.Configuration, builder.Environment);
+
+        startup.ConfigureServices(builder.Services);
+
+        var app = builder.Build();
+
+        startup.Configure(app);
+
+        app.Run();
     }
 }

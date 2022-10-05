@@ -19,7 +19,7 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
             var command = new CreateTransactionCommand();
 
             FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().ThrowExactly<InputValidationException>();
+                .Should().ThrowExactlyAsync<InputValidationException>();
         }
 
         [Test]
@@ -76,10 +76,10 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
                 .ToArray()
             };
 
-            FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().ThrowExactly<InputValidationException>()
-                .Which.Errors.Should().ContainKey("ProductId")
-                .And.Subject["ProductId"].Should().ContainMatch("*62614*");
+            (await FluentActions.Invoking(() => TestFramework.SendAsync(command))
+                .Should().ThrowExactlyAsync<InputValidationException>())
+                    .Which.Errors.Should().ContainKey("ProductId")
+                    .And.Subject["ProductId"].Should().ContainMatch("*62614*");
         }
 
         [Test]
@@ -138,8 +138,8 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
                 }).ToArray()
             };
 
-            FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().ThrowExactly<InputValidationException>()
+            (await FluentActions.Invoking(() => TestFramework.SendAsync(command))
+                .Should().ThrowExactlyAsync<InputValidationException>())
                     .And.Errors.SelectMany(e => e.Value).Should().ContainMatch("*stock*");
         }
     }

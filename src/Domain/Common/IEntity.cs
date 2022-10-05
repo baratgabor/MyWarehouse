@@ -1,7 +1,6 @@
-﻿namespace MyWarehouse.Domain.Common
+﻿namespace MyWarehouse.Domain.Common;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        int Id { get; }
-    }
+    int Id { get; }
 }

@@ -1,7 +1,6 @@
-﻿namespace MyWarehouse.Domain.Partners
+﻿namespace MyWarehouse.Domain.Partners;
+
+public static class PartnerInvariants
 {
-    public static class PartnerInvariants
-    {
-        public const int NameMaxLength = 100;
-    }
+    public const int NameMaxLength = 100;
 }

@@ -1,7 +1,6 @@
-﻿namespace MyWarehouse.Infrastructure.Common.Validation
+﻿namespace MyWarehouse.Infrastructure.Common.Validation;
+
+internal interface IValidatable
 {
-    internal interface IValidatable
-    {
-        public void Validate();
-    }
+    public void Validate();
 }

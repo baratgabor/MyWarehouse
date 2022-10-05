@@ -15,7 +15,7 @@ namespace MyWarehouse.Application.IntegrationTests.Products
             var request = new GetProductDetailsQuery() { Id = 12345 };
 
             FluentActions.Invoking(() => TestFramework.SendAsync(request))
-                .Should().ThrowExactly<EntityNotFoundException>();
+                .Should().ThrowExactlyAsync<EntityNotFoundException>();
         }
 
         [Test]

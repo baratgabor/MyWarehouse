@@ -25,7 +25,7 @@ namespace MyWarehouse.Application.IntegrationTests
             _databaseReset = () => {
                 return new Checkpoint()
                 {
-                    TablesToIgnore = new[] { "__EFMigrationsHistory" }
+                    TablesToIgnore = new[] { new Respawn.Graph.Table("__EFMigrationsHistory") }
                 }
                 .Reset(_host.ConnectionString);
             };

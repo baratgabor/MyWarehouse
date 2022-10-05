@@ -13,7 +13,7 @@ namespace MyWarehouse.Application.IntegrationTests.Products
         public void WhenDtoIsBlank_ShouldThrow_InputValidationException()
         {
             FluentActions.Invoking(() => TestFramework.SendAsync(new CreateProductCommand()))
-                .Should().ThrowExactly<InputValidationException>();
+                .Should().ThrowExactlyAsync<InputValidationException>();
         }
 
         [Test]

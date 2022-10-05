@@ -1,11 +1,10 @@
-﻿namespace MyWarehouse.Infrastructure.Authentication.Core.Model
+﻿namespace MyWarehouse.Infrastructure.Authentication.Core.Model;
+
+public record SignInData
 {
-    public record SignInData
-    {
-        public TokenModel Token { get; init; }
-        public string Username { get; init; }
-        public string Email { get; init; }
-        public bool IsExternalLogin => !string.IsNullOrWhiteSpace(ExternalAuthenticationProvider);
-        public string ExternalAuthenticationProvider { get; init; }
-    }
+    public TokenModel Token { get; init; } = null!;
+    public string Username { get; init; } = null!;
+    public string Email { get; init; } = null!;
+    public bool IsExternalLogin => !string.IsNullOrWhiteSpace(ExternalAuthenticationProvider);
+    public string? ExternalAuthenticationProvider { get; init; }
 }

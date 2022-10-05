@@ -1,21 +1,20 @@
 ﻿using MyWarehouse.Application.Common.Mapping;
 using MyWarehouse.Domain.Products;
 
-namespace MyWarehouse.Application.Products.GetProducts
+namespace MyWarehouse.Application.Products.GetProducts;
+
+public record ProductDto : IMapFrom<Product>
 {
-    public record ProductDto : IMapFrom<Product>
-    {
-        public int Id { get; init; }
+    public int Id { get; init; }
 
-        public string Name { get; init; }
-        public string Description { get; init; }
+    public string Name { get; init; } = null!;
+    public string Description { get; init; } = null!;
+    
+    public decimal PriceAmount { get; init; }
+    public string PriceCurrencyCode { get; init; } = null!;
 
-        public decimal PriceAmount { get; init; }
-        public string PriceCurrencyCode { get; init; }
+    public float MassValue { get; init; }
+    public string MassUnitSymbol { get; init; } = null!;
 
-        public float MassValue { get; init; }
-        public string MassUnitSymbol { get; init; }
-
-        public int NumberInStock { get; init; }
-    }
+    public int NumberInStock { get; init; }
 }

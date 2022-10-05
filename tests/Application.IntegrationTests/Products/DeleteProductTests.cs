@@ -15,7 +15,7 @@ namespace MyWarehouse.Application.IntegrationTests.Products
             var command = new DeleteProductCommand() { Id = 1234567 };
 
             FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().Throw<EntityNotFoundException>();
+                .Should().ThrowAsync<EntityNotFoundException>();
         }
 
         [Test]

@@ -1,8 +1,7 @@
-﻿namespace MyWarehouse.Domain
+﻿namespace MyWarehouse.Domain;
+
+public enum TransactionType
 {
-    public enum TransactionType
-    {
-        Sales = 0,
-        Procurement = 1
-    }
+    Sales = 0,
+    Procurement = 1
 }

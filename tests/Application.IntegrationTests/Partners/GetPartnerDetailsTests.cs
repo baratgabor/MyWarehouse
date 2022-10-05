@@ -16,7 +16,7 @@ namespace MyWarehouse.Application.IntegrationTests.Partners
             var query = new GetPartnerDetailsQuery() { Id = 45938 };
 
             FluentActions.Invoking(() => TestFramework.SendAsync(query))
-                .Should().Throw<EntityNotFoundException>();
+                .Should().ThrowAsync<EntityNotFoundException>();
         }
 
         [Test]
