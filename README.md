@@ -1,6 +1,4 @@
-
-
-##  MyWarehouse – A Clean Architecture, Vertical Slicing, DDD sample in ASP.NET Core
+## MyWarehouse – A Clean Architecture, Vertical Slicing, DDD sample in ASP.NET Core
 
 [![Backend CI](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CI.yml) [![Backend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/backend-CD.yml) [![Frontend CD](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml/badge.svg)](https://github.com/baratgabor/MyWarehouse/actions/workflows/frontend-CD.yml) [![App Core Coverage Status](https://coveralls.io/repos/github/baratgabor/MyWarehouse/badge.svg?branch=master)](https://coveralls.io/github/baratgabor/MyWarehouse?branch=master)
 
@@ -63,6 +61,7 @@ The following, rather informatively written documentation page has a two-fold pu
   * [More feature-rich Angular frontend](#more-feature-rich-angular-frontend)
 - [Potential improvements](#potential-improvements)
 - [How to set up to run locally](#how-to-set-up-to-run-locally)
+- [.NET 6.0 update improvements](#.net-6.0-update-improvements)
 
 ## Motivation
 
@@ -78,7 +77,7 @@ This project had an older version I originally developed for a job application, 
 
 ## Technologies
 
-[C# 9](https://devblogs.microsoft.com/dotnet/welcome-to-c-9-0/)  ◊ [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0) ◊ [ASP.NET Core 5](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-5.0) ◊ [Entity Framework Core 5](https://docs.microsoft.com/en-us/ef/core/) ◊ [Angular 11](https://angular.io/) ◊ [Bootstrap](https://getbootstrap.com/) ◊ [MediatR](https://github.com/jbogard/MediatR) ◊ [AutoMapper](https://automapper.org/) ◊ [FluentValidation](https://fluentvalidation.net/) ◊ [NUnit](https://nunit.org/) ◊ [Moq](https://github.com/Moq/moq4/wiki/Quickstart) ◊ [FluentAssertions](https://fluentassertions.com/) ◊ [Respawn](https://github.com/jbogard/Respawn) ◊ [Swagger](https://swagger.io/)
+[C# 10](https://devblogs.microsoft.com/dotnet/welcome-to-c-10-0/)  ◊ [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0) ◊ [ASP.NET Core 6](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0) ◊ [Entity Framework Core 5](https://docs.microsoft.com/en-us/ef/core/) ◊ [Angular 11](https://angular.io/) ◊ [Bootstrap](https://getbootstrap.com/) ◊ [MediatR](https://github.com/jbogard/MediatR) ◊ [AutoMapper](https://automapper.org/) ◊ [FluentValidation](https://fluentvalidation.net/) ◊ [NUnit](https://nunit.org/) ◊ [Moq](https://github.com/Moq/moq4/wiki/Quickstart) ◊ [FluentAssertions](https://fluentassertions.com/) ◊ [Respawn](https://github.com/jbogard/Respawn) ◊ [Swagger](https://swagger.io/)
 
 ## Backend Design Paradigms
 
@@ -314,3 +313,119 @@ It you wish to clone this repository and use it (for whatever purpose you see fi
 Thank you for your interest in this project and/or in this lengthy documentation page. I recognize that my style of writing readmes is different from what people usually do on GitHub, but since I don't publish on any platform I usually have plenty of things bottled up, so it just feels *nice* to write about them in a context where they are at least relevant.
 
 I'm always open to improving my designs, and, as I mentioned, this was pretty much my first foray into DDD, so feel free to suggest improvements if you'd like to.
+
+
+
+## .NET 6.0 update improvements
+
+With plenty of delay, the project was finally updated to .NET 6 (which we were using at my workplace pretty much from release day). The sections below will introduce you to the notable improvements that have occurred in the scope of this update.
+
+### ● IOptions pattern improvements
+
+If I'm not mistaken, 6.0 is the version when we got the new `ValidateDataAnnotations()` and `ValidateOnStart()` methods on `OptionsBuilder`, both of which come very handy in strongly typed options validation. So I took the opportunity to update my options registration extension helper method in the following way:
+
+```csharp
+public static void RegisterMyOptions<T>(this IServiceCollection services, bool requiredToExistInConfiguration = true) where T : class
+{
+    var optionsBuilder = services.AddOptions<T>()
+        .BindConfiguration(typeof(T).Name)
+        .ValidateDataAnnotations() // <- Note
+        .ValidateOnStart(); // <- Note
+
+    // Note this hack too :)
+    // You can pass a validation lambda to Validate() that will check if the section actually exists in configuration.
+    // This check runs on startup if ValidateOnStart() is called.
+    if (requiredToExistInConfiguration)
+        optionsBuilder.Validate<IConfiguration>((_, configuration)
+            => configuration.GetSection(typeof(T).Name).Exists(), string.Format(ConfigMissingErrorMessage, typeof(T).Name));
+
+    services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<T>>().Value);
+}
+```
+
+### ● EF 6 "ConfigureConventions" – Centralized decimal precision config
+
+There is a new feature in EF 6 that makes it **much** easier to configure entity properties in a cross-cutting manner. Previously you had to call `modelBuilder.Entity<entity>().Property(e => e.PropertyName)` to set configuration on a per-property basis, even if you wanted those constraints to apply to *all properties of a given type*, for example *all* strings to have the same maximum length, or *all* decimals to have the same precision. This lead to awkward solutions like the one below to have at least some sort of cross-cutting control (directly copied from this codebase before the .NET 6 update):
+
+```csharp
+// Before .NET 6
+
+/// <summary>
+/// Set all decimal properties to a custom uniform precision.
+/// </summary>
+private static void ConfigureDecimalPrecision(ModelBuilder builder)
+{
+    foreach (var entityType in builder.Model.GetEntityTypes())
+    {
+        foreach (var decimalProperty in entityType.GetProperties()
+            .Where(x => x.ClrType == typeof(decimal)))
+        {
+            decimalProperty.SetPrecision(18);
+            decimalProperty.SetScale(4);
+        }
+    }
+}
+```
+
+Now, after EF 6, we can do:
+
+```csharp
+// After .NET 6
+
+protected override void ConfigureConventions(ModelConfigurationBuilder configBuilder)
+{
+    configBuilder.Properties<decimal>()
+        .HavePrecision(precision: 18, scale: 4);
+}   }
+```
+
+Bam! 👌
+
+### ● EF 6 "ConfigureConventions" – Centralized conversion config
+
+Similarly to the section above, configuring conversions for *all* properties of a given type is much easier now as well. Consider that the following code was present in the codebase before the .NET 6 update:
+
+```csharp
+// Before .NET 6
+// Notice that conversion had to be set individually for each property of a given type.
+// I had to resort to creating some local functions to reduce code repetition.
+
+    // Store and restore mass unit as symbol.
+    builder.Entity<Product>().OwnsOne(p => p.Mass, StoreMassUnitAsSymbol);
+
+    // Store and restore currency as currency code.
+    builder.Entity<Product>().OwnsOne(p => p.Price, StoreCurrencyAsCode);
+    builder.Entity<Transaction>().OwnsOne(p => p.Total, StoreCurrencyAsCode);
+    builder.Entity<TransactionLine>().OwnsOne(p => p.UnitPrice, StoreCurrencyAsCode);
+
+    static void StoreCurrencyAsCode<T>(OwnedNavigationBuilder<T, Money> onb) where T : class
+        => onb.Property(m => m.Currency)
+        .HasConversion(
+        	c => c.Code,
+	        c => Currency.FromCode(c))
+        .HasMaxLength(3);
+
+    static void StoreMassUnitAsSymbol<T>(OwnedNavigationBuilder<T, Mass> onb) where T : class
+        => onb.Property(m => m.Unit)
+        .HasConversion(
+    	    u => u.Symbol,
+        	s => MassUnit.FromSymbol(s))
+        .HasMaxLength(3);
+```
+
+Now after .NET 6 this has become:
+
+```csharp
+    protected override void ConfigureConventions(ModelConfigurationBuilder configBuilder)
+    {
+        configBuilder.Properties<Currency>()
+            .HaveConversion<CurrencyConverter>() // Notice how we're setting a converter for all props of this type.
+            .HaveMaxLength(3);
+
+        configBuilder.Properties<MassUnit>()
+            .HaveConversion<MassUnitConverter>()
+            .HaveMaxLength(3);
+    }
+```
+
+The only downside is that we're forced to write converter classes (e.g. `CurrencyConverter` above), which is arguably a bit too much ceremony for very simple conversions where a short lambda would suffice.
