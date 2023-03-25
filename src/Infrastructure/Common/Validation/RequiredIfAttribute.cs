@@ -1,39 +1,43 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿namespace MyWarehouse.Infrastructure.Common.Validation;
 
-namespace MyWarehouse.Infrastructure.Common.Validation
+/// <summary>
+/// Validates a property as required if a boolean flag has a specific value.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class RequiredIfAttribute : RequiredAttribute
 {
-    /// <summary>
-    /// Validates a property as required if a boolean flag has a specific value.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class RequiredIfAttribute : RequiredAttribute
+    private readonly string _otherPropertyName;
+    private readonly bool _otherPropertyValue;
+
+    public RequiredIfAttribute(string otherPropertyName, bool otherPropertyValue)
     {
-        private readonly string _flagName;
-        private readonly bool _condition;
+        _otherPropertyName = otherPropertyName;
+        _otherPropertyValue = otherPropertyValue;
+        AllowEmptyStrings = false;
+    }
 
-        public RequiredIfAttribute(string flagName, bool condition)
-        {
-            _flagName = flagName;
-            _condition = condition;
-        }
+    protected override ValidationResult? IsValid(object? value, ValidationContext context)
+    {
+        if (IsValidationRequired(context)) return base.IsValid(value, context);
 
-        protected override ValidationResult IsValid(object value, ValidationContext context)
-        {
-            object instance = context.ObjectInstance;
-            Type type = instance.GetType();
+        return ValidationResult.Success;
+    }
 
-            if (!bool.TryParse(type.GetProperty(_flagName).GetValue(instance)?.ToString(), out bool flagValue))
-            {
-                throw new InvalidOperationException($"{nameof(RequiredIfAttribute)} can be used only on bool properties.");
-            }
+    /// <summary>
+    /// Checks if the specified other property has the specified value, making the 'Required' validation necessary.
+    /// </summary>
+    private bool IsValidationRequired(ValidationContext context)
+    {
+        var otherProperty = context.ObjectInstance.GetType().GetProperty(_otherPropertyName);
 
-            if (flagValue == _condition && (value == null || (value is string s && string.IsNullOrEmpty(s))))
-            {
-                return new ValidationResult($"Property {context.MemberName} must have a value when {_flagName} is {_condition}");
-            }
+        if (otherProperty is null)
+            throw new ArgumentException($"The specified property '{_otherPropertyName}' is not found on the validatable object.");
 
-            return ValidationResult.Success;
-        }
+        if (otherProperty.PropertyType != typeof(bool) && otherProperty.PropertyType != typeof(bool?))
+            throw new ArgumentException($"The specified property '{_otherPropertyName}' on the validatable object must be of type bool.");
+
+        var ifConditionSatisfied = otherProperty.GetValue(context.ObjectInstance) as bool? == _otherPropertyValue;
+
+        return ifConditionSatisfied;
     }
 }

@@ -26,7 +26,7 @@ namespace MyWarehouse.Domain.UnitTests.Transactions
 
             transaction.TransactionType.Should().Be(TransactionType.Procurement);
             transaction.Partner.Should().Be(partner);
-            transaction.Total.Should().BeNull();
+            transaction.Total.Amount.Should().Be(0);
             transaction.TransactionLines.Should()
                 .NotBeNull().And
                 .BeEmpty();

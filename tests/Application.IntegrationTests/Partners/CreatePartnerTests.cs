@@ -17,7 +17,7 @@ namespace MyWarehouse.Application.IntegrationTests.Partners
             var command = new CreatePartnerCommand();
 
             FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().Throw<InputValidationException>();
+                .Should().ThrowAsync<InputValidationException>();
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace MyWarehouse.Application.IntegrationTests.Partners
             var partner = await TestFramework.Data.FindAsync<Partner>(partnerId, x => x.Transactions);
             partner.Should().NotBeNull();
             partner.Id.Should().Be(partnerId);
-            partner.CreatedAt.Should().BeCloseTo(DateTime.Now, 10000);
+            partner.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
             partner.CreatedBy.Should().NotBeNullOrWhiteSpace();
             partner.LastModifiedAt.Should().BeNull();
             partner.DeletedAt.Should().BeNull();

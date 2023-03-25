@@ -8,20 +8,19 @@ using MyWarehouse.Infrastructure.ApplicationDependencies.DataAccess.Repositories
 using MyWarehouse.Infrastructure.ApplicationDependencies.Services;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MyWarehouse.Infrastructure.ApplicationDependencies
-{
-    [ExcludeFromCodeCoverage]
-    internal static class Startup
-    {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration _)
-        {
-            services.AddScoped<IProductRepository, ProductRepositoryEF>();
-            services.AddScoped<IPartnerRepository, PartnerRepositoryEF>();
-            services.AddScoped<ITransactionRepository, TransactionRepositoryEF>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+namespace MyWarehouse.Infrastructure.ApplicationDependencies;
 
-            services.AddTransient<IDateTime, DateTimeService>();
-            services.AddTransient<IStockStatisticsService, StockStatisticsService>();
-        }
+[ExcludeFromCodeCoverage]
+internal static class Startup
+{
+    public static void ConfigureServices(this IServiceCollection services, IConfiguration _)
+    {
+        services.AddScoped<IProductRepository, ProductRepositoryEF>();
+        services.AddScoped<IPartnerRepository, PartnerRepositoryEF>();
+        services.AddScoped<ITransactionRepository, TransactionRepositoryEF>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IStockStatisticsService, StockStatisticsService>();
     }
 }

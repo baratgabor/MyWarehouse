@@ -1,7 +1,6 @@
-﻿namespace MyWarehouse.Infrastructure.Authorization.Constants
+﻿namespace MyWarehouse.Infrastructure.Authorization.Constants;
+
+public static class PolicyNames
 {
-    public static class PolicyNames
-    {
-        public const string SamplePolicy = "SamplePolicy";
-    }
+    public const string SamplePolicy = "SamplePolicy";
 }

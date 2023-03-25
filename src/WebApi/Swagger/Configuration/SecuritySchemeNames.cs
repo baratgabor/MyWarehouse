@@ -1,7 +1,6 @@
-﻿namespace MyWarehouse.WebApi.Swagger.Configuration
+﻿namespace MyWarehouse.WebApi.Swagger.Configuration;
+
+public static class SecuritySchemeNames
 {
-    public static class SecuritySchemeNames
-    {
-        public const string ApiLogin = "ApiLogin";
-    }
+    public const string ApiLogin = "ApiLogin";
 }

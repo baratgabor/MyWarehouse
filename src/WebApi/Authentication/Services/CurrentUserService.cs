@@ -1,28 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
-using MyWarehouse.Application.Dependencies.Services;
+﻿using MyWarehouse.Application.Dependencies.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace MyWarehouse.WebApi.Authentication.Services
+namespace MyWarehouse.WebApi.Authentication.Services;
+
+public class CurrentUserService : ICurrentUserService
 {
-    public class CurrentUserService : ICurrentUserService
+    private const string DefaultNonUserMoniker = "System";
+    private const string UknownUserMoniker = "Anonymous";
+
+    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
-        private const string DefaultNonUserMoniker = "System";
-        private const string UknownUserMoniker = "Anonymous";
-
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        if (httpContextAccessor.HttpContext == null)
         {
-            if (httpContextAccessor.HttpContext == null)
-            {
-                UserId = DefaultNonUserMoniker;
-            }
-            else
-            {
-                UserId = httpContextAccessor.HttpContext.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName)
-                     ?? UknownUserMoniker;
-            }
+            UserId = DefaultNonUserMoniker;
         }
-
-        public string UserId { get; }
+        else
+        {
+            UserId = httpContextAccessor.HttpContext.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName)
+                 ?? UknownUserMoniker;
+        }
     }
+
+    public string UserId { get; }
 }

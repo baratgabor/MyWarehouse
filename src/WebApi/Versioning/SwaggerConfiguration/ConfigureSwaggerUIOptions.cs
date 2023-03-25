@@ -1,31 +1,27 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace MyWarehouse.WebApi.Versioning.SwaggerConfiguration
+namespace MyWarehouse.WebApi.Versioning.SwaggerConfiguration;
+
+[ExcludeFromCodeCoverage]
+internal class ConfigureSwaggerUIOptions : IPostConfigureOptions<SwaggerUIOptions>
 {
-    [ExcludeFromCodeCoverage]
-    internal class ConfigureSwaggerUIOptions : IPostConfigureOptions<SwaggerUIOptions>
+    private readonly IApiVersionDescriptionProvider _versionProvider;
+
+    public ConfigureSwaggerUIOptions(IApiVersionDescriptionProvider versionProvider)
+        => _versionProvider = versionProvider;
+
+    public void PostConfigure(string _, SwaggerUIOptions options)
     {
-        private readonly IApiVersionDescriptionProvider _versionProvider;
+        // Clear potentially added unversioned endpoints.
+        options.ConfigObject.Urls = Enumerable.Empty<UrlDescriptor>();
 
-        public ConfigureSwaggerUIOptions(IApiVersionDescriptionProvider versionProvider)
-            => _versionProvider = versionProvider;
-
-        public void PostConfigure(string _, SwaggerUIOptions options)
+        foreach (var description in _versionProvider.ApiVersionDescriptions)
         {
-            // Clear potentially added unversioned endpoints.
-            options.ConfigObject.Urls = Enumerable.Empty<UrlDescriptor>();
-
-            foreach (var description in _versionProvider.ApiVersionDescriptions)
-            {
-                options.SwaggerEndpoint(
-                    url: $"/swagger/{description.GroupName}/swagger.json",
-                    name: description.GroupName.ToUpperInvariant());
-            }
+            options.SwaggerEndpoint(
+                url: $"/swagger/{description.GroupName}/swagger.json",
+                name: description.GroupName.ToUpperInvariant());
         }
     }
 }

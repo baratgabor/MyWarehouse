@@ -62,8 +62,8 @@ namespace MyWarehouse.Domain.UnitTests.Common.ValueObjects.MoneyTests
         [Test, Repeat(10)]
         public void Subtract_WithSameCurrencies_ShouldReturnExpectedValue()
         {
-            var m1 = new Money(_rnd.Next() / 1000, Currency.USD);
-            var m2 = new Money(_rnd.Next() / 1000, Currency.USD);
+            var m1 = new Money(_rnd.Next(1, 100000), Currency.USD);
+            var m2 = new Money(_rnd.Next(1, (int)m1.Amount), Currency.USD);
 
             var result = m1 - m2;
 

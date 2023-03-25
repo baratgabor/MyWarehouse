@@ -16,7 +16,7 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
             var command = new GetTransactionDetailsQuery() { Id = 1234567 };
 
             FluentActions.Invoking(() => TestFramework.SendAsync(command))
-                .Should().ThrowExactly<EntityNotFoundException>();
+                .Should().ThrowExactlyAsync<EntityNotFoundException>();
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace MyWarehouse.Application.IntegrationTests.Transactions
             var result = await TestFramework.SendAsync(new GetTransactionDetailsQuery() { Id = existing.Id });
 
             result.Should().NotBeNull();
-            result.CreatedAt.Should().BeCloseTo(DateTime.Now, 10000);
+            result.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
             result.PartnerId.Should().Be(existing.PartnerId);
             result.PartnerName.Should().Be(existing.Partner.Name);
             result.PartnerAddress.Should().Be(existing.Partner.Address.ToString());

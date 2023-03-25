@@ -1,12 +1,11 @@
-﻿namespace MyWarehouse.Infrastructure.Authentication.Core.Model
+﻿namespace MyWarehouse.Infrastructure.Authentication.Core.Model;
+
+// Used instead of Identity.SignInResult to avoid unnecessary coupling
+// between authentication pipeline participants and Identity.
+public enum MySignInResult
 {
-    // Used instead of Identity.SignInResult to avoid unnecessary coupling
-    // between authentication pipeline participants and Identity.
-    public enum MySignInResult
-    {
-        Failed,
-        Success,
-        LockedOut,
-        NotAllowed
-    }
+    Failed,
+    Success,
+    LockedOut,
+    NotAllowed
 }

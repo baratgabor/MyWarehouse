@@ -1,19 +1,15 @@
-﻿using MediatR;
-using MyWarehouse.Application.Common.Dependencies.DataAccess;
+﻿using MyWarehouse.Application.Common.Dependencies.DataAccess;
 using MyWarehouse.Application.Common.Dependencies.DataAccess.Repositories.Common;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace MyWarehouse.Application.Partners.GetPartners
+namespace MyWarehouse.Application.Partners.GetPartners;
+
+public class GetPartnersListQueryHandler : IRequestHandler<ListQueryModel<PartnerDto>, IListResponseModel<PartnerDto>>
 {
-    public class GetPartnersListQueryHandler : IRequestHandler<ListQueryModel<PartnerDto>, IListResponseModel<PartnerDto>>
-    {
-        private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
-        public GetPartnersListQueryHandler(IUnitOfWork unitOfWork)
-            => _unitOfWork = unitOfWork;
+    public GetPartnersListQueryHandler(IUnitOfWork unitOfWork)
+        => _unitOfWork = unitOfWork;
 
-        public Task<IListResponseModel<PartnerDto>> Handle(ListQueryModel<PartnerDto> request, CancellationToken cancellationToken)
-            => _unitOfWork.Partners.GetProjectedListAsync(request, readOnly: true);
-    }
+    public Task<IListResponseModel<PartnerDto>> Handle(ListQueryModel<PartnerDto> request, CancellationToken cancellationToken)
+        => _unitOfWork.Partners.GetProjectedListAsync(request, readOnly: true);
 }

@@ -1,2 +1,2 @@
 ::Usage: AddMigration <migrationName>
-@dotnet ef migrations add --project ../src/MyWarehouse.Infrastructure --startup-project ../src/MyWarehouse.Api %*
+@dotnet ef migrations add --project ../src/Infrastructure --startup-project ../src/WebApi %*

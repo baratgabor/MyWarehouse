@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace MyWarehouse.Infrastructure.Persistence.Settings;
 
-namespace MyWarehouse.Infrastructure.Persistence.Settings
+public class ConnectionStrings
 {
-    public class ConnectionStrings
-    {
-        [Required, MinLength(1)]
-        public string DefaultConnection { get; init; }
-    }
+    [Required, MinLength(1)]
+    public string DefaultConnection { get; init; } = null!;
 }

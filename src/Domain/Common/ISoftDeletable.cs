@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace MyWarehouse.Domain.Common;
 
-namespace MyWarehouse.Domain.Common
+public interface ISoftDeletable
 {
-    public interface ISoftDeletable
-    {
-        public string DeletedBy { get; }
+    public string? DeletedBy { get; }
 
-        public DateTime? DeletedAt { get; }
-    }
+    public DateTime? DeletedAt { get; }
 }

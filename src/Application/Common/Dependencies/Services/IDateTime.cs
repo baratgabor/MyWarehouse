@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace MyWarehouse.Application.Dependencies.Services
+namespace MyWarehouse.Application.Dependencies.Services;
+
+public interface IDateTime
 {
-    public interface IDateTime
-    {
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

@@ -1,10 +1,9 @@
 ﻿using MyWarehouse.Infrastructure.Authentication.External.Model;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
-namespace MyWarehouse.Infrastructure.Authentication.External.Services
+namespace MyWarehouse.Infrastructure.Authentication.External.Services;
+
+public interface IExternalAuthenticationVerifier
 {
-    public interface IExternalAuthenticationVerifier
-    {
-        Task<(bool success, ExternalUserData userData)> Verify(ExternalAuthenticationProvider provider, string idToken);
-    }
+    Task<(bool success, ExternalUserData? userData)> Verify(ExternalAuthenticationProvider provider, string idToken);
 }

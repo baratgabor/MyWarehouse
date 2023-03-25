@@ -1,8 +1,7 @@
-﻿namespace MyWarehouse.Application.Products.ProductStockMass
+﻿namespace MyWarehouse.Application.Products.ProductStockMass;
+
+public record StockMassDto
 {
-    public record StockMassDto
-    {
-        public float Value { get; init; }
-        public string Unit { get; init; }
-    }
+    public float Value { get; init; }
+    public string Unit { get; init; } = null!;
 }
